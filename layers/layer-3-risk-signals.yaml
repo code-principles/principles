@@ -1,0 +1,199 @@
+# Layer 3 — Risk-elevated principles
+# When risk signals are detected, these principles are elevated to higher priority.
+# Elevation means the reviewer should weight these principles more heavily
+# and flag violations with greater urgency.
+
+authentication:
+  description: "Code handling user authentication, sessions, or identity verification"
+  signals:
+    - "password"
+    - "login"
+    - "logout"
+    - "OAuth"
+    - "JWT"
+    - "token"
+    - "session"
+    - "authenticate"
+    - "credential"
+    - "sign_in"
+    - "sign_up"
+    - "bcrypt"
+    - "hash"
+    - "salt"
+    - "OIDC"
+    - "SAML"
+    - "bearer"
+    - "refresh_token"
+  elevate:
+    - SEC-002
+    - SEC-003
+    - SEC-008
+
+financial:
+  description: "Code processing payments, billing, currency, or financial transactions"
+  signals:
+    - "payment"
+    - "billing"
+    - "invoice"
+    - "currency"
+    - "transaction"
+    - "charge"
+    - "refund"
+    - "stripe"
+    - "paypal"
+    - "ledger"
+    - "account_balance"
+    - "decimal"
+    - "money"
+    - "price"
+    - "checkout"
+    - "subscription"
+  elevate:
+    - SEC-001
+    - SEC-004
+    - RL-003
+    - CC-001
+
+personal-data:
+  description: "Code handling personally identifiable information or privacy-sensitive data"
+  signals:
+    - "PII"
+    - "GDPR"
+    - "email"
+    - "SSN"
+    - "social_security"
+    - "address"
+    - "phone_number"
+    - "date_of_birth"
+    - "passport"
+    - "driver_license"
+    - "personal_data"
+    - "consent"
+    - "data_subject"
+    - "anonymize"
+    - "pseudonymize"
+    - "encryption"
+    - "CCPA"
+    - "HIPAA"
+  elevate:
+    - SEC-001
+    - SEC-003
+    - SEC-005
+    - SEC-010
+
+public-api:
+  description: "Versioned or published APIs consumed by third-party clients"
+  signals:
+    - "versioned"
+    - "v1"
+    - "v2"
+    - "published"
+    - "third-party"
+    - "external"
+    - "consumer"
+    - "backward_compatible"
+    - "deprecat"
+    - "changelog"
+    - "breaking_change"
+    - "semver"
+    - "api_version"
+    - "public_api"
+  elevate:
+    - API-014
+    - API-001
+    - API-004
+    - RL-007
+
+high-throughput:
+  description: "Performance-critical code paths requiring low latency or high throughput"
+  signals:
+    - "hot_path"
+    - "hot path"
+    - "real-time"
+    - "realtime"
+    - "low-latency"
+    - "low_latency"
+    - "performance"
+    - "benchmark"
+    - "throughput"
+    - "cache"
+    - "pool"
+    - "buffer"
+    - "batch_size"
+    - "optimization"
+    - "critical_path"
+    - "microsecond"
+    - "nanosecond"
+  elevate:
+    - PF-001
+    - PF-002
+    - PF-003
+    - PF-004
+    - PF-005
+    - CC-006
+
+distributed-system:
+  description: "Distributed architectures with inter-service communication and eventual consistency"
+  signals:
+    - "microservice"
+    - "RPC"
+    - "gRPC"
+    - "event-driven"
+    - "event_bus"
+    - "saga"
+    - "choreography"
+    - "orchestration"
+    - "circuit_breaker"
+    - "retry"
+    - "timeout"
+    - "idempotent"
+    - "eventual_consistency"
+    - "distributed"
+    - "service_mesh"
+    - "message_broker"
+    - "outbox"
+    - "dead_letter"
+  elevate:
+    - RL-002
+    - RL-003
+    - RL-004
+    - RL-005
+    - RL-006
+    - OB-001
+    - OB-002
+    - OB-003
+    - AR-013
+    - AR-014
+    - AR-015
+
+legacy-codebase:
+  description: "Refactoring, migration, or brownfield work on existing codebases"
+  signals:
+    - "refactor"
+    - "migration"
+    - "brownfield"
+    - "legacy"
+    - "technical_debt"
+    - "tech_debt"
+    - "deprecated"
+    - "backward_compat"
+    - "strangler"
+    - "anti-corruption"
+    - "modernize"
+    - "rewrite"
+    - "upgrade"
+  elevate:
+    - CS-001
+    - CS-002
+    - CS-003
+    - CS-004
+    - CS-005
+    - CS-006
+    - CS-007
+    - CS-008
+    - CS-009
+    - CS-010
+    - SD-029
+    - SD-030
+    - SD-031
+    - SD-032
