@@ -1,0 +1,19 @@
+name: security-focused
+description: "Security-sensitive codebases — authentication, data protection, threat modeling"
+
+principles:
+  - CODE-SEC-001
+  - CODE-SEC-002
+  - CODE-SEC-003
+  - CODE-SEC-004
+  - CODE-SEC-005
+  - CODE-SEC-006
+  - CODE-SEC-007
+  - CODE-SEC-008
+  - CODE-SEC-009
+  - CODE-SEC-010
+  - CODE-SEC-011
+  - CODE-RL-001
+  - CODE-RL-003
+  - CODE-OB-001
+  - CODE-OB-005

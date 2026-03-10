@@ -1,0 +1,23 @@
+name: microservices
+description: "Microservices architecture — inter-service communication, resilience, observability"
+
+principles:
+  - CODE-AR-001
+  - CODE-AR-002
+  - CODE-AR-003
+  - CODE-AR-006
+  - CODE-AR-009
+  - CODE-AR-013
+  - CODE-AR-014
+  - CODE-AR-015
+  - CODE-RL-002
+  - CODE-RL-003
+  - CODE-RL-004
+  - CODE-RL-005
+  - CODE-RL-006
+  - CODE-RL-007
+  - CODE-OB-001
+  - CODE-OB-002
+  - CODE-OB-003
+  - CODE-OB-004
+  - CODE-OB-005

@@ -1,0 +1,24 @@
+name: spring-boot
+description: "Spring Boot REST APIs, dependency injection, and service layer"
+
+includes:
+  - java
+
+principles:
+  - CODE-API-011
+  - CODE-API-012
+  - CODE-API-013
+  - CODE-API-014
+  - CODE-API-015
+  - CODE-AR-001
+  - CODE-AR-002
+  - CODE-AR-003
+  - CODE-AR-016
+  - CODE-AR-017
+  - CODE-DM-001
+  - CODE-DM-002
+  - CODE-DM-008
+  - CODE-SEC-001
+  - CODE-SEC-002
+  - CODE-SEC-004
+  - CODE-SEC-008

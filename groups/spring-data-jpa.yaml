@@ -1,0 +1,15 @@
+name: spring-data-jpa
+description: "Spring Data JPA — repository pattern, aggregate design, transaction management"
+
+includes:
+  - spring-boot
+
+principles:
+  - CODE-DM-003
+  - CODE-DM-004
+  - CODE-DM-005
+  - CODE-DM-006
+  - CODE-DM-007
+  - CODE-DM-008
+  - CODE-RL-003
+  - CODE-RL-006

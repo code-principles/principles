@@ -1,0 +1,16 @@
+name: fastapi
+description: "FastAPI — async endpoints, Pydantic validation, OpenAPI"
+
+includes:
+  - python
+
+principles:
+  - CODE-API-011
+  - CODE-API-013
+  - CODE-API-014
+  - CODE-API-015
+  - CODE-SEC-001
+  - CODE-SEC-004
+  - CODE-CC-007
+  - CODE-CC-008
+  - CODE-TP-001

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# install.sh — Deploy code-principles to AI coding tools
+# install.sh — Deploy .principles to AI coding tools
 #
 # Usage:
 #   ./install.sh claude              # Install Claude Code slash commands
@@ -27,9 +27,134 @@ fi
 
 print_header() {
     echo ""
-    echo -e "${BOLD}code-principles installer${NC}"
+    echo -e "${BOLD}.principles installer${NC}"
     echo "─────────────────────────"
 }
+
+# ---------------------------------------------------------------------------
+# Context file generation
+# ---------------------------------------------------------------------------
+
+# Extract a named section from a markdown principle file.
+# Prints lines between "## <section>" and the next "## " header.
+extract_section() {
+    local file="$1"
+    local section="$2"
+    awk -v sec="## $section" '
+        $0 == sec         { found=1; next }
+        found && /^## /   { exit }
+        found             { print }
+    ' "$file"
+}
+
+# Derive a principle ID from its path relative to the principles/ directory.
+# e.g. code/api/api-001.md → CODE-API-001
+derive_id() {
+    local relpath="${1%.md}"   # strip .md
+    local IFS_BAK="$IFS"
+    IFS='/' read -ra segs <<< "$relpath"
+    IFS="$IFS_BAK"
+
+    local n=${#segs[@]}
+    local result=""
+
+    # Uppercase each directory segment
+    for (( i=0; i<n-1; i++ )); do
+        local up
+        up=$(echo "${segs[$i]}" | tr '[:lower:]' '[:upper:]')
+        result="${result:+$result-}$up"
+    done
+
+    # Strip parent-dir prefix from filename (e.g. api-001 → 001)
+    local last="${segs[$((n-1))]}"
+    local parent="${segs[$((n-2))]}"
+    local prefix_len=$(( ${#parent} + 1 ))   # parent + "-"
+    local lower_last
+    lower_last=$(echo "$last" | tr '[:upper:]' '[:lower:]')
+    local lower_parent
+    lower_parent=$(echo "$parent" | tr '[:upper:]' '[:lower:]')
+
+    local suffix
+    if [ "${lower_last:0:$prefix_len}" = "${lower_parent}-" ]; then
+        suffix="${last:$prefix_len}"
+    else
+        suffix="$last"
+    fi
+
+    local up_suffix
+    up_suffix=$(echo "$suffix" | tr '[:lower:]' '[:upper:]')
+    echo "${result}-${up_suffix}"
+}
+
+# Build .context-prime.md and .context-audit.md for every namespace under principles/.
+# Called automatically by install_claude.
+build_context() {
+    local principles_dir="$SCRIPT_DIR/principles"
+    local total=0
+
+    for catalog in "$principles_dir"/*/catalog.yaml; do
+        [ -f "$catalog" ] || continue
+        local ns_dir
+        ns_dir="$(dirname "$catalog")"
+        local ns_name
+        ns_name="$(basename "$ns_dir")"
+
+        local prime_file="$ns_dir/.context-prime.md"
+        local audit_file="$ns_dir/.context-audit.md"
+
+        printf '# .principles prime context — %s\n' "$ns_name"   > "$prime_file"
+        printf '# Sections: Principle · Why it matters · Good practice\n\n' >> "$prime_file"
+
+        printf '# .principles audit context — %s\n' "$ns_name"   > "$audit_file"
+        printf '# Sections: Principle · Violations to detect\n\n' >> "$audit_file"
+
+        local count=0
+
+        while IFS= read -r -d '' mdfile; do
+            local relpath="${mdfile#$principles_dir/}"
+            local id
+            id=$(derive_id "$relpath")
+
+            # Title: first line stripped of "# " and any "ID — " prefix
+            local title
+            title=$(head -1 "$mdfile" | sed 's/^# //')
+            [[ "$title" == *" — "* ]] && title="${title#*— }"
+
+            local principle why good violations
+            principle=$(extract_section "$mdfile" "Principle")
+            why=$(extract_section "$mdfile" "Why it matters")
+            good=$(extract_section "$mdfile" "Good practice")
+            violations=$(extract_section "$mdfile" "Violations to detect")
+
+            # Prime entry
+            {
+                echo "### $id — $title"
+                [ -n "$principle"  ] && echo "$principle"
+                [ -n "$why"        ] && printf '\nWhy it matters:\n%s\n' "$why"
+                [ -n "$good"       ] && printf '\nGood practice:\n%s\n' "$good"
+                echo ""
+            } >> "$prime_file"
+
+            # Audit entry
+            {
+                echo "### $id — $title"
+                [ -n "$principle"  ] && echo "$principle"
+                [ -n "$violations" ] && printf '\nViolations to detect:\n%s\n' "$violations"
+                echo ""
+            } >> "$audit_file"
+
+            count=$(( count + 1 ))
+        done < <(find "$ns_dir" -name "*.md" -not -name "TEMPLATE.md" -not -name ".context-*.md" -print0 | sort -z)
+
+        echo -e "  ${GREEN}✓${NC} principles/$ns_name/.context-prime.md ($count principles)"
+        echo -e "  ${GREEN}✓${NC} principles/$ns_name/.context-audit.md ($count principles)"
+        total=$(( total + count ))
+    done
+
+    echo -e "  ${BOLD}$total${NC} principles compiled"
+}
+
+# ---------------------------------------------------------------------------
 
 install_claude() {
     echo -e "${BOLD}Installing Claude Code slash commands...${NC}"
@@ -39,7 +164,8 @@ install_claude() {
     local count=0
     for file in "$SCRIPT_DIR/targets/claude-code/"*.md; do
         if [ -f "$file" ]; then
-            cp "$file" "$CLAUDE_COMMANDS_DIR/"
+            sed "s|{{CODE_PRINCIPLES_REPO}}|$SCRIPT_DIR|g" "$file" \
+                > "$CLAUDE_COMMANDS_DIR/$(basename "$file")"
             count=$((count + 1))
             echo -e "  ${GREEN}✓${NC} /$(basename "$file" .md)"
         fi
@@ -48,9 +174,13 @@ install_claude() {
     echo ""
     echo -e "Installed ${BOLD}$count${NC} commands to $CLAUDE_COMMANDS_DIR"
     echo ""
+    echo -e "${BOLD}Building principle context files...${NC}"
+    build_context
+    echo ""
     echo "Available commands:"
-    echo "  /prepare-coding  — Scan context and activate principles before coding"
-    echo "  /review-code     — Review code with severity-categorized findings"
+    echo "  /prime   — Load principles into context before coding"
+    echo "  /audit   — Audit code against activated principles"
+    echo "  /scout   — Detect project profile and write .principles files"
 }
 
 install_copilot() {
@@ -71,16 +201,16 @@ install_copilot() {
     # Check if file exists and has content
     if [ -f "$target_file" ] && [ -s "$target_file" ]; then
         echo -e "${YELLOW}Warning: $target_file already exists.${NC}"
-        echo "  Appending code-principles section. Review the file afterward."
+        echo "  Appending .principles section. Review the file afterward."
         echo "" >> "$target_file"
-        echo "<!-- code-principles: begin -->" >> "$target_file"
+        echo "<!-- .principles: begin -->" >> "$target_file"
     else
-        echo "<!-- code-principles: begin -->" > "$target_file"
+        echo "<!-- .principles: begin -->" > "$target_file"
     fi
 
-    # Generate Copilot instructions from the prepare-coding prompt
+    # Generate Copilot instructions from the prime prompt
     cat >> "$target_file" << 'COPILOT_EOF'
-# Code Principles — AI Coding Guidelines
+# .principles — AI Coding Guidelines
 
 When writing or reviewing code in this project, follow the layered principle system below.
 
@@ -122,7 +252,7 @@ Elevate severity when code handles:
 - **Distributed systems**: Design for fault tolerance, idempotency, circuit breakers
 COPILOT_EOF
 
-    echo "<!-- code-principles: end -->" >> "$target_file"
+    echo "<!-- .principles: end -->" >> "$target_file"
 
     echo -e "  ${GREEN}✓${NC} $target_file"
     echo ""
@@ -142,7 +272,7 @@ install_cursor() {
     local target_dir="$project_dir/.cursor/rules"
     mkdir -p "$target_dir"
 
-    local target_file="$target_dir/code-principles.mdc"
+    local target_file="$target_dir/.principles.mdc"
 
     cat > "$target_file" << 'CURSOR_EOF'
 ---
@@ -151,7 +281,7 @@ globs:
 alwaysApply: true
 ---
 
-# Code Principles — AI Coding Guidelines
+# .principles — AI Coding Guidelines
 
 When writing or reviewing code, follow the layered principle system below.
 
@@ -202,7 +332,7 @@ uninstall_claude() {
     echo -e "${BOLD}Removing Claude Code slash commands...${NC}"
 
     local count=0
-    for file in prepare-coding.md review-code.md; do
+    for file in prime.md audit.md scout.md; do
         if [ -f "$CLAUDE_COMMANDS_DIR/$file" ]; then
             rm "$CLAUDE_COMMANDS_DIR/$file"
             count=$((count + 1))
@@ -219,12 +349,12 @@ uninstall_claude() {
 }
 
 list_installed() {
-    echo -e "${BOLD}Installed code-principles:${NC}"
+    echo -e "${BOLD}Installed .principles:${NC}"
     echo ""
 
     echo "Claude Code commands:"
     local found=false
-    for file in prepare-coding.md review-code.md; do
+    for file in prime.md audit.md scout.md; do
         if [ -f "$CLAUDE_COMMANDS_DIR/$file" ]; then
             echo -e "  ${GREEN}✓${NC} /$(basename "$file" .md)"
             found=true
@@ -243,7 +373,7 @@ show_usage() {
     echo "Targets:"
     echo "  claude              Install slash commands to ~/.claude/commands/"
     echo "  copilot [dir]       Generate .github/copilot-instructions.md (default: current dir)"
-    echo "  cursor [dir]        Generate .cursor/rules/code-principles.mdc (default: current dir)"
+    echo "  cursor [dir]        Generate .cursor/rules/.principles.mdc (default: current dir)"
     echo "  all [dir]           Install all targets"
     echo ""
     echo "Management:"

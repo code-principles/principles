@@ -1,0 +1,16 @@
+name: react
+description: "React — component design, state management, hooks, rendering"
+
+includes:
+  - typescript
+
+principles:
+  - CODE-SD-001
+  - CODE-SD-006
+  - CODE-DX-006
+  - CODE-DX-007
+  - CODE-DX-008
+  - CODE-DX-009
+  - CODE-CC-002
+  - CODE-TP-001
+  - CODE-TP-003

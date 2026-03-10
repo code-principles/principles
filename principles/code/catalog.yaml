@@ -1,0 +1,4 @@
+# principles/code/catalog.yaml
+namespace: code
+id-prefix: CODE
+description: "Software engineering principles — design, security, architecture, testing, and more"

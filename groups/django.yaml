@@ -1,0 +1,16 @@
+name: django
+description: "Django — models, views, ORM, REST framework"
+
+includes:
+  - python
+
+principles:
+  - CODE-API-011
+  - CODE-API-013
+  - CODE-API-015
+  - CODE-SEC-001
+  - CODE-SEC-002
+  - CODE-SEC-004
+  - CODE-SEC-006
+  - CODE-DM-001
+  - CODE-DM-008

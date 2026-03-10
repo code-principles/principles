@@ -1,0 +1,14 @@
+name: go
+description: "Go — composition, interfaces, concurrency, explicit error handling"
+
+principles:
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-CC-001
+  - CODE-CC-002
+  - CODE-CC-004
+  - CODE-CC-007
+  - CODE-CC-008
+  - CODE-RL-001
+  - CODE-DX-001
+  - CODE-DX-002

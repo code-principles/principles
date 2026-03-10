@@ -1,0 +1,32 @@
+name: java
+description: "Java language fundamentals — OOP design, API design, concurrency"
+
+principles:
+  - CODE-API-001
+  - CODE-API-002
+  - CODE-API-003
+  - CODE-API-004
+  - CODE-API-005
+  - CODE-API-006
+  - CODE-API-007
+  - CODE-API-008
+  - CODE-API-009
+  - CODE-API-010
+  - CODE-CC-001
+  - CODE-CC-002
+  - CODE-CC-003
+  - CODE-CC-004
+  - CODE-CC-005
+  - CODE-CC-006
+  - CODE-CC-007
+  - CODE-CC-008
+  - CODE-SD-001
+  - CODE-SD-002
+  - CODE-SD-003
+  - CODE-SD-004
+  - CODE-SD-005
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-TP-001
+  - CODE-TP-002
+  - CODE-TP-003

@@ -1,0 +1,14 @@
+name: python
+description: "Python — readability, simplicity, Pythonic patterns"
+
+principles:
+  - CODE-SD-001
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-DX-001
+  - CODE-DX-002
+  - CODE-DX-003
+  - CODE-DX-004
+  - CODE-CS-001
+  - CODE-CS-002
+  - CODE-CS-003

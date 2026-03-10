@@ -1,0 +1,18 @@
+name: rust
+description: "Rust — ownership, type safety, fearless concurrency, zero-cost abstractions"
+
+principles:
+  - CODE-TP-001
+  - CODE-TP-002
+  - CODE-TP-003
+  - CODE-TP-004
+  - CODE-TP-005
+  - CODE-CC-001
+  - CODE-CC-002
+  - CODE-CC-003
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-RL-001
+  - CODE-PF-001
+  - CODE-PF-002
+  - CODE-PF-003

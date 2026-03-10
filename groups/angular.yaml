@@ -1,0 +1,17 @@
+name: angular
+description: "Angular — components, services, dependency injection, RxJS"
+
+includes:
+  - typescript
+
+principles:
+  - CODE-SD-001
+  - CODE-SD-005
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-DX-006
+  - CODE-DX-007
+  - CODE-DX-008
+  - CODE-DX-009
+  - CODE-CC-002
+  - CODE-TP-001

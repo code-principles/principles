@@ -1,0 +1,15 @@
+name: typescript
+description: "TypeScript — type safety, functional patterns, modern JS"
+
+principles:
+  - CODE-TP-001
+  - CODE-TP-002
+  - CODE-TP-003
+  - CODE-TP-004
+  - CODE-TP-005
+  - CODE-SD-006
+  - CODE-SD-007
+  - CODE-CC-002
+  - CODE-DX-001
+  - CODE-DX-002
+  - CODE-DX-003
