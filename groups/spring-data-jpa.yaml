@@ -5,11 +5,11 @@ includes:
   - spring-boot
 
 principles:
-  - CODE-DM-003
-  - CODE-DM-004
-  - CODE-DM-005
-  - CODE-DM-006
-  - CODE-DM-007
-  - CODE-DM-008
+  - DDD-ENTITY
+  - DDD-VALUE-OBJECT
+  - DDD-AGGREGATE
+  - DDD-AGGREGATE-ROOT
+  - DDD-DOMAIN-EVENT
+  - DDD-REPOSITORY
   - CODE-RL-003
   - CODE-RL-006

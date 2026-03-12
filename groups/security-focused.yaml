@@ -3,16 +3,16 @@ description: "Security-sensitive codebases — authentication, data protection, 
 
 principles:
   - CODE-SEC-001
-  - CODE-SEC-002
+  - OWASP-A01
   - CODE-SEC-003
-  - CODE-SEC-004
+  - OWASP-A03
   - CODE-SEC-005
-  - CODE-SEC-006
-  - CODE-SEC-007
-  - CODE-SEC-008
+  - OWASP-A05
+  - OWASP-A06
+  - OWASP-A07
   - CODE-SEC-009
   - CODE-SEC-010
-  - CODE-SEC-011
+  - OWASP-A10
   - CODE-RL-001
   - CODE-RL-003
   - CODE-OB-001

@@ -21,10 +21,66 @@ When high-level policy directly instantiates or imports low-level detail (a spec
 
 ## Good practice
 
-- Inject dependencies through constructor parameters typed as interfaces or abstract classes
+`OrderService` depends on the `PaymentGateway` abstraction — not on `Stripe` or `PayPal` directly. Either implementation can be injected at runtime or swapped in tests.
+
+```mermaid
+classDiagram
+    class PaymentGateway {
+        <<interface>>
+        +pay(amount double)
+    }
+    class OrderService {
+        -gateway PaymentGateway
+        +OrderService(gw PaymentGateway)
+        +checkout()
+    }
+    class Stripe {
+        +pay(amount double)
+    }
+    class PayPal {
+        +pay(amount double)
+    }
+    OrderService --> PaymentGateway : depends on
+    Stripe ..|> PaymentGateway : implements
+    PayPal ..|> PaymentGateway : implements
+```
+
+```java
+// Violation — OrderService locked to Stripe; untestable
+class OrderService {
+    void checkout(Order o) {
+        Stripe stripe = new Stripe(); // hard dependency on concrete class
+        stripe.charge(o.total());
+    }
+}
+
+// Correct — depend on the abstraction; inject the detail
+interface PaymentGateway {
+    void pay(double amount);
+}
+class Stripe implements PaymentGateway {
+    public void pay(double amount) { /* Stripe API call */ }
+}
+class PayPal implements PaymentGateway {
+    public void pay(double amount) { /* PayPal API call */ }
+}
+
+class OrderService {
+    private final PaymentGateway gateway;
+
+    OrderService(PaymentGateway gw) { this.gateway = gw; } // inject at construction
+
+    void checkout(Order o) { gateway.pay(o.total()); }
+}
+
+// Inject Stripe or PayPal at runtime; inject a fake in tests
+new OrderService(new Stripe());
+new OrderService(new PayPal());
+new OrderService(new FakePaymentGateway()); // test double
+```
+
 - Use a dependency injection container or factory at the composition root — not inside business logic
 - Define interfaces in the high-level module's package; let the low-level module implement them (the "plugin" architecture)
-- Ensure all `import`/`using` statements in business logic reference only abstractions
 
 ## Sources
 

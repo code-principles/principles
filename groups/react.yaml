@@ -5,8 +5,8 @@ includes:
   - typescript
 
 principles:
-  - CODE-SD-001
-  - CODE-SD-006
+  - SOLID-SRP
+  - GOF-COMPOSITION-OVER-INHERITANCE
   - CODE-DX-006
   - CODE-DX-007
   - CODE-DX-008

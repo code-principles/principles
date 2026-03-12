@@ -19,6 +19,8 @@ This document describes the full architecture of the `.principles` hierarchy sys
 3. Projects place `.principles` files in their directories to declare which principles apply
 4. The AI resolves a hierarchy of `.principles` files (innermost overrides outermost) and reads the full principle content before coding or reviewing
 
+**Plain-Text-as-Code:** This repo is a **Plain-Text-as-Code** system. Every artefact is plain text in version control — diffable, composable, portable, and natively readable by both humans and AI tools. Principle files are Markdown, group files are YAML, and the catalog is YAML. No binary formats, no generated code, no lock-in.
+
 ---
 
 ## 2. Catalog Structure
@@ -27,15 +29,12 @@ The `principles/` directory is a **namespace container**. Each subdirectory is a
 
 ```
 principles/
-  code/                  ← shipped catalog (148+ principles)
+  code/                  ← general catalog (~71 principles)
     catalog.yaml         ← declares namespace: code, id-prefix: CODE
-    sd/
-      sd-001.md
-      sd-002.md
     sec/
       sec-001.md
     api/
-      api-001.md
+      api-011.md
     ...
   solid/                 ← SOLID principles (5 principles)
     catalog.yaml         ← declares namespace: solid, id-prefix: SOLID
@@ -44,6 +43,33 @@ principles/
     lsp.md               → SOLID-LSP
     isp.md               → SOLID-ISP
     dip.md               → SOLID-DIP
+  gof/                   ← Gang of Four (25 entries)
+    catalog.yaml         ← declares namespace: gof, id-prefix: GOF
+    strategy.md          → GOF-STRATEGY
+    observer.md          → GOF-OBSERVER
+    ...
+  ddd/                   ← Domain-Driven Design (8 principles)
+    catalog.yaml         ← declares namespace: ddd, id-prefix: DDD
+    aggregate.md         → DDD-AGGREGATE
+    repository.md        → DDD-REPOSITORY
+    ...
+  simple-design/         ← Kent Beck's 4 Rules (4 principles)
+    catalog.yaml         ← declares namespace: simple-design, id-prefix: SIMPLE-DESIGN
+    passes-tests.md      → SIMPLE-DESIGN-PASSES-TESTS
+    ...
+  clean-arch/            ← Clean Architecture (4 principles)
+    catalog.yaml         ← declares namespace: clean-arch, id-prefix: CLEAN-ARCH
+    dependency-rule.md   → CLEAN-ARCH-DEPENDENCY-RULE
+    ...
+  effective-java/        ← Effective Java (10 principles)
+    catalog.yaml         ← declares namespace: effective-java, id-prefix: EFFECTIVE-JAVA
+    static-factory.md    → EFFECTIVE-JAVA-STATIC-FACTORY
+    ...
+  code-smells/           ← Fowler code smells (9 principles)
+    catalog.yaml         ← declares namespace: code-smells, id-prefix: CODE-SMELLS
+    long-method.md       → CODE-SMELLS-LONG-METHOD
+    feature-envy.md      → CODE-SMELLS-FEATURE-ENVY
+    ...
   grasp/                 ← GRASP patterns (9 principles)
     catalog.yaml         ← declares namespace: grasp, id-prefix: GRASP
     information-expert.md → GRASP-INFORMATION-EXPERT
@@ -106,11 +132,13 @@ IDs are **derived from file path** — no separate ID field is needed in the fil
 | File path (relative to `principles/`) | ID |
 |---|---|
 | `solid/srp.md` | `SOLID-SRP` |
+| `gof/strategy.md` | `GOF-STRATEGY` |
+| `ddd/aggregate.md` | `DDD-AGGREGATE` |
+| `code-smells/feature-envy.md` | `CODE-SMELLS-FEATURE-ENVY` |
 | `grasp/low-coupling.md` | `GRASP-LOW-COUPLING` |
 | `12factor/01-codebase.md` | `12FACTOR-01-CODEBASE` |
 | `owasp/a01.md` | `OWASP-A01` |
-| `code/api/api-001.md` | `CODE-API-001` |
-| `code/sd/sd-001.md` | `CODE-SD-001` |
+| `code/api/api-011.md` | `CODE-API-011` |
 | `code/sec/sec-001.md` | `CODE-SEC-001` |
 | `corp/corp-0001.md` | `CORP-0001` |
 | `arch/xx/yy/yy-01.md` | `ARCH-XX-YY-01` |
@@ -177,6 +205,8 @@ Every principle file follows this template:
 | `Good practice` | Positive example (AI uses this for generation guidance) |
 | `Sources` | At least one verifiable published source |
 
+**Diagrams:** Include a `mermaid` code block in the *Good practice* section whenever the concept has a structural form (class hierarchies, relationships, flows). Mermaid adds machine-readable semantics. If you can draw it, draw it.
+
 ---
 
 ## 5. Groups
@@ -217,23 +247,32 @@ principles:
 | Group | Includes | Purpose |
 |-------|----------|---------|
 | `solid` | — | All five SOLID principles |
+| `gof` | — | All 25 GoF entries (2 principles + 23 patterns) |
+| `gof-creational` | — | 5 GoF creational patterns |
+| `gof-structural` | — | 7 GoF structural patterns |
+| `gof-behavioral` | — | 11 GoF behavioral patterns |
+| `ddd` | — | 8 Domain-Driven Design building blocks |
+| `simple-design` | — | Kent Beck's 4 Rules of Simple Design |
+| `clean-arch` | — | 4 Clean Architecture principles |
+| `effective-java` | — | 10 Effective Java best practices |
+| `code-smells` | — | 9 Fowler code smells |
 | `grasp` | — | All nine GRASP responsibility patterns |
 | `12factor` | — | All twelve Twelve-Factor App practices |
 | `owasp` | — | OWASP Top 10 (2021) security risks |
-| `java` | — | Java language fundamentals |
+| `java` | effective-java | Java language fundamentals |
 | `typescript` | — | TypeScript type safety and patterns |
 | `python` | — | Python readability and Pythonic patterns |
 | `go` | — | Go composition and concurrency |
-| `csharp` | — | C# OOP and async patterns |
+| `csharp` | solid | C# OOP and async patterns |
 | `rust` | — | Rust ownership and type safety |
 | `spring-boot` | java | Spring Boot REST and DI |
-| `spring-data-jpa` | spring-boot | JPA repositories and aggregates |
+| `spring-data-jpa` | spring-boot, ddd | JPA repositories and aggregates |
 | `react` | typescript | React components and hooks |
 | `angular` | typescript | Angular components and DI |
 | `django` | python | Django models and views |
 | `fastapi` | python | FastAPI async endpoints |
 | `microservices` | — | Inter-service resilience and observability |
-| `security-focused` | — | Security-heavy codebases |
+| `security-focused` | owasp | Security-heavy codebases |
 
 ### Rules
 

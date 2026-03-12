@@ -21,9 +21,60 @@ Every time existing code is modified to add new behaviour, previously working fu
 
 ## Good practice
 
-- Introduce abstractions (interfaces, abstract classes) at the points most likely to vary
-- Use the strategy or template-method pattern to allow new behaviour via new implementations
-- Apply the principle selectively — not all variation is worth abstracting; wait for the second change request
+Define an abstraction, then add new behaviour by implementing it — the `Shape` interface never changes as new shapes are added.
+
+```mermaid
+classDiagram
+    class Shape {
+        <<interface>>
+        +area() double
+    }
+    class Circle {
+        +area() double
+    }
+    class Rectangle {
+        +area() double
+    }
+    class Triangle {
+        +area() double
+    }
+    Shape <|.. Circle
+    Shape <|.. Rectangle
+    Shape <|.. Triangle
+```
+
+```java
+// Violation — must modify existing code for every new shape
+double totalArea(List<Object> shapes) {
+    double total = 0;
+    for (Object s : shapes) {
+        if (s instanceof Circle c)       total += Math.PI * c.radius * c.radius;
+        else if (s instanceof Rectangle r) total += r.width * r.height;
+        // add new shape? edit this method
+    }
+    return total;
+}
+
+// Correct — add a new shape without touching existing code
+interface Shape {
+    double area();
+}
+class Circle implements Shape {
+    public double area() { return Math.PI * radius * radius; }
+}
+class Rectangle implements Shape {
+    public double area() { return width * height; }
+}
+class Triangle implements Shape {
+    public double area() { return 0.5 * base * height; }
+}
+
+double totalArea(List<Shape> shapes) {
+    return shapes.stream().mapToDouble(Shape::area).sum();
+}
+```
+
+- Apply the principle selectively — not all variation is worth abstracting; wait for the second change request before introducing an abstraction
 
 ## Sources
 

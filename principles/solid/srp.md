@@ -22,10 +22,46 @@ When a class serves multiple stakeholders, a change for one can inadvertently br
 
 ## Good practice
 
-- Extract each responsibility into its own class or module
+Split each responsibility into its own class. The diagram and code below show a monolithic `User` class refactored into three focused classes — each owned by a different stakeholder.
+
+```mermaid
+classDiagram
+    class UserAuth {
+        +login(credentials)
+        +logout()
+    }
+    class UserProfile {
+        +updateProfile(data)
+        +getProfile()
+    }
+    class EmailService {
+        +sendWelcome(user)
+        +sendReset(user)
+    }
+```
+
+```java
+// Violation — one class, three reasons to change
+class User {
+    void login(Credentials c) { ... }
+    void updateProfile(ProfileData d) { ... }
+    void sendWelcomeEmail() { ... }
+}
+
+// Correct — each class has exactly one reason to change
+class UserAuth {
+    void login(Credentials c) { ... }
+}
+class UserProfile {
+    void updateProfile(ProfileData d) { ... }
+}
+class EmailService {
+    void sendWelcome(User u) { ... }
+}
+```
+
 - Use the "one sentence without 'and'" test: if you need "and" to describe the class, it has too many responsibilities
 - Group code by reason-to-change, not by technical layer
-- Prefer small, focused interfaces; let callers depend only on what they need
 
 ## Sources
 

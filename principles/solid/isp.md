@@ -21,10 +21,66 @@ Fat interfaces create phantom coupling: a class that uses only one method of a t
 
 ## Good practice
 
+Split a fat interface into focused role interfaces. `SimplePrinter` implements only `Printable`; `AllInOne` implements all three — neither is forced to stub anything.
+
+```mermaid
+classDiagram
+    class Printable {
+        <<interface>>
+        +print()
+    }
+    class Scannable {
+        <<interface>>
+        +scan()
+    }
+    class Faxable {
+        <<interface>>
+        +fax()
+    }
+    class SimplePrinter {
+        +print()
+    }
+    class AllInOne {
+        +print()
+        +scan()
+        +fax()
+    }
+    Printable <|.. SimplePrinter
+    Printable <|.. AllInOne
+    Scannable <|.. AllInOne
+    Faxable <|.. AllInOne
+```
+
+```java
+// Violation — SimplePrinter forced to implement methods it doesn't use
+interface Machine {
+    void print();
+    void scan();
+    void fax();
+}
+class SimplePrinter implements Machine {
+    public void print() { ... }
+    public void scan()  { throw new UnsupportedOperationException(); } // forced stub
+    public void fax()   { throw new UnsupportedOperationException(); } // forced stub
+}
+
+// Correct — each interface is a focused role
+interface Printable { void print(); }
+interface Scannable { void scan(); }
+interface Faxable   { void fax(); }
+
+class SimplePrinter implements Printable {
+    public void print() { ... }
+}
+class AllInOne implements Printable, Scannable, Faxable {
+    public void print() { ... }
+    public void scan()  { ... }
+    public void fax()   { ... }
+}
+```
+
 - Define role interfaces: each interface represents one role a client expects
-- Let a class implement multiple small interfaces rather than one large one
-- Split existing fat interfaces using the "what does this specific client actually call?" question
-- In dynamic languages, use duck typing or protocols for the same effect
+- In dynamic languages, use duck typing or structural protocols for the same effect
 
 ## Sources
 

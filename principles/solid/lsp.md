@@ -22,9 +22,54 @@ Violations break the contract that polymorphism depends on. Callers are forced t
 
 ## Good practice
 
-- Design subtype hierarchies around behaviour, not data structure
+Every subtype must honour the full contract of the base type. Both `Eagle` and `Sparrow` satisfy the `Bird` contract — `makeFly` works correctly with either, with no special-casing.
+
+```mermaid
+classDiagram
+    class Bird {
+        <<interface>>
+        +fly()
+    }
+    class Eagle {
+        +fly()
+    }
+    class Sparrow {
+        +fly()
+    }
+    Bird <|.. Eagle
+    Bird <|.. Sparrow
+```
+
+```java
+// Violation — Penguin breaks the Bird contract
+class Penguin extends Bird {
+    @Override
+    void fly() { throw new UnsupportedOperationException("Penguins can't fly"); }
+}
+void makeFly(Bird bird) {
+    bird.fly(); // blows up for Penguin — LSP violated
+}
+
+// Correct — every Bird subtype honours fly()
+interface Bird {
+    void fly();
+}
+class Eagle implements Bird {
+    public void fly() { /* soar */ }
+}
+class Sparrow implements Bird {
+    public void fly() { /* flutter */ }
+}
+
+void makeFly(Bird bird) {
+    bird.fly(); // works with any Bird
+}
+makeFly(new Eagle());   // OK
+makeFly(new Sparrow()); // OK
+```
+
 - Prefer composition over inheritance when a subtype cannot honour the full base contract
-- Write tests against the base type interface and run them against all subtypes (Liskov test suite pattern)
+- Write tests against the base type and run them against all subtypes (Liskov test suite pattern)
 - Use the "is-substitutable-for" test, not just the "is-a" test, when modelling hierarchies
 
 ## Sources
