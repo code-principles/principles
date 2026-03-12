@@ -34,13 +34,24 @@ Seed the active set with these universally-active principles:
 | CODE-SD-030 | Reveals intention |
 | CODE-SD-031 | No duplication |
 | CODE-SD-032 | Fewest elements |
-| CODE-SEC-001 | Validate input at system boundaries |
+| CODE-SEC-VALIDATE-INPUT | Validate input at system boundaries |
 | CODE-CS-DRY | DRY: Don't Repeat Yourself |
-| CODE-DX-001 | Name things by what they represent |
-| CODE-DX-002 | Keep functions small and single-purpose |
-| CODE-DX-003 | Write code for the reader, not the writer |
-| CODE-DX-005 | Delete dead code |
-| CODE-RL-001 | Fail fast, fail loudly |
+| CODE-CS-WET | WET: Write Every Time |
+| CODE-CS-YAGNI | YAGNI: You Aren't Gonna Need It |
+| CODE-CS-KISS | KISS: Keep It Simple |
+| CODE-CS-NIH | NIH: Not Invented Here |
+| CODE-CS-NO-SILVER-BULLET | No Silver Bullet |
+| CODE-CS-CQS | CQS: Command-Query Separation |
+| CODE-CS-BOY-SCOUT | The Boy Scout Rule |
+| CODE-CS-BROKEN-WINDOWS | Broken Windows |
+| CODE-CS-POSTELS-LAW | Postel's Law |
+| CODE-CS-HYRUMS-LAW | Hyrum's Law |
+| ARCH-CONWAYS-LAW | Conway's Law |
+| CODE-DX-NAMING | Name things by what they represent |
+| CODE-DX-SMALL-FUNCTIONS | Keep functions small and single-purpose |
+| CODE-DX-CODE-FOR-READERS | Write code for the reader, not the writer |
+| CODE-DX-DELETE-DEAD-CODE | Delete dead code |
+| CODE-CS-FAIL-FAST | Fail fast, fail loudly |
 
 ### Process Each .principles File (root → target)
 
@@ -83,11 +94,11 @@ Based on the code under review, activate ALL principles from matching contexts b
 
 **api-design** — REST/HTTP API endpoints, controllers, route handlers
 Signals: @RestController, @GetMapping, @PostMapping, @RequestMapping, app.get(, app.post(, router., HttpResponse, status_code, REST, endpoint, controller, FastAPI, flask, express, OpenAPI, swagger
-Activate: CODE-API-001 through CODE-API-015, CODE-SEC-001, CODE-SEC-004
+Activate: CODE-API-STANDARD-HTTP-METHODS, CODE-API-HATEOAS, CODE-API-RESOURCE-NOUNS, CODE-API-BACKWARD-COMPATIBILITY, CODE-API-HTTP-STATUS-CODES, CODE-SEC-VALIDATE-INPUT, CODE-SEC-004
 
 **concurrency** — Concurrent or parallel code using threads, async, or locks
 Signals: async, await, Thread, Lock, Mutex, Semaphore, synchronized, concurrent, parallel, atomic, volatile, CompletableFuture, Promise.all, asyncio, tokio, goroutine, channel
-Activate: CODE-CC-001 through CODE-CC-008
+Activate: CODE-CC-SYNC-SHARED-STATE through CODE-CC-STRUCTURED-CONCURRENCY
 
 **domain-modeling** — Domain-driven design with entities, value objects, aggregates
 Signals: Entity, ValueObject, Aggregate, Repository, DomainEvent, BoundedContext, domain, aggregate_root, repository, specification, factory
@@ -95,11 +106,11 @@ Activate: CODE-DM-001 through CODE-DM-008
 
 **data-pipeline** — Streaming, ETL, batch processing, message-driven data flows
 Signals: stream, pipeline, ETL, transform, batch, kafka, rabbitmq, message_queue, producer, consumer, subscriber, publisher, spark, flink, airflow, dag
-Activate: CODE-AR-013, CODE-AR-014, CODE-AR-015, CODE-RL-003, CODE-RL-005, CODE-RL-007
+Activate: CODE-AR-ASYNC-MESSAGING, CODE-AR-PIPES-AND-FILTERS, CODE-AR-MESSAGE-BROKER, CODE-RL-IDEMPOTENCY, CODE-RL-BACKPRESSURE, CODE-RL-SCHEMA-EVOLUTION
 
 **testing** — Test files, test frameworks, test utilities
 Signals: test_, _test.go, .test.ts, .test.js, .spec.ts, .spec.js, @Test, describe(, it(, expect(, assert, pytest, unittest, JUnit, jest, mocha, vitest, mock, stub, fixture
-Activate: CODE-TS-001 through CODE-TS-008
+Activate: CODE-TS-TEST-FIRST through CODE-TS-TEST-NAMING
 
 **object-oriented** — Class hierarchies, interfaces, inheritance, OOP patterns
 Signals: class, extends, implements, interface, abstract, override, virtual, protected, super(, base., inheritance, polymorphism
@@ -111,23 +122,23 @@ Activate: CODE-AR-001 through CODE-AR-012
 
 **infrastructure** — Infrastructure-as-code and provisioning configurations
 Signals: terraform, resource, provider, CloudFormation, ansible, playbook, pulumi, cdk, .tf, module, variable, output, data, stack
-Activate: CODE-AR-020 through CODE-AR-024
+Activate: CODE-AR-INFRASTRUCTURE-AS-CODE through CODE-AR-COMPOSABLE-MODULES
 
 **ui-interaction** — User interface components, forms, navigation, interaction
 Signals: Component, useState, useEffect, render, onClick, onChange, form, input, button, modal, dialog, navigation, route, template, view, directive, v-model, ngModel, @Component, JSX, TSX
-Activate: CODE-DX-006 through CODE-DX-010
+Activate: CODE-DX-SYSTEM-STATUS-VISIBILITY through CODE-DX-DATA-INK-RATIO
 
 **library-api** — Public libraries, SDKs, packages consumed by external users
 Signals: export, public API, SDK, package, library, @api, @public, module.exports, __init__.py, setup.py, package.json, Cargo.toml, *.gemspec, nuget, npm publish
-Activate: CODE-API-001 through CODE-API-010, CODE-API-014
+Activate: CODE-API-001 through CODE-API-010, CODE-API-BACKWARD-COMPATIBILITY
 
 **functional** — Functional programming patterns with immutability and pure functions
 Signals: map(, filter(, reduce(, flatMap, immutable, readonly, const, val, pure, lambda, fn, pipe, compose, curry, monad, functor, fold, pattern match
-Activate: CODE-SD-006, CODE-CC-002, CODE-TP-001 through CODE-TP-005
+Activate: CODE-SD-006, CODE-CC-PREFER-IMMUTABLE, CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
 
 **typed-language** — Statically typed languages with expressive type systems
 Signals: TypeScript, Kotlin, Rust, Haskell, C#, Scala, F#, .ts, .kt, .rs, .hs, .cs, .scala, type, interface, generic, enum, struct, trait
-Activate: CODE-TP-001 through CODE-TP-005
+Activate: CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
 
 ### Layer 3 — Risk-Elevated
 
@@ -135,27 +146,27 @@ Based on risk signals detected, elevate principles from matching risks. Elevated
 
 **authentication** — User authentication, sessions, identity verification
 Signals: password, login, logout, OAuth, JWT, token, session, authenticate, credential, sign_in, sign_up, bcrypt, hash, salt, OIDC, SAML, bearer, refresh_token
-Elevate: CODE-SEC-002, CODE-SEC-003, CODE-SEC-008
+Elevate: CODE-SEC-002, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-008
 
 **financial** — Payments, billing, currency, financial transactions
 Signals: payment, billing, invoice, currency, transaction, charge, refund, stripe, paypal, ledger, account_balance, decimal, money, price, checkout, subscription
-Elevate: CODE-SEC-001, CODE-SEC-004, CODE-RL-003, CODE-CC-001
+Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-004, CODE-RL-IDEMPOTENCY, CODE-CC-SYNC-SHARED-STATE
 
 **personal-data** — Personally identifiable information, privacy-sensitive data
 Signals: PII, GDPR, email, SSN, social_security, address, phone_number, date_of_birth, passport, driver_license, personal_data, consent, data_subject, anonymize, pseudonymize, encryption, CCPA, HIPAA
-Elevate: CODE-SEC-001, CODE-SEC-003, CODE-SEC-005, CODE-SEC-010
+Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-SECURITY-BY-DESIGN, CODE-SEC-SECURITY-LOGGING
 
 **public-api** — Versioned or published APIs consumed by third-party clients
 Signals: versioned, v1, v2, published, third-party, external, consumer, backward_compatible, deprecat, changelog, breaking_change, semver, api_version, public_api
-Elevate: CODE-API-014, CODE-API-001, CODE-API-004, CODE-RL-007
+Elevate: CODE-API-BACKWARD-COMPATIBILITY, CODE-API-001, CODE-API-004, CODE-RL-SCHEMA-EVOLUTION
 
 **high-throughput** — Performance-critical code paths requiring low latency
 Signals: hot_path, hot path, real-time, realtime, low-latency, low_latency, performance, benchmark, throughput, cache, pool, buffer, batch_size, optimization, critical_path, microsecond, nanosecond
-Elevate: CODE-PF-001 through CODE-PF-005, CODE-CC-006
+Elevate: CODE-PF-PROFILE-FIRST through CODE-PF-PREDICTABLE-LATENCY, CODE-CC-AVOID-LOCKS-IN-HOT-PATHS
 
 **distributed-system** — Inter-service communication, eventual consistency
 Signals: microservice, RPC, gRPC, event-driven, event_bus, saga, choreography, orchestration, circuit_breaker, retry, timeout, idempotent, eventual_consistency, distributed, service_mesh, message_broker, outbox, dead_letter
-Elevate: CODE-RL-002 through CODE-RL-006, CODE-OB-001 through CODE-OB-003, CODE-AR-013 through CODE-AR-015
+Elevate: CODE-RL-FAULT-TOLERANCE through CODE-RL-CONSISTENCY-MODELS, CODE-OB-STRUCTURED-TELEMETRY through CODE-OB-DISTRIBUTED-TRACING, CODE-AR-ASYNC-MESSAGING through CODE-AR-MESSAGE-BROKER
 
 **legacy-codebase** — Refactoring, migration, brownfield work
 Signals: refactor, migration, brownfield, legacy, technical_debt, tech_debt, deprecated, backward_compat, strangler, anti-corruption, modernize, rewrite, upgrade

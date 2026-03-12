@@ -29,12 +29,12 @@ The `principles/` directory is a **namespace container**. Each subdirectory is a
 
 ```
 principles/
-  code/                  ← general catalog (~71 principles)
+  code/                  ← general catalog (~88 principles)
     catalog.yaml         ← description only
     sec/
-      sec-001.md
+      validate-input.md
     api/
-      api-011.md
+      standard-http-methods.md
     ...
   solid/                 ← SOLID principles (5 principles)
     catalog.yaml         ← description only
@@ -135,17 +135,17 @@ IDs are **derived from file path** — no separate ID field is needed in the fil
 | `grasp/low-coupling.md` | `GRASP-LOW-COUPLING` |
 | `12factor/01-codebase.md` | `12FACTOR-01-CODEBASE` |
 | `owasp/a01.md` | `OWASP-A01` |
-| `code/api/api-011.md` | `CODE-API-011` |
-| `code/sec/sec-001.md` | `CODE-SEC-001` |
+| `code/api/standard-http-methods.md` | `CODE-API-STANDARD-HTTP-METHODS` |
+| `code/sec/validate-input.md` | `CODE-SEC-VALIDATE-INPUT` |
 | `corp/corp-0001.md` | `CORP-0001` |
 | `arch/xx/yy/yy-01.md` | `ARCH-XX-YY-01` |
 
-### Step-by-step: `code/api/api-001.md`
+### Step-by-step: `code/api/standard-http-methods.md`
 
-1. Segments: `code`, `api`, `api-001`
+1. Segments: `code`, `api`, `standard-http-methods`
 2. Dir segments uppercased: `CODE`, `API`
-3. Filename `api-001` → strip `api-` prefix → `001`
-4. Join: `CODE-API-001`
+3. Filename `standard-http-methods` → does not start with `api-`, use verbatim: `STANDARD-HTTP-METHODS`
+4. Join: `CODE-API-STANDARD-HTTP-METHODS`
 
 ### Step-by-step: `arch/xx/yy/yy-01.md`
 
@@ -435,8 +435,8 @@ The system discovers all `principles/*/catalog.yaml` files automatically. The na
 
 - Namespace prefix: uppercase, short (2-6 chars) — `CODE`, `CORP`, `ARCH`
 - Category segment: 2-4 uppercase chars — `SD`, `API`, `SEC`, `AR`
-- Numeric suffix: zero-padded to 3 digits for top-level (`001`), fewer digits acceptable for deep nesting
-- Named files: when a file name does not start with the parent directory name followed by `-`, the full filename is used verbatim as the final ID segment (e.g., `solid/srp.md` → `SOLID-SRP`, `owasp/a01.md` → `OWASP-A01`). Numeric prefixes work the same way (e.g., `12factor/01-codebase.md` → `12FACTOR-01-CODEBASE`).
+- Named files: the full filename is used verbatim as the final ID segment (e.g., `solid/srp.md` → `SOLID-SRP`, `code/api/standard-http-methods.md` → `CODE-API-STANDARD-HTTP-METHODS`, `owasp/a01.md` → `OWASP-A01`). Numeric prefixes work the same way (e.g., `12factor/01-codebase.md` → `12FACTOR-01-CODEBASE`).
+- Prefer descriptive slugs over opaque numbers — `validate-input.md` is immediately clear; `sec-001.md` is not.
 - Avoid: special characters, spaces, mixed case
 
 ### Depth Recommendations

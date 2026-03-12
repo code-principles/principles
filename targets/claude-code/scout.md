@@ -93,8 +93,8 @@ For each proposed file, show:
 [path]/.principles
   @group1          ← reason
   @group2          ← reason
-  CODE-OB-004      ← specific principle for this directory
-  !CODE-TS-001     ← exclusion and why
+  CODE-OB-SERVICE-LEVEL-OBJECTIVES      ← specific principle for this directory
+  !CODE-TS-TEST-FIRST     ← exclusion and why
 ```
 
 Ask for confirmation before writing: "I propose creating/updating N .principles files. Proceed? (yes to write, no to review proposals)"
@@ -129,7 +129,7 @@ Write or update each file as determined in Phase 4.
 @group2
 
 # Direct includes
-CODE-OB-004
+CODE-OB-SERVICE-LEVEL-OBJECTIVES
 ```
 
 Do not add comments to lines that were already present in an existing file — only add comments to newly added entries.
@@ -147,8 +147,8 @@ Files written:
   — unchanged /path/to/infra/.principles   (no changes needed)
 
 Active groups resolved:
-  @spring-boot → java → CODE-API-001..015, CODE-CC-001..008, CODE-SD-001..007 (N principles)
-  @security-focused → CODE-SEC-001..011 (N principles)
+  @spring-boot → java → CODE-API-001..015, CODE-CC-SYNC-SHARED-STATE..008, CODE-SD-001..007 (N principles)
+  @security-focused → CODE-SEC-VALIDATE-INPUT..011 (N principles)
 
 Next steps:
   - Run /prime to activate principles before writing code

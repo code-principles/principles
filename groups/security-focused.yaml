@@ -2,18 +2,18 @@ name: security-focused
 description: "Security-sensitive codebases — authentication, data protection, threat modeling"
 
 principles:
-  - CODE-SEC-001
+  - CODE-SEC-VALIDATE-INPUT
   - OWASP-A01
-  - CODE-SEC-003
+  - CODE-SEC-STRONG-CRYPTOGRAPHY
   - OWASP-A03
-  - CODE-SEC-005
+  - CODE-SEC-SECURITY-BY-DESIGN
   - OWASP-A05
   - OWASP-A06
   - OWASP-A07
-  - CODE-SEC-009
-  - CODE-SEC-010
+  - CODE-SEC-DATA-INTEGRITY
+  - CODE-SEC-SECURITY-LOGGING
   - OWASP-A10
-  - CODE-RL-001
-  - CODE-RL-003
-  - CODE-OB-001
-  - CODE-OB-005
+  - CODE-CS-FAIL-FAST
+  - CODE-RL-IDEMPOTENCY
+  - CODE-OB-STRUCTURED-TELEMETRY
+  - CODE-OB-EMIT-EVENTS
