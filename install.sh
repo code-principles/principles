@@ -169,20 +169,39 @@ install_copilot() {
     mkdir -p "$target_dir"
     mkdir -p "$prompts_dir"
 
-    # Check if file exists and has content
-    if [ -f "$target_file" ] && [ -s "$target_file" ]; then
-        echo -e "${YELLOW}Warning: $target_file already exists.${NC}"
-        echo "  Appending code-principles section. Review the file afterward."
-        echo "" >> "$target_file"
-        echo "<!-- code-principles: begin -->" >> "$target_file"
+    # Build the new block in a temp file
+    local block_file
+    block_file="$(mktemp)"
+    echo "<!-- code-principles: begin -->" > "$block_file"
+    write_principles_body "$block_file"
+    echo "<!-- code-principles: end -->" >> "$block_file"
+
+    if [ ! -f "$target_file" ] || [ ! -s "$target_file" ]; then
+        # New or empty file: create with just the block
+        cp "$block_file" "$target_file"
+    elif grep -q "^<!-- code-principles: begin -->$" "$target_file"; then
+        # Existing block found: replace it in-place
+        local result_file
+        result_file="$(mktemp)"
+        awk '
+            BEGIN { in_block=0 }
+            /^<!-- code-principles: begin -->$/ { in_block=1; next }
+            /^<!-- code-principles: end -->$/ { if (in_block) { in_block=0; next } }
+            !in_block { print }
+        ' "$target_file" > "$result_file"
+        # Trim trailing blank lines, then append the new block
+        awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
+            "$result_file" > "${result_file}.t" && mv "${result_file}.t" "$result_file"
+        [ -s "$result_file" ] && echo "" >> "$result_file"
+        cat "$block_file" >> "$result_file"
+        mv "$result_file" "$target_file"
     else
-        echo "<!-- code-principles: begin -->" > "$target_file"
+        # Existing file without our block: append
+        echo "" >> "$target_file"
+        cat "$block_file" >> "$target_file"
     fi
 
-    # Generate Copilot instructions
-    write_principles_body "$target_file"
-
-    echo "<!-- code-principles: end -->" >> "$target_file"
+    rm -f "$block_file"
 
     echo -e "${BOLD}Installing Copilot skills and prompt commands...${NC}"
 

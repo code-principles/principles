@@ -124,6 +124,10 @@ uninstall_copilot() {
         return
     }
 
+    # Trim trailing blank lines left after block removal
+    awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
+        "$temp_file" > "${temp_file}.t" && mv "${temp_file}.t" "$temp_file"
+
     if grep -q '[^[:space:]]' "$temp_file"; then
         mv "$temp_file" "$target_file"
         echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md (removed code-principles block)"
