@@ -4,7 +4,7 @@ This document describes the full architecture of the `.principles` hierarchy sys
 
 ---
 
-## 1. Overview
+## 🗺️ 1. Overview
 
 **What it is:** A portable, project-local configuration system that tells AI coding agents which software engineering principles apply to your codebase — similar in spirit to `.gitignore`, but for coding guidance.
 
@@ -27,7 +27,7 @@ This document describes the full architecture of the `.principles` hierarchy sys
 
 ---
 
-## 2. Catalog Structure
+## 📁 2. Catalog Structure
 
 The `principles/` directory is a **namespace container**. Each subdirectory is a namespace with its own catalog.
 
@@ -116,7 +116,7 @@ The namespace is the directory name. IDs are derived from file paths (see Sectio
 
 ---
 
-## 3. ID Derivation
+## 🔑 3. ID Derivation
 
 IDs are **derived from file path** — no separate ID field is needed in the file itself.
 
@@ -160,7 +160,7 @@ IDs are **derived from file path** — no separate ID field is needed in the fil
 
 ---
 
-## 4. Principle File Schema
+## 📄 4. Principle File Schema
 
 Every principle file follows this template:
 
@@ -210,7 +210,7 @@ Every principle file follows this template:
 
 ---
 
-## 5. Groups
+## 🗂️ 5. Groups
 
 Groups bundle related principles under a reusable name. They enable one-line activation of a full principle set for a technology.
 
@@ -283,7 +283,7 @@ principles:
 
 ---
 
-## 6. `.principles` File Format
+## 📝 6. `.principles` File Format
 
 Plain text. One entry per line. Filesystem mtime is the implicit last-modified timestamp.
 
@@ -356,9 +356,9 @@ When reviewing `/repo-root/src/payments/PaymentService.java`:
 
 ---
 
-## 7. Commands
+## 🛠️ 7. Commands
 
-### `/prime`
+### ⚡ `/prime`
 
 Activates principles before writing code. Run it before starting work on a task.
 
@@ -372,7 +372,7 @@ Activates principles before writing code. Run it before starting work on a task.
 | 4     | Read Principle Content        | Reads actual `.md` files; extracts full guidance (Violations + Good Practice)  |
 | 5     | Output                        | Presents active principles table with source column; states coding frame       |
 
-### `/audit`
+### 🔎 `/audit`
 
 Reviews code against activated principles. Outputs findings grouped by severity.
 
@@ -387,7 +387,7 @@ Reviews code against activated principles. Outputs findings grouped by severity.
 | 5     | Review                        | Applies each principle; groups findings by severity (Critical/High/Medium/Low)    |
 | 6     | Summary                       | Reports findings count; states principle source (hierarchy vs. dynamic detection) |
 
-### `/scout`
+### 🔍 `/scout`
 
 Analyses a project directory and creates or updates `.principles` files.
 
@@ -403,17 +403,17 @@ Analyses a project directory and creates or updates `.principles` files.
 
 ---
 
-## 8. Installer Targets
+## 📦 8. Installer Targets
 
 `install.sh` deploys the three commands (`/scout`, `/prime`, `/audit`) to three AI tool families. Each target writes different files because each tool family has its own discovery mechanism.
 
-### Claude Code (`./install.sh claude`)
+### 🤖 Claude Code (`./install.sh claude`)
 
 Writes to `~/.claude/commands/<name>.md` (global, user-level).
 
 Claude Code discovers slash commands by scanning `~/.claude/commands/` for `.md` files. The file body is the full prompt. No frontmatter is required.
 
-### GitHub Copilot (`./install.sh copilot <dir>`)
+### 🐙 GitHub Copilot (`./install.sh copilot <dir>`)
 
 Writes two sets of files per command, because Copilot has two separate client families:
 
@@ -428,7 +428,7 @@ Writes two sets of files per command, because Copilot has two separate client fa
 
 Also writes `.github/copilot-instructions.md` with the Layer 1–3 principle summary. This file is consumed by all Copilot clients (CLI and IDEs) as always-on background context.
 
-### Cursor (`./install.sh cursor <dir>`)
+### 🖱️ Cursor (`./install.sh cursor <dir>`)
 
 Writes to `.cursor/rules/code-principles.mdc`.
 
@@ -436,7 +436,7 @@ Cursor discovers rules by scanning `.cursor/rules/` for `.mdc` files. The frontm
 
 ---
 
-## 9. Adding a New Namespace
+## ➕ 9. Adding a New Namespace
 
 To add a company-specific namespace alongside the shipped `code` catalog:
 
@@ -466,7 +466,7 @@ The system discovers all `principles/*/catalog.yaml` files automatically. The na
 
 ---
 
-## 10. ID Format Guidance
+## 🏷️ 10. ID Format Guidance
 
 ### Naming Conventions
 
@@ -494,17 +494,22 @@ Add a new category directory when:
 
 ---
 
-## 11. Contributing Principles
+## 🤝 11. Contributing Principles
 
-### Requirements
+> **Scope of this repo:** Principles contributed here must be **established, widely recognized concepts** from the software engineering literature — named principles, published patterns, or documented practices backed by authoritative sources. They must not duplicate what is already in the catalog.
+>
+> 🍴 If your principle is original, company-specific, domain-niche, or doesn't have an authoritative published source, **fork this repo** and add it in your own namespace (e.g., `principles/corp/`) rather than submitting a PR.
+
+### ✅ Requirements
 
 Every new principle must have:
 - A clear principle description in your own words
 - At least one verifiable published source (book with ISBN, paper with DOI, or authoritative URL)
 - Correct layer assignment (1 = universal, 2 = contextual, 3 = risk-elevated)
 - At least one "Violations to detect" entry
+- No significant overlap with an existing principle in the catalog
 
-### Process
+### 🔁 Process
 
 1. Copy `principles/code/TEMPLATE.md` to the appropriate category directory
 2. Fill in all fields
@@ -515,7 +520,7 @@ Every new principle must have:
    - Group file updates
    - A brief rationale for the source choice
 
-### Source Requirements
+### 📚 Source Requirements
 
 Acceptable sources:
 - Books: full citation with ISBN (e.g., *Effective Java* by Bloch, 3rd ed., ISBN 978-0134685991)

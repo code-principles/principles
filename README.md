@@ -6,13 +6,13 @@ A curated catalog of software engineering principles, organized into a `.princip
 
 > See [DISCLAIMER.md](DISCLAIMER.md) — this is a proof of concept. Groups are opinionated, gaps exist, and adjustments are expected.
 
-## Philosophy
+## 🧠 Philosophy
 
 `.principles` does **not** teach the AI anything. Modern AI coding agents already know SOLID, OWASP, DDD, and the rest. The point is to **focus and trigger** that knowledge — to give the AI context about *which* principles matter for *this* codebase, alongside the other AI instructions it receives (AGENTS.md, CLAUDE.md, `.github/copilot-instructions.md`, etc.).
 
 Think of it as: the AI instructions tell the agent *how to behave*; `.principles` tells it *which engineering lens to apply*.
 
-## How it works
+## ⚙️ How it works
 
 Place a `.principles` file in your project root (and optionally in subdirectories) to declare which principles apply:
 
@@ -29,7 +29,7 @@ CODE-OB-004
 
 The system walks up from the reviewed file to the git root, collecting `.principles` files and merging them (outermost first, innermost last). The AI then reads the full principle content before coding or reviewing.
 
-### Layer model
+### 🗂️ Layer model
 
 | Layer                       | When                          | What                                                                               |
 |-----------------------------|-------------------------------|------------------------------------------------------------------------------------|
@@ -37,13 +37,13 @@ The system walks up from the reviewed file to the git root, collecting `.princip
 | **Layer 2 — Contextual**    | Based on what you're building | API design, concurrency, data modeling, etc.                                       |
 | **Layer 3 — Risk-elevated** | Based on risk signals         | Security, performance, backward compatibility                                      |
 
-### Three commands
+### 🛠️ Three commands
 
-- **`/scout`** — Analyzes your project, detects language/framework/domain, and creates `.principles` files.
-- **`/prime`** — Resolves your `.principles` hierarchy, reads full principle guidance, prepares your coding frame.
-- **`/audit`** — Resolves your `.principles` hierarchy, reads principle content, reviews code, and groups findings by severity (Critical / High / Medium / Low).
+- 🔍 **`/scout`** — Analyzes your project, detects language/framework/domain, and creates `.principles` files.
+- ⚡ **`/prime`** — Resolves your `.principles` hierarchy, reads full principle guidance, prepares your coding frame.
+- 🔎 **`/audit`** — Resolves your `.principles` hierarchy, reads principle content, reviews code, and groups findings by severity (Critical / High / Medium / Low).
 
-## Quick start
+## 🚀 Quick start
 
 ```bash
 # Clone the repo
@@ -65,7 +65,7 @@ For GitHub Copilot, run `./install.sh copilot <project-dir>`. This writes:
 
 The prompt files need YAML frontmatter to be discoverable. `install.sh copilot` now generates valid prompt files, but command visibility still depends on the Copilot client you use.
 
-## Principle catalog
+## 📚 Principle catalog
 
 150+ principles across 13 categories:
 
@@ -85,9 +85,9 @@ The prompt files need YAML frontmatter to be discoverable. `install.sh copilot` 
 | `CODE-DX-`  | Developer Experience                                  |
 | `CODE-TP-`  | Type & Pattern Safety                                 |
 
-Shipped groups (e.g., `@spring-boot`, `@react`, `@microservices`, `@security-focused`) bundle related principles for common stacks. See [DESIGN.md](DESIGN.md#5-groups) for the full list.
+Shipped groups (e.g., `@spring-boot`, `@react`, `@microservices`, `@security-focused`) bundle related principles for common stacks. See [DESIGN.md](DESIGN.md#-5-groups) for the full list.
 
-## Example review output
+## 💡 Example review output
 
 ```
 ## Critical
@@ -111,22 +111,26 @@ Active principles: CODE-SEC-001..011, CODE-CC-001..008, CODE-SD-001..007
 Principle source: .principles hierarchy (2 files)
 ```
 
-## Extending with your own principles
+## 🔧 Extending with your own principles
 
-Fork this repo and add a `principles/corp/` namespace (or any name) for corporate or domain-specific principles. Reference them with `CORP-0001` in your `.principles` files. See [DESIGN.md](DESIGN.md#8-adding-a-new-namespace) for the full process.
+Fork this repo and add a `principles/corp/` namespace (or any name) for corporate or domain-specific principles. Reference them with `CORP-0001` in your `.principles` files. See [DESIGN.md](DESIGN.md#-9-adding-a-new-namespace) for the full process.
 
-## Contributing
+## 🤝 Contributing
 
-Every contribution requires a clear principle description, at least one verifiable published source (book with ISBN, paper with DOI, or authoritative URL), and correct layer assignment. See [DESIGN.md](DESIGN.md#10-contributing-principles) for the full process.
+Principles in this repo must be **established, widely recognized concepts** from the software engineering literature — named principles, published patterns, or documented practices backed by authoritative sources. They must not duplicate what is already in the catalog.
 
-## License
+If you need original, company-specific, or niche principles that don't meet this bar, **fork this repo** and add them in your own namespace (e.g., `principles/corp/`).
+
+Every contribution requires a clear principle description, at least one verifiable published source (book with ISBN, paper with DOI, or authoritative URL), and correct layer assignment. See [DESIGN.md](DESIGN.md#-11-contributing-principles) for the full process.
+
+## 📄 License
 
 - **Principle texts:** [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) — use freely, credit required, share-alike
 - **Scripts and tooling:** [MIT](https://opensource.org/licenses/MIT)
-- **How to apply this in practice:** see [LICENSE-INTERPRETATION.md](LICENSE-INTERPRETATION.md) (including `internal use` vs `distribution`, and what users/developers may do and must do)
-- **Ownership boundary:** see [Ownership and curation scope](LICENSE-INTERPRETATION.md#10-ownership-and-curation-scope)
+- **How to apply this in practice:** see [LICENSE-INTERPRETATION.md](LICENSE-INTERPRETATION.md) for internal use vs distribution, and what users/developers may do and must do
+- **Ownership boundary:** see [LICENSE-INTERPRETATION.md](LICENSE-INTERPRETATION.md) (section 10: Ownership and curation scope)
 
-## Support
+## ☕ Support
 
 If this project is useful to you, you can support ongoing maintenance and updates:
 
