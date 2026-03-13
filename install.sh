@@ -5,7 +5,7 @@ set -euo pipefail
 #
 # Usage:
 #   ./install.sh claude              # Install Claude Code slash commands
-#   ./install.sh copilot [project]   # Generate Copilot instructions for a project
+#   ./install.sh copilot [project]   # Generate Copilot instructions + prompt commands
 #   ./install.sh cursor [project]    # Generate Cursor rules for a project
 #   ./install.sh all [project]       # Install all targets
 #   ./install.sh --list              # Show what's installed
@@ -50,8 +50,9 @@ install_claude() {
     echo -e "Installed ${BOLD}$count${NC} commands to $CLAUDE_COMMANDS_DIR"
     echo ""
     echo "Available commands:"
-    echo "  /prepare-coding  — Scan context and activate principles before coding"
-    echo "  /review-code     — Review code with severity-categorized findings"
+    echo "  /scout  — Detect project profile and generate .principles placements"
+    echo "  /prime  — Activate principles before writing code"
+    echo "  /audit  — Review code with severity-categorized findings"
 }
 
 install_copilot() {
@@ -66,8 +67,10 @@ install_copilot() {
 
     local target_dir="$project_dir/.github"
     local target_file="$target_dir/copilot-instructions.md"
+    local prompts_dir="$target_dir/prompts"
 
     mkdir -p "$target_dir"
+    mkdir -p "$prompts_dir"
 
     # Check if file exists and has content
     if [ -f "$target_file" ] && [ -s "$target_file" ]; then
@@ -125,9 +128,27 @@ COPILOT_EOF
 
     echo "<!-- code-principles: end -->" >> "$target_file"
 
+    echo -e "${BOLD}Installing Copilot prompt commands...${NC}"
+
+    local prompt_count=0
+    local file
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local command_name
+            command_name="$(basename "$file" .md)"
+            cp "$file" "$prompts_dir/$command_name.prompt.md"
+            prompt_count=$((prompt_count + 1))
+            echo -e "  ${GREEN}✓${NC} /$command_name"
+        fi
+    done
+
     echo -e "  ${GREEN}✓${NC} $target_file"
     echo ""
-    echo "Copilot instructions written. Review and commit the file."
+    echo "Copilot assets written:"
+    echo "  - .github/copilot-instructions.md"
+    echo "  - .github/prompts/*.prompt.md (${prompt_count} commands)"
+    echo ""
+    echo "Open Copilot Chat in this repo and run /scout, /prime, or /audit."
 }
 
 install_cursor() {
@@ -223,7 +244,7 @@ show_usage() {
     echo ""
     echo "Targets:"
     echo "  claude              Install slash commands to ~/.claude/commands/"
-    echo "  copilot [dir]       Generate .github/copilot-instructions.md (default: current dir)"
+    echo "  copilot [dir]       Generate .github/copilot-instructions.md + .github/prompts/*.prompt.md"
     echo "  cursor [dir]        Generate .cursor/rules/code-principles.mdc (default: current dir)"
     echo "  all [dir]           Install all targets"
     echo ""

@@ -22,6 +22,8 @@ else
     GREEN='' RED='' BOLD='' NC=''
 fi
 
+NEUTRAL='-'
+
 cleanup_dir_if_empty() {
     local dir="$1"
 
@@ -69,7 +71,7 @@ uninstall_claude() {
             if [ -f "$installed_file" ]; then
                 rm "$installed_file"
                 count=$((count + 1))
-                echo -e "  ${RED}✗${NC} /$(basename "$file" .md)"
+                echo -e "  ${GREEN}✓${NC} /$(basename "$file" .md)"
             fi
         fi
     done
@@ -80,7 +82,7 @@ uninstall_claude() {
     fi
 
     if [ $count -eq 0 ]; then
-        echo "  No current commands found to remove."
+        echo "  ${NEUTRAL} No current commands found to remove."
     else
         echo ""
         echo -e "Removed ${GREEN}$count${NC} commands."
@@ -90,11 +92,12 @@ uninstall_claude() {
 uninstall_copilot() {
     local project_dir="$1"
     local target_file="$project_dir/.github/copilot-instructions.md"
+    local prompts_dir="$project_dir/.github/prompts"
 
     echo -e "${BOLD}Removing GitHub Copilot instructions...${NC}"
 
     if [ ! -f "$target_file" ]; then
-        echo "  No Copilot instructions found to remove."
+        echo "  ${NEUTRAL} No Copilot instructions found to remove."
         return
     fi
 
@@ -109,18 +112,39 @@ uninstall_copilot() {
         END { exit removed ? 0 : 1 }
     ' "$target_file" > "$temp_file" || {
         rm -f "$temp_file"
-        echo "  No code-principles Copilot instructions found to remove."
+        echo "  ${NEUTRAL} No code-principles Copilot instructions found to remove."
         return
     }
 
     if grep -q '[^[:space:]]' "$temp_file"; then
         mv "$temp_file" "$target_file"
-        echo -e "  ${RED}✗${NC} .github/copilot-instructions.md (removed code-principles block)"
+        echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md (removed code-principles block)"
     else
         rm -f "$temp_file" "$target_file"
-        echo -e "  ${RED}✗${NC} .github/copilot-instructions.md"
+        echo -e "  ${GREEN}✓${NC} .github/copilot-instructions.md"
     fi
 
+    echo ""
+    echo -e "${BOLD}Removing GitHub Copilot prompt commands...${NC}"
+
+    local prompt_count=0
+    local file
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local prompt_file="$prompts_dir/$(basename "$file" .md).prompt.md"
+            if [ -f "$prompt_file" ]; then
+                rm "$prompt_file"
+                prompt_count=$((prompt_count + 1))
+                echo -e "  ${GREEN}✓${NC} .github/prompts/$(basename "$prompt_file")"
+            fi
+        fi
+    done
+
+    if [ $prompt_count -eq 0 ]; then
+        echo "  ${NEUTRAL} No Copilot prompt commands found to remove."
+    fi
+
+    cleanup_dir_if_empty "$prompts_dir"
     cleanup_dir_if_empty "$project_dir/.github"
 }
 
@@ -131,12 +155,12 @@ uninstall_cursor() {
     echo -e "${BOLD}Removing Cursor rules...${NC}"
 
     if [ ! -f "$target_file" ]; then
-        echo "  No Cursor rule found to remove."
+        echo "  ${NEUTRAL} No Cursor rule found to remove."
         return
     fi
 
     rm "$target_file"
-    echo -e "  ${RED}✗${NC} .cursor/rules/code-principles.mdc"
+    echo -e "  ${GREEN}✓${NC} .cursor/rules/code-principles.mdc"
 
     cleanup_dir_if_empty "$project_dir/.cursor/rules"
     cleanup_dir_if_empty "$project_dir/.cursor"
