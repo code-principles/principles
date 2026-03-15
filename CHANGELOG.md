@@ -22,6 +22,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - **Cross-platform installer** — Bash, PowerShell, and CMD wrapper scripts
 - **3 target platforms** — Claude Code, GitHub Copilot, Cursor
 - **Full documentation suite** — README, DESIGN.md, INSTALL.md, REQUIREMENTS.md, and more
+- **Inspection sections** — `.context-inspect.md` files and inline `## Inspection` sections with `grep` patterns for automated principle verification across `code/` and `solid/` namespaces
+- **Improved catalog** — restructured `principles/catalog.yaml` with expanded metadata
+- **Enhanced audit command** — richer inspection-driven audit flow in `targets/claude-code/audit.md`
+- **CONTRIBUTING.md** — contributor guidelines added
+- **Layer refinements** — updated universal layer, context mappings, and risk signals
 
 ### What's Next
 
