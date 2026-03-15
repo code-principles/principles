@@ -147,8 +147,8 @@ Files written:
   — unchanged /path/to/infra/.principles   (no changes needed)
 
 Active groups resolved:
-  @spring-boot → java → CODE-API-001..015, CODE-CC-SYNC-SHARED-STATE..008, CODE-SD-001..007 (N principles)
-  @security-focused → CODE-SEC-VALIDATE-INPUT..011 (N principles)
+  @spring-boot → @java, CODE-API-STANDARD-HTTP-METHODS, 12FACTOR-01-CODEBASE, DDD-REPOSITORY, OWASP-03-INJECTION ... (N principles)
+  @security-focused → CODE-SEC-VALIDATE-INPUT, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-SECURITY-BY-DESIGN ... (N principles)
 
 Next steps:
   - Run /prime to activate principles before writing code

@@ -1,944 +1,1178 @@
-# .principles — Master Catalog
-# Generated from principle files. 148 principles across 13 categories.
-# Each entry maps a principle ID to its metadata.
-# Full principle text lives in principles/<CATEGORY>/<ID>.md
+# .principles — Consolidated Catalog
+# Generated from principle files. 187 principles across 13 namespaces.
+# Each entry maps a current principle ID to lightweight metadata.
+# Full principle text lives in the principle markdown files under principles/.
 
 # =============================================================================
-# API — API Design
+# 12FACTOR
 # =============================================================================
 
-API-001:
-  title: "Minimize accessibility of classes and members"
+12FACTOR-01-CODEBASE:
+  title: "Codebase"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, deployment]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-002:
-  title: "Use interfaces to define types, not constants"
+12FACTOR-02-DEPENDENCIES:
+  title: "Dependencies"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, dependency-management]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-003:
-  title: "Prefer class hierarchies to tagged classes"
+12FACTOR-03-CONFIG:
+  title: "Config"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, security, configuration]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-004:
-  title: "Design method signatures carefully"
+12FACTOR-04-BACKING-SERVICES:
+  title: "Backing Services"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, dependency-management]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-005:
-  title: "Return empty collections, not null"
+12FACTOR-05-BUILD-RELEASE-RUN:
+  title: "Build, Release, Run"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, deployment]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-006:
-  title: "Write doc comments for all exposed API elements"
+12FACTOR-06-PROCESSES:
+  title: "Processes"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, scalability]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-007:
-  title: "Minimize mutability — prefer immutable classes"
+12FACTOR-07-PORT-BINDING:
+  title: "Port Binding"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, deployment]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-008:
-  title: "Prefer static factory methods over constructors"
+12FACTOR-08-CONCURRENCY:
+  title: "Concurrency"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, scalability]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-009:
-  title: "Consider builders for constructors with many parameters"
+12FACTOR-09-DISPOSABILITY:
+  title: "Disposability"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, resilience]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-010:
-  title: "Eliminate unchecked warnings"
+12FACTOR-10-DEV-PROD-PARITY:
+  title: "Dev/Prod Parity"
   layer: 2
-  categories: [api-design, developer-experience]
-  languages: [java]
+  categories: [architecture, cloud-native, quality]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-011:
-  title: "Use standard HTTP methods with their defined semantics"
+12FACTOR-11-LOGS:
+  title: "Logs"
   layer: 2
-  categories: [api-design, rest, protocol-design]
-  languages: [all]
+  categories: [architecture, cloud-native, observability]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-012:
-  title: "Make APIs self-descriptive using hypermedia (HATEOAS)"
+12FACTOR-12-ADMIN-PROCESSES:
+  title: "Admin Processes"
   layer: 2
-  categories: [api-design, rest, protocol-design]
-  languages: [all]
+  categories: [architecture, cloud-native, operations]
+  applies_to: [cloud-native, twelve-factor-apps]
 
-API-013:
-  title: "Design resources around nouns, not verbs"
+# =============================================================================
+# ARCH
+# =============================================================================
+
+ARCH-CONWAYS-LAW:
+  title: "Conway's Law"
   layer: 2
-  categories: [api-design, rest, protocol-design]
-  languages: [all]
+  categories: [architecture, org-design, systems-thinking]
+  applies_to: [system-design, team-structure]
 
-API-014:
+ARCH-DECISION-RECORDS:
+  title: "Record architecture decisions as ADRs"
+  layer: 1
+  categories: [architecture, governance, documentation]
+  applies_to: [all]
+
+ARCH-DESIGN-FOR-FAILURE:
+  title: "Assume failure; design around it"
+  layer: 2
+  categories: [architecture, resilience, fault-tolerance, distributed-systems]
+  applies_to: [distributed-systems, microservices, cloud-native]
+
+ARCH-OBSERVABILITY-BY-DESIGN:
+  title: "Observability is an architectural property, not an afterthought"
+  layer: 1
+  categories: [architecture, observability, operations, distributed-systems]
+  applies_to: [all]
+
+ARCH-REPLACEABILITY:
+  title: "Design for replaceability, not permanence"
+  layer: 2
+  categories: [architecture, evolutionary-architecture, maintainability]
+  applies_to: [all]
+
+ARCH-SERVICE-BOUNDARIES:
+  title: "Define and enforce explicit service boundaries"
+  layer: 2
+  categories: [architecture, distributed-systems, domain-driven-design]
+  applies_to: [microservices, distributed-systems, service-oriented]
+
+ARCH-STATELESS-FIRST:
+  title: "Design service instances to be stateless"
+  layer: 2
+  categories: [architecture, scalability, cloud-native, resilience]
+  applies_to: [services, apis, web-applications]
+
+# =============================================================================
+# CLEAN-ARCH
+# =============================================================================
+
+CLEAN-ARCH-ARCHITECTURAL-BOUNDARIES:
+  title: "Define Clear Architectural Boundaries"
+  layer: 2
+  categories: [architecture]
+  applies_to: [all]
+
+CLEAN-ARCH-DEPENDENCY-RULE:
+  title: "The Dependency Rule"
+  layer: 2
+  categories: [architecture, maintainability]
+  applies_to: [all]
+
+CLEAN-ARCH-KEEP-OPTIONS-OPEN:
+  title: "Keep Options Open"
+  layer: 2
+  categories: [architecture]
+  applies_to: [all]
+
+CLEAN-ARCH-SEPARATE-BUSINESS-RULES:
+  title: "Separate Business Rules from Frameworks and Delivery Mechanisms"
+  layer: 2
+  categories: [architecture, maintainability]
+  applies_to: [all]
+
+# =============================================================================
+# CODE
+# =============================================================================
+
+CODE-API-BACKWARD-COMPATIBILITY:
   title: "Support backward compatibility — never break existing clients"
   layer: 2
   categories: [api-design, rest, protocol-design]
-  languages: [all]
+  applies_to: [all]
 
-API-015:
+CODE-API-HATEOAS:
+  title: "Make APIs self-descriptive using hypermedia (HATEOAS)"
+  layer: 2
+  categories: [api-design, rest, protocol-design]
+  applies_to: [all]
+
+CODE-API-HTTP-STATUS-CODES:
   title: "Use proper HTTP status codes to communicate outcomes"
   layer: 2
   categories: [api-design, rest, protocol-design]
-  languages: [all]
+  applies_to: [all]
 
-# =============================================================================
-# AR — Architecture
-# =============================================================================
-
-AR-001:
-  title: "One codebase, many deploys"
+CODE-API-RESOURCE-NOUNS:
+  title: "Design resources around nouns, not verbs"
   layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
+  categories: [api-design, rest, protocol-design]
+  applies_to: [all]
 
-AR-002:
-  title: "Explicitly declare dependencies"
+CODE-API-STANDARD-HTTP-METHODS:
+  title: "Use standard HTTP methods with their defined semantics"
   layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
+  categories: [api-design, rest, protocol-design]
+  applies_to: [all]
 
-AR-003:
-  title: "Store config in the environment"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-004:
-  title: "Treat backing services as attached resources"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-005:
-  title: "Strictly separate build, release, run"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-006:
-  title: "Execute as stateless processes"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-007:
-  title: "Export services via port binding"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-008:
-  title: "Scale out via the process model"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-009:
-  title: "Maximize robustness with fast startup and graceful shutdown"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-010:
-  title: "Keep development and production as similar as possible"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-011:
-  title: "Treat logs as event streams"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-012:
-  title: "Run admin tasks as one-off processes"
-  layer: 2
-  categories: [architecture, cloud-native, deployment]
-  languages: [all]
-
-AR-013:
+CODE-AR-ASYNC-MESSAGING:
   title: "Use messaging for asynchronous integration between services"
   layer: 2
   categories: [architecture, integration, distributed-systems]
-  languages: [all]
+  applies_to: [all]
 
-AR-014:
-  title: "Apply the Pipes and Filters pattern for composable processing"
-  layer: 2
-  categories: [architecture, integration]
-  languages: [all]
-
-AR-015:
-  title: "Use a message broker to decouple producers from consumers"
-  layer: 2
-  categories: [architecture, integration, distributed-systems]
-  languages: [all]
-
-AR-016:
-  title: "Separate business rules from frameworks and delivery mechanisms"
-  layer: 2
-  categories: [architecture, maintainability]
-  languages: [all]
-
-AR-017:
-  title: "Apply the Dependency Rule — source code dependencies must point inward"
-  layer: 2
-  categories: [architecture, maintainability]
-  languages: [all]
-
-AR-018:
-  title: "Define clear architectural boundaries between components"
-  layer: 2
-  categories: [architecture]
-  languages: [all]
-
-AR-019:
-  title: "Keep options open — defer decisions about frameworks and databases"
-  layer: 2
-  categories: [architecture]
-  languages: [all]
-
-AR-020:
-  title: "Define all infrastructure as code — no manual changes to environments"
-  layer: 2
-  categories: [architecture, infrastructure, devops]
-  languages: [all]
-
-AR-021:
-  title: "Make infrastructure changes through a pipeline, not direct access"
-  layer: 2
-  categories: [architecture, infrastructure, devops]
-  languages: [all]
-
-AR-022:
-  title: "Design infrastructure for immutability — replace, don't patch"
-  layer: 2
-  categories: [architecture, infrastructure, devops]
-  languages: [all]
-
-AR-023:
-  title: "Test infrastructure code like application code"
-  layer: 2
-  categories: [architecture, infrastructure, devops]
-  languages: [all]
-
-AR-024:
+CODE-AR-COMPOSABLE-MODULES:
   title: "Keep infrastructure modules small and composable"
   layer: 2
   categories: [architecture, infrastructure, devops]
-  languages: [all]
+  applies_to: [all]
 
-# =============================================================================
-# CC — Concurrency
-# =============================================================================
-
-CC-001:
-  title: "Guard shared mutable state with synchronization"
+CODE-AR-IMMUTABLE-INFRASTRUCTURE:
+  title: "Design infrastructure for immutability — replace, don't patch"
   layer: 2
-  categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  categories: [architecture, infrastructure, devops]
+  applies_to: [all]
 
-CC-002:
-  title: "Prefer immutable objects for thread safety"
+CODE-AR-INFRASTRUCTURE-AS-CODE:
+  title: "Define all infrastructure as code — no manual changes to environments"
   layer: 2
-  categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  categories: [architecture, infrastructure, devops]
+  applies_to: [all]
 
-CC-003:
-  title: "Never publish a reference to an incompletely constructed object"
+CODE-AR-MESSAGE-BROKER:
+  title: "Use a message broker to decouple producers from consumers"
   layer: 2
-  categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  categories: [architecture, integration, distributed-systems]
+  applies_to: [all]
 
-CC-004:
-  title: "Use higher-level concurrency utilities over wait/notify"
+CODE-AR-PIPELINE-CHANGES:
+  title: "Make infrastructure changes through a pipeline, not direct access"
   layer: 2
-  categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  categories: [architecture, infrastructure, devops]
+  applies_to: [all]
 
-CC-005:
-  title: "Document thread-safety guarantees"
+CODE-AR-PIPES-AND-FILTERS:
+  title: "Apply the Pipes and Filters pattern for composable processing"
   layer: 2
-  categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  categories: [architecture, integration]
+  applies_to: [all]
 
-CC-006:
+CODE-AR-TEST-INFRASTRUCTURE:
+  title: "Test infrastructure code like application code"
+  layer: 2
+  categories: [architecture, infrastructure, devops]
+  applies_to: [all]
+
+CODE-CC-AVOID-LOCKS-IN-HOT-PATHS:
   title: "Avoid holding locks during long-running operations"
   layer: 2
   categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  applies_to: [all]
 
-CC-007:
-  title: "Prefer task-based concurrency over raw threads"
+CODE-CC-DOCUMENT-THREAD-SAFETY:
+  title: "Document thread-safety guarantees"
   layer: 2
   categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  applies_to: [all]
 
-CC-008:
+CODE-CC-HIGHER-LEVEL-CONCURRENCY:
+  title: "Use higher-level concurrency utilities over wait/notify"
+  layer: 2
+  categories: [concurrency, thread-safety, performance]
+  applies_to: [all]
+
+CODE-CC-PREFER-IMMUTABLE:
+  title: "Prefer immutable objects for thread safety"
+  layer: 2
+  categories: [concurrency, thread-safety, performance]
+  applies_to: [all]
+
+CODE-CC-SAFE-PUBLICATION:
+  title: "Never publish a reference to an incompletely constructed object"
+  layer: 2
+  categories: [concurrency, thread-safety, performance]
+  applies_to: [all]
+
+CODE-CC-STRUCTURED-CONCURRENCY:
   title: "Design for structured concurrency (parent scope owns child tasks)"
   layer: 2
   categories: [concurrency, thread-safety, performance]
-  languages: [all]
+  applies_to: [all]
 
-# =============================================================================
-# CS — Code Smells & Refactoring
-# =============================================================================
+CODE-CC-SYNC-SHARED-STATE:
+  title: "Guard shared mutable state with synchronization"
+  layer: 2
+  categories: [concurrency, thread-safety, performance]
+  applies_to: [all]
 
-CS-001:
-  title: "Don't repeat knowledge"
+CODE-CC-TASK-BASED-CONCURRENCY:
+  title: "Prefer task-based concurrency over raw threads"
+  layer: 2
+  categories: [concurrency, thread-safety, performance]
+  applies_to: [all]
+
+CODE-CS-BOY-SCOUT:
+  title: "The Boy Scout Rule"
   layer: 1
-  categories: [code-smells, maintainability, refactoring]
-  languages: [all]
+  categories: [maintainability, refactoring, craftsmanship]
+  applies_to: [all]
 
-CS-002:
-  title: "Long Method"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-003:
-  title: "Large Class"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-004:
-  title: "Feature Envy"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-005:
-  title: "Data Clumps"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-006:
-  title: "Primitive Obsession"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-007:
-  title: "Switch Statements"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-008:
-  title: "Speculative Generality"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-009:
-  title: "Message Chains"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-CS-010:
-  title: "Comments as deodorant"
-  layer: 2
-  categories: [code-smells, refactoring, maintainability]
-  languages: [all]
-
-# =============================================================================
-# DM — Domain Modeling
-# =============================================================================
-
-DM-001:
-  title: "Model the domain in code using Ubiquitous Language"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-002:
-  title: "Define explicit Bounded Contexts"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-003:
-  title: "Use Entities for objects with identity continuity"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-004:
-  title: "Use Value Objects for descriptive, identity-less concepts"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-005:
-  title: "Design Aggregates as consistency boundaries"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-006:
-  title: "Access Aggregates only through their root"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-007:
-  title: "Use Domain Events to communicate between bounded contexts"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-DM-008:
-  title: "Separate domain logic from infrastructure with Repositories"
-  layer: 2
-  categories: [domain-modeling, domain-driven-design]
-  languages: [all]
-
-# =============================================================================
-# DX — Developer Experience (naming, readability, UX heuristics)
-# =============================================================================
-
-DX-001:
-  title: "Name things by what they represent"
+CODE-CS-BROKEN-WINDOWS:
+  title: "Broken Windows"
   layer: 1
-  categories: [developer-experience, readability, maintainability]
-  languages: [all]
+  categories: [maintainability, craftsmanship, team-culture]
+  applies_to: [all]
 
-DX-002:
-  title: "Keep functions small and single-purpose"
-  layer: 1
-  categories: [developer-experience, readability]
-  languages: [all]
-
-DX-003:
-  title: "Write code for the reader, not the writer"
-  layer: 1
-  categories: [developer-experience, readability]
-  languages: [all]
-
-DX-004:
-  title: "Reduce cognitive load in code structure"
-  layer: 2
-  categories: [developer-experience, readability]
-  languages: [all]
-
-DX-005:
-  title: "Delete dead code"
-  layer: 1
-  categories: [developer-experience, readability]
-  languages: [all]
-
-DX-006:
-  title: "Provide clear visibility of system status"
-  layer: 2
-  categories: [developer-experience, usability, ux-design]
-  languages: [all]
-
-DX-007:
-  title: "Support recognition over recall in interfaces"
-  layer: 2
-  categories: [developer-experience, usability, ux-design]
-  languages: [all]
-
-DX-008:
-  title: "Design for error prevention, not just error handling"
-  layer: 2
-  categories: [developer-experience, usability, ux-design]
-  languages: [all]
-
-DX-009:
-  title: "Provide clear affordances and feedback"
-  layer: 2
-  categories: [developer-experience, usability, ux-design]
-  languages: [all]
-
-DX-010:
-  title: "Minimize data-ink ratio in visualizations"
-  layer: 2
-  categories: [developer-experience, usability, ux-design]
-  languages: [all]
-
-# =============================================================================
-# OB — Observability & Operations
-# =============================================================================
-
-OB-001:
-  title: "Instrument code with structured, contextual telemetry"
-  layer: 2
-  categories: [observability, operations, reliability]
-  languages: [all]
-
-OB-002:
-  title: "Use high-cardinality fields for debugging in production"
-  layer: 2
-  categories: [observability, operations, reliability]
-  languages: [all]
-
-OB-003:
-  title: "Trace requests across service boundaries with correlation IDs"
-  layer: 2
-  categories: [observability, operations, reliability]
-  languages: [all]
-
-OB-004:
-  title: "Define and measure SLOs (Service Level Objectives)"
-  layer: 2
-  categories: [observability, operations, reliability]
-  languages: [all]
-
-OB-005:
-  title: "Emit events, not just metrics"
-  layer: 2
-  categories: [observability, operations, reliability]
-  languages: [all]
-
-# =============================================================================
-# PF — Performance
-# =============================================================================
-
-PF-001:
-  title: "Measure before optimizing — profile, don't guess"
-  layer: 3
-  categories: [performance]
-  languages: [all]
-
-PF-002:
-  title: "Understand mechanical sympathy — align code with hardware realities"
-  layer: 3
-  categories: [performance]
-  languages: [all]
-
-PF-003:
-  title: "Optimize data locality — keep related data close in memory"
-  layer: 3
-  categories: [performance]
-  languages: [all]
-
-PF-004:
-  title: "Avoid premature allocation — minimize garbage and allocation pressure"
-  layer: 3
-  categories: [performance]
-  languages: [all]
-
-PF-005:
-  title: "Design for predictable latency — avoid lock contention and GC pauses in hot paths"
-  layer: 3
-  categories: [performance]
-  languages: [all]
-
-# =============================================================================
-# RL — Reliability & Error Handling
-# =============================================================================
-
-RL-001:
-  title: "Fail fast, fail loudly"
-  layer: 1
-  categories: [reliability, error-handling, debugging]
-  languages: [all]
-
-RL-002:
-  title: "Design for fault tolerance — expect and handle partial failures"
-  layer: 2
-  categories: [reliability, distributed-systems]
-  languages: [all]
-
-RL-003:
-  title: "Make operations idempotent to enable safe retries"
-  layer: 2
-  categories: [reliability, distributed-systems]
-  languages: [all]
-
-RL-004:
+CODE-CS-CIRCUIT-BREAKER:
   title: "Use circuit breakers to prevent cascade failures"
   layer: 2
   categories: [reliability, distributed-systems]
-  languages: [all]
+  applies_to: [all]
 
-RL-005:
+CODE-CS-CQS:
+  title: "CQS: Command-Query Separation"
+  layer: 1
+  categories: [software-design, maintainability, predictability]
+  applies_to: [all]
+
+CODE-CS-DRY:
+  title: "DRY: Don't Repeat Yourself"
+  layer: 1
+  categories: [code-smells, maintainability, refactoring]
+  applies_to: [all]
+
+CODE-CS-FAIL-FAST:
+  title: "Fail fast, fail loudly"
+  layer: 1
+  categories: [reliability, error-handling, debugging]
+  applies_to: [all]
+
+CODE-CS-HYRUMS-LAW:
+  title: "Hyrum's Law"
+  layer: 2
+  categories: [api-design, compatibility, maintainability]
+  applies_to: [apis, libraries, public interfaces]
+
+CODE-CS-KISS:
+  title: "KISS: Keep It Simple"
+  layer: 1
+  categories: [simplicity, software-design, maintainability]
+  applies_to: [all]
+
+CODE-CS-NIH:
+  title: "NIH: Not Invented Here"
+  layer: 1
+  categories: [dependency-management, pragmatism, simplicity]
+  applies_to: [all]
+
+CODE-CS-NO-SILVER-BULLET:
+  title: "No Silver Bullet"
+  layer: 2
+  categories: [software-design, pragmatism, architecture]
+  applies_to: [all]
+
+CODE-CS-PARETO:
+  title: "The 80/20 Rule (Pareto Principle)"
+  layer: 2
+  categories: [pragmatism, performance, prioritisation]
+  applies_to: [all]
+
+CODE-CS-POSTELS-LAW:
+  title: "Postel's Law (Robustness Principle)"
+  layer: 2
+  categories: [api-design, interoperability, resilience]
+  applies_to: [apis, protocols, integrations]
+
+CODE-CS-WET:
+  title: "WET: Write Every Time"
+  layer: 1
+  categories: [code-smells, maintainability, refactoring]
+  applies_to: [all]
+
+CODE-CS-YAGNI:
+  title: "YAGNI: You Aren't Gonna Need It"
+  layer: 2
+  categories: [software-design, simplicity, agile]
+  applies_to: [all]
+
+CODE-DX-AFFORDANCES-AND-FEEDBACK:
+  title: "Provide clear affordances and feedback"
+  layer: 2
+  categories: [developer-experience, usability, ux-design]
+  applies_to: [all]
+
+CODE-DX-CODE-FOR-READERS:
+  title: "Write code for the reader, not the writer"
+  layer: 1
+  categories: [developer-experience, readability]
+  applies_to: [all]
+
+CODE-DX-DATA-INK-RATIO:
+  title: "Minimize data-ink ratio in visualizations"
+  layer: 2
+  categories: [developer-experience, usability, ux-design]
+  applies_to: [all]
+
+CODE-DX-DELETE-DEAD-CODE:
+  title: "Delete dead code"
+  layer: 1
+  categories: [developer-experience, readability]
+  applies_to: [all]
+
+CODE-DX-ERROR-PREVENTION:
+  title: "Design for error prevention, not just error handling"
+  layer: 2
+  categories: [developer-experience, usability, ux-design]
+  applies_to: [all]
+
+CODE-DX-NAMING:
+  title: "Name things by what they represent"
+  layer: 1
+  categories: [developer-experience, readability, maintainability]
+  applies_to: [all]
+
+CODE-DX-RECOGNITION-OVER-RECALL:
+  title: "Support recognition over recall in interfaces"
+  layer: 2
+  categories: [developer-experience, usability, ux-design]
+  applies_to: [all]
+
+CODE-DX-REDUCE-COGNITIVE-LOAD:
+  title: "Reduce cognitive load in code structure"
+  layer: 2
+  categories: [developer-experience, readability]
+  applies_to: [all]
+
+CODE-DX-SMALL-FUNCTIONS:
+  title: "Keep functions small and single-purpose"
+  layer: 1
+  categories: [developer-experience, readability]
+  applies_to: [all]
+
+CODE-DX-SYSTEM-STATUS-VISIBILITY:
+  title: "Provide clear visibility of system status"
+  layer: 2
+  categories: [developer-experience, usability, ux-design]
+  applies_to: [all]
+
+CODE-OB-DISTRIBUTED-TRACING:
+  title: "Trace requests across service boundaries with correlation IDs"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-EMIT-EVENTS:
+  title: "Emit events, not just metrics"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-HIGH-CARDINALITY:
+  title: "Use high-cardinality fields for debugging in production"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-SERVICE-LEVEL-OBJECTIVES:
+  title: "Define and measure SLOs (Service Level Objectives)"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-STRUCTURED-TELEMETRY:
+  title: "Instrument code with structured, contextual telemetry"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-PF-DATA-LOCALITY:
+  title: "Optimize data locality — keep related data close in memory"
+  layer: 3
+  categories: [performance]
+  applies_to: [all]
+
+CODE-PF-MECHANICAL-SYMPATHY:
+  title: "Understand mechanical sympathy — align code with hardware realities"
+  layer: 3
+  categories: [performance]
+  applies_to: [all]
+
+CODE-PF-MINIMIZE-ALLOCATION:
+  title: "Avoid premature allocation — minimize garbage and allocation pressure"
+  layer: 3
+  categories: [performance]
+  applies_to: [all]
+
+CODE-PF-PREDICTABLE-LATENCY:
+  title: "Design for predictable latency — avoid lock contention and GC pauses in hot paths"
+  layer: 3
+  categories: [performance]
+  applies_to: [all]
+
+CODE-PF-PROFILE-FIRST:
+  title: "Measure before optimizing — profile, don't guess"
+  layer: 3
+  categories: [performance]
+  applies_to: [all]
+
+CODE-RL-BACKPRESSURE:
   title: "Apply backpressure to protect systems from overload"
   layer: 2
   categories: [reliability, distributed-systems]
-  languages: [all]
+  applies_to: [all]
 
-RL-006:
+CODE-RL-CONSISTENCY-MODELS:
   title: "Choose consistency models explicitly — strong vs. eventual"
   layer: 2
   categories: [reliability, distributed-systems]
-  languages: [all]
+  applies_to: [all]
 
-RL-007:
+CODE-RL-FAULT-TOLERANCE:
+  title: "Design for fault tolerance — expect and handle partial failures"
+  layer: 2
+  categories: [reliability, distributed-systems]
+  applies_to: [all]
+
+CODE-RL-IDEMPOTENCY:
+  title: "Make operations idempotent to enable safe retries"
+  layer: 2
+  categories: [reliability, distributed-systems]
+  applies_to: [all]
+
+CODE-RL-SCHEMA-EVOLUTION:
   title: "Plan for schema evolution — design data formats for forward and backward compatibility"
   layer: 2
   categories: [reliability, distributed-systems]
-  languages: [all]
+  applies_to: [all]
 
-# =============================================================================
-# SD — Software Design (SOLID, GoF, composition, simplicity)
-# =============================================================================
-
-SD-001:
-  title: "Single Responsibility Principle"
-  layer: 1
-  categories: [software-design, maintainability]
-  languages: [all]
-
-SD-002:
-  title: "Open-Closed Principle"
-  layer: 2
-  categories: [software-design, object-oriented, maintainability]
-  languages: [all]
-
-SD-003:
-  title: "Liskov Substitution Principle"
-  layer: 2
-  categories: [software-design, object-oriented, maintainability]
-  languages: [all]
-
-SD-004:
-  title: "Interface Segregation Principle"
-  layer: 2
-  categories: [software-design, object-oriented, maintainability]
-  languages: [all]
-
-SD-005:
-  title: "Dependency Inversion Principle"
-  layer: 2
-  categories: [software-design, object-oriented, maintainability]
-  languages: [all]
-
-SD-006:
-  title: "Favor Composition over Inheritance"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-007:
-  title: "Program to an Interface, Not an Implementation"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-008:
-  title: "Abstract Factory Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-009:
-  title: "Builder Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-010:
-  title: "Factory Method Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-011:
-  title: "Prototype Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-012:
-  title: "Singleton Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-013:
-  title: "Adapter Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-014:
-  title: "Bridge Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-015:
-  title: "Composite Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-016:
-  title: "Decorator Pattern"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-017:
-  title: "Facade"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-018:
-  title: "Flyweight"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-019:
-  title: "Proxy"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-020:
-  title: "Chain of Responsibility"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-021:
-  title: "Command"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-022:
-  title: "Iterator"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-023:
-  title: "Mediator"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-024:
-  title: "Memento"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-025:
-  title: "Observer"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-026:
-  title: "State"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-027:
-  title: "Strategy"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-028:
-  title: "Template Method"
-  layer: 2
-  categories: [software-design, design-patterns, object-oriented]
-  languages: [all]
-
-SD-029:
-  title: "Passes all tests"
-  layer: 1
-  categories: [software-design, testing, simplicity]
-  languages: [all]
-
-SD-030:
-  title: "Reveals intention"
-  layer: 1
-  categories: [software-design, readability, simplicity]
-  languages: [all]
-
-SD-031:
-  title: "No duplication"
-  layer: 1
-  categories: [software-design, simplicity, refactoring]
-  languages: [all]
-
-SD-032:
-  title: "Fewest elements"
-  layer: 1
-  categories: [software-design, simplicity]
-  languages: [all]
-
-# =============================================================================
-# SEC — Security
-# =============================================================================
-
-SEC-001:
-  title: "Validate input at system boundaries"
-  layer: 1
-  categories: [security, reliability, api-design]
-  languages: [all]
-
-SEC-002:
-  title: "Prevent broken access control"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-003:
-  title: "Use strong cryptography correctly"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-004:
-  title: "Prevent injection attacks"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-005:
-  title: "Design for security from the start"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-006:
-  title: "Eliminate security misconfigurations"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-007:
-  title: "Keep components updated and patched"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-008:
-  title: "Implement proper authentication and session management"
-  layer: 2
-  categories: [security]
-  languages: [all]
-
-SEC-009:
+CODE-SEC-DATA-INTEGRITY:
   title: "Verify data integrity"
   layer: 2
   categories: [security]
-  languages: [all]
+  applies_to: [all]
 
-SEC-010:
+CODE-SEC-SECURITY-BY-DESIGN:
+  title: "Design for security from the start"
+  layer: 2
+  categories: [security]
+  applies_to: [all]
+
+CODE-SEC-SECURITY-LOGGING:
   title: "Log security events and monitor for attacks"
   layer: 2
   categories: [security]
-  languages: [all]
+  applies_to: [all]
 
-SEC-011:
-  title: "Prevent server-side request forgery"
+CODE-SEC-STRONG-CRYPTOGRAPHY:
+  title: "Use strong cryptography correctly"
   layer: 2
   categories: [security]
-  languages: [all]
+  applies_to: [all]
 
-# =============================================================================
-# TP — Type & Pattern Safety
-# =============================================================================
+CODE-SEC-VALIDATE-INPUT:
+  title: "Validate input at system boundaries"
+  layer: 1
+  categories: [security, reliability, api-design]
+  applies_to: [all]
 
-TP-001:
-  title: "Make illegal states unrepresentable through types"
-  layer: 2
-  categories: [type-safety, correctness]
-  languages: [all]
-
-TP-002:
-  title: "Use exhaustive pattern matching — handle all cases"
-  layer: 2
-  categories: [type-safety, correctness]
-  languages: [all]
-
-TP-003:
-  title: "Prefer sum types (discriminated unions) over boolean flags or string types"
-  layer: 2
-  categories: [type-safety, correctness]
-  languages: [all]
-
-TP-004:
-  title: "Encode state machines in the type system"
-  layer: 2
-  categories: [type-safety, correctness]
-  languages: [all]
-
-TP-005:
+CODE-TP-BRANDED-TYPES:
   title: "Use newtypes/branded types to prevent value confusion"
   layer: 2
   categories: [type-safety, correctness]
-  languages: [all]
+  applies_to: [all (especially typed languages)]
 
-# =============================================================================
-# TS — Testing Strategy
-# =============================================================================
-
-TS-001:
-  title: "Write the test before the code"
+CODE-TP-EXHAUSTIVE-PATTERN-MATCHING:
+  title: "Use exhaustive pattern matching — handle all cases"
   layer: 2
-  categories: [testing, quality]
-  languages: [all]
+  categories: [type-safety, correctness]
+  applies_to: [all (especially typed languages)]
 
-TS-002:
-  title: "Each test should verify one behavior"
+CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE:
+  title: "Make illegal states unrepresentable through types"
   layer: 2
-  categories: [testing, quality]
-  languages: [all]
+  categories: [type-safety, correctness]
+  applies_to: [all (especially typed languages)]
 
-TS-003:
-  title: "Tests must be independent and isolated"
+CODE-TP-PREFER-SUM-TYPES:
+  title: "Prefer sum types (discriminated unions) over boolean flags or string types"
   layer: 2
-  categories: [testing, quality]
-  languages: [all]
+  categories: [type-safety, correctness]
+  applies_to: [all (especially typed languages)]
 
-TS-004:
-  title: "Test behavior, not implementation"
+CODE-TP-TYPE-STATE-MACHINES:
+  title: "Encode state machines in the type system"
   layer: 2
-  categories: [testing, quality]
-  languages: [all]
+  categories: [type-safety, correctness]
+  applies_to: [all (especially typed languages)]
 
-TS-005:
+CODE-TS-ARRANGE-ACT-ASSERT:
   title: "Use the Arrange-Act-Assert pattern for test structure"
   layer: 2
   categories: [testing, quality]
-  languages: [all]
+  applies_to: [all]
 
-TS-006:
+CODE-TS-FAST-TESTS:
   title: "Keep tests fast"
   layer: 2
   categories: [testing, quality]
-  languages: [all]
+  applies_to: [all]
 
-TS-007:
+CODE-TS-SINGLE-BEHAVIOR:
+  title: "Each test should verify one behavior"
+  layer: 2
+  categories: [testing, quality]
+  applies_to: [all]
+
+CODE-TS-TEST-BEHAVIOR:
+  title: "Test behavior, not implementation"
+  layer: 2
+  categories: [testing, quality]
+  applies_to: [all]
+
+CODE-TS-TEST-DOUBLES:
   title: "Use test doubles judiciously"
   layer: 2
   categories: [testing, quality]
-  languages: [all]
+  applies_to: [all]
 
-TS-008:
+CODE-TS-TEST-FIRST:
+  title: "Write the test before the code"
+  layer: 2
+  categories: [testing, quality]
+  applies_to: [all]
+
+CODE-TS-TEST-INDEPENDENCE:
+  title: "Tests must be independent and isolated"
+  layer: 2
+  categories: [testing, quality]
+  applies_to: [all]
+
+CODE-TS-TEST-NAMING:
   title: "Name tests by the behavior they verify"
   layer: 2
   categories: [testing, quality]
-  languages: [all]
+  applies_to: [all]
+
+# =============================================================================
+# CODE-SMELLS
+# =============================================================================
+
+CODE-SMELLS-COMMENTS-AS-DEODORANT:
+  title: "Comments as Deodorant"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-DATA-CLUMPS:
+  title: "Data Clumps"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-FEATURE-ENVY:
+  title: "Feature Envy"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-LARGE-CLASS:
+  title: "Large Class"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-LONG-METHOD:
+  title: "Long Method"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-MESSAGE-CHAINS:
+  title: "Message Chains"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-PRIMITIVE-OBSESSION:
+  title: "Primitive Obsession"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-SPECULATIVE-GENERALITY:
+  title: "Speculative Generality"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+CODE-SMELLS-SWITCH-STATEMENTS:
+  title: "Switch Statements"
+  layer: 2
+  categories: [code-smells, refactoring, maintainability]
+  applies_to: [all]
+
+# =============================================================================
+# DDD
+# =============================================================================
+
+DDD-AGGREGATE:
+  title: "Aggregate"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-AGGREGATE-ROOT:
+  title: "Aggregate Root"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-BOUNDED-CONTEXT:
+  title: "Bounded Context"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-DOMAIN-EVENT:
+  title: "Domain Event"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-ENTITY:
+  title: "Entity"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-REPOSITORY:
+  title: "Repository"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-UBIQUITOUS-LANGUAGE:
+  title: "Ubiquitous Language"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+DDD-VALUE-OBJECT:
+  title: "Value Object"
+  layer: 2
+  categories: [domain-modeling, domain-driven-design]
+  applies_to: [all]
+
+# =============================================================================
+# EFFECTIVE-JAVA
+# =============================================================================
+
+EFFECTIVE-JAVA-BUILDER:
+  title: "Consider Builders for Constructors with Many Parameters"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-DESIGN-METHOD-SIGNATURES:
+  title: "Design Method Signatures Carefully"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-ELIMINATE-UNCHECKED-WARNINGS:
+  title: "Eliminate Unchecked Warnings"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-INTERFACES-FOR-TYPES:
+  title: "Use Interfaces Only to Define Types"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-MINIMIZE-ACCESSIBILITY:
+  title: "Minimize Accessibility of Classes and Members"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-MINIMIZE-MUTABILITY:
+  title: "Minimize Mutability — Prefer Immutable Classes"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-PREFER-CLASS-HIERARCHIES:
+  title: "Prefer Class Hierarchies to Tagged Classes"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-RETURN-EMPTY-COLLECTIONS:
+  title: "Return Empty Collections, Not Null"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-STATIC-FACTORY:
+  title: "Prefer Static Factory Methods over Constructors"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+EFFECTIVE-JAVA-WRITE-DOC-COMMENTS:
+  title: "Write Doc Comments for All Exposed API Elements"
+  layer: 2
+  categories: [api-design, developer-experience]
+  applies_to: [java]
+
+# =============================================================================
+# GOF
+# =============================================================================
+
+GOF-ABSTRACT-FACTORY:
+  title: "Abstract Factory Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-ADAPTER:
+  title: "Adapter Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-BRIDGE:
+  title: "Bridge Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-BUILDER:
+  title: "Builder Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-CHAIN-OF-RESPONSIBILITY:
+  title: "Chain of Responsibility Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-COMMAND:
+  title: "Command Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-COMPOSITE:
+  title: "Composite Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-COMPOSITION-OVER-INHERITANCE:
+  title: "Favor Composition over Inheritance"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-DECORATOR:
+  title: "Decorator Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-FACADE:
+  title: "Facade Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-FACTORY-METHOD:
+  title: "Factory Method Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-FLYWEIGHT:
+  title: "Flyweight Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-INTERPRETER:
+  title: "Interpreter Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-ITERATOR:
+  title: "Iterator Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-MEDIATOR:
+  title: "Mediator Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-MEMENTO:
+  title: "Memento Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-OBSERVER:
+  title: "Observer Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-PROGRAM-TO-INTERFACE:
+  title: "Program to an Interface, Not an Implementation"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-PROTOTYPE:
+  title: "Prototype Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-PROXY:
+  title: "Proxy Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-SINGLETON:
+  title: "Singleton Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-STATE:
+  title: "State Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-STRATEGY:
+  title: "Strategy Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-TEMPLATE-METHOD:
+  title: "Template Method Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+GOF-VISITOR:
+  title: "Visitor Pattern"
+  layer: 2
+  categories: [software-design, design-patterns, object-oriented]
+  applies_to: [all]
+
+# =============================================================================
+# GRASP
+# =============================================================================
+
+GRASP-CONTROLLER:
+  title: "Controller"
+  layer: 2
+  categories: [software-design, responsibility-assignment, architecture]
+  applies_to: [all]
+
+GRASP-CREATOR:
+  title: "Creator"
+  layer: 2
+  categories: [software-design, responsibility-assignment, object-creation]
+  applies_to: [all]
+
+GRASP-HIGH-COHESION:
+  title: "High Cohesion"
+  layer: 1
+  categories: [software-design, maintainability]
+  applies_to: [all]
+
+GRASP-INDIRECTION:
+  title: "Indirection"
+  layer: 2
+  categories: [software-design, coupling-reduction, architecture]
+  applies_to: [all]
+
+GRASP-INFORMATION-EXPERT:
+  title: "Information Expert"
+  layer: 1
+  categories: [software-design, responsibility-assignment]
+  applies_to: [all]
+
+GRASP-LOW-COUPLING:
+  title: "Low Coupling"
+  layer: 1
+  categories: [software-design, maintainability, dependency-management]
+  applies_to: [all]
+
+GRASP-POLYMORPHISM:
+  title: "Polymorphism"
+  layer: 2
+  categories: [software-design, extensibility]
+  applies_to: [all]
+
+GRASP-PROTECTED-VARIATIONS:
+  title: "Protected Variations"
+  layer: 2
+  categories: [software-design, stability, extensibility]
+  applies_to: [all]
+
+GRASP-PURE-FABRICATION:
+  title: "Pure Fabrication"
+  layer: 2
+  categories: [software-design, responsibility-assignment]
+  applies_to: [all]
+
+# =============================================================================
+# INFRA
+# =============================================================================
+
+INFRA-HIGH-AVAILABILITY:
+  title: "Eliminate single points of failure across all production infrastructure"
+  layer: 2
+  categories: [infrastructure, availability, resilience, disaster-recovery]
+  applies_to: [production-systems, cloud, internet-facing]
+
+INFRA-IMMUTABLE-INFRASTRUCTURE:
+  title: "Infrastructure is immutable: replace, never patch"
+  layer: 2
+  categories: [infrastructure, devops, reliability]
+  applies_to: [cloud, containerised, vm-based]
+
+INFRA-INFRASTRUCTURE-AS-CODE:
+  title: "All infrastructure is code; nothing is configured manually"
+  layer: 1
+  categories: [infrastructure, devops, repeatability]
+  applies_to: [all]
+
+INFRA-LEAST-PRIVILEGE:
+  title: "Every identity gets only the minimum permissions it requires"
+  layer: 1
+  categories: [infrastructure, security, iam, access-control]
+  applies_to: [all]
+
+INFRA-NO-SECRETS-IN-CODE:
+  title: "Secrets never appear in code, config files, or logs"
+  layer: 1
+  categories: [infrastructure, security, devops]
+  applies_to: [all]
+
+INFRA-OBSERVABLE-INFRASTRUCTURE:
+  title: "All infrastructure emits centralised, structured telemetry"
+  layer: 1
+  categories: [infrastructure, observability, operations, monitoring]
+  applies_to: [all]
+
+# =============================================================================
+# OWASP
+# =============================================================================
+
+OWASP-01-BROKEN-ACCESS-CONTROL:
+  title: "Broken Access Control"
+  layer: 2
+  categories: [security, access-control, authorisation]
+  applies_to: [all]
+
+OWASP-02-CRYPTOGRAPHIC-FAILURES:
+  title: "Cryptographic Failures"
+  layer: 3
+  categories: [security, cryptography, data-protection]
+  applies_to: [all]
+
+OWASP-03-INJECTION:
+  title: "Injection"
+  layer: 3
+  categories: [security, injection, input-validation]
+  applies_to: [all]
+
+OWASP-04-INSECURE-DESIGN:
+  title: "Insecure Design"
+  layer: 2
+  categories: [security, architecture, threat-modelling]
+  applies_to: [all]
+
+OWASP-05-SECURITY-MISCONFIGURATION:
+  title: "Security Misconfiguration"
+  layer: 2
+  categories: [security, configuration, hardening]
+  applies_to: [all]
+
+OWASP-06-VULNERABLE-COMPONENTS:
+  title: "Vulnerable and Outdated Components"
+  layer: 2
+  categories: [security, dependency-management, supply-chain]
+  applies_to: [all]
+
+OWASP-07-AUTHENTICATION-FAILURES:
+  title: "Identification and Authentication Failures"
+  layer: 3
+  categories: [security, authentication, session-management]
+  applies_to: [all]
+
+OWASP-08-SOFTWARE-INTEGRITY-FAILURES:
+  title: "Software and Data Integrity Failures"
+  layer: 2
+  categories: [security, supply-chain, integrity]
+  applies_to: [all]
+
+OWASP-09-LOGGING-FAILURES:
+  title: "Security Logging and Monitoring Failures"
+  layer: 2
+  categories: [security, observability, incident-response]
+  applies_to: [all]
+
+OWASP-10-SSRF:
+  title: "Server-Side Request Forgery (SSRF)"
+  layer: 2
+  categories: [security, injection, network]
+  applies_to: [all]
+
+# =============================================================================
+# SIMPLE-DESIGN
+# =============================================================================
+
+SIMPLE-DESIGN-FEWEST-ELEMENTS:
+  title: "Fewest Elements"
+  layer: 1
+  categories: [software-design, simplicity]
+  applies_to: [all]
+
+SIMPLE-DESIGN-NO-DUPLICATION:
+  title: "No Duplication"
+  layer: 1
+  categories: [software-design, simplicity, refactoring]
+  applies_to: [all]
+
+SIMPLE-DESIGN-PASSES-TESTS:
+  title: "Passes All Tests"
+  layer: 1
+  categories: [software-design, testing, simplicity]
+  applies_to: [all]
+
+SIMPLE-DESIGN-REVEALS-INTENTION:
+  title: "Reveals Intention"
+  layer: 1
+  categories: [software-design, readability, simplicity]
+  applies_to: [all]
+
+# =============================================================================
+# SOLID
+# =============================================================================
+
+SOLID-DIP:
+  title: "Dependency Inversion Principle"
+  layer: 1
+  categories: [software-design, dependency-management, testability]
+  applies_to: [all]
+
+SOLID-ISP:
+  title: "Interface Segregation Principle"
+  layer: 1
+  categories: [software-design, api-design, coupling]
+  applies_to: [all]
+
+SOLID-LSP:
+  title: "Liskov Substitution Principle"
+  layer: 1
+  categories: [software-design, correctness, inheritance]
+  applies_to: [all]
+
+SOLID-OCP:
+  title: "Open/Closed Principle"
+  layer: 1
+  categories: [software-design, extensibility, maintainability]
+  applies_to: [all]
+
+SOLID-SRP:
+  title: "Single Responsibility Principle"
+  layer: 1
+  categories: [software-design, maintainability]
+  applies_to: [all]

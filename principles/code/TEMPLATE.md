@@ -20,6 +20,11 @@ Focus on what goes wrong, not abstract theory.]
 - [Another concrete violation]
 - [Be specific enough that an AI reviewer can spot these in code]
 
+## Inspection
+
+<!-- Optional — only if the violation has a grep-able textual signature. -->
+<!-- See DESIGN.md Section 4 "## Inspection — When to Add" for guidance. -->
+
 ## Good practice
 
 - [Concrete recommendation — what to do instead]

@@ -40,13 +40,13 @@ Seed the active set with these universally-active principles:
 
 | ID | Title |
 |----|-------|
-| CODE-SD-001 | Single Responsibility Principle |
-| CODE-SD-006 | Favor Composition over Inheritance |
-| CODE-SD-007 | Program to an Interface, Not an Implementation |
-| CODE-SD-029 | Passes all tests |
-| CODE-SD-030 | Reveals intention |
-| CODE-SD-031 | No duplication |
-| CODE-SD-032 | Fewest elements |
+| SOLID-SRP | Single Responsibility Principle |
+| GOF-COMPOSITION-OVER-INHERITANCE | Favor Composition over Inheritance |
+| GOF-PROGRAM-TO-INTERFACE | Program to an Interface, Not an Implementation |
+| SIMPLE-DESIGN-PASSES-TESTS | Passes all tests |
+| SIMPLE-DESIGN-REVEALS-INTENTION | Reveals intention |
+| SIMPLE-DESIGN-NO-DUPLICATION | No duplication |
+| SIMPLE-DESIGN-FEWEST-ELEMENTS | Fewest elements |
 | CODE-SEC-VALIDATE-INPUT | Validate input at system boundaries |
 | CODE-CS-DRY | DRY: Don't Repeat Yourself |
 | CODE-CS-WET | WET: Write Every Time |
@@ -95,7 +95,7 @@ Based on the context detected in Phase 1, activate ALL principles from matching 
 
 **api-design** — REST/HTTP API endpoints, controllers, route handlers
 Signals: @RestController, @GetMapping, @PostMapping, @RequestMapping, app.get(, app.post(, router., HttpResponse, status_code, REST, endpoint, controller, FastAPI, flask, express, OpenAPI, swagger
-Activate: CODE-API-STANDARD-HTTP-METHODS, CODE-API-HATEOAS, CODE-API-RESOURCE-NOUNS, CODE-API-BACKWARD-COMPATIBILITY, CODE-API-HTTP-STATUS-CODES, CODE-SEC-VALIDATE-INPUT, CODE-SEC-004
+Activate: CODE-API-STANDARD-HTTP-METHODS, CODE-API-HATEOAS, CODE-API-RESOURCE-NOUNS, CODE-API-BACKWARD-COMPATIBILITY, CODE-API-HTTP-STATUS-CODES, CODE-SEC-VALIDATE-INPUT, OWASP-03-INJECTION
 
 **concurrency** — Concurrent or parallel code using threads, async, or locks
 Signals: async, await, Thread, Lock, Mutex, Semaphore, synchronized, concurrent, parallel, atomic, volatile, CompletableFuture, Promise.all, asyncio, tokio, goroutine, channel
@@ -103,7 +103,7 @@ Activate: CODE-CC-SYNC-SHARED-STATE through CODE-CC-STRUCTURED-CONCURRENCY
 
 **domain-modeling** — Domain-driven design with entities, value objects, aggregates
 Signals: Entity, ValueObject, Aggregate, Repository, DomainEvent, BoundedContext, domain, aggregate_root, repository, specification, factory
-Activate: CODE-DM-001 through CODE-DM-008
+Activate: DDD-AGGREGATE-ROOT, DDD-AGGREGATE, DDD-ENTITY, DDD-VALUE-OBJECT, DDD-REPOSITORY, DDD-DOMAIN-EVENT, DDD-BOUNDED-CONTEXT, DDD-UBIQUITOUS-LANGUAGE
 
 **data-pipeline** — Streaming, ETL, batch processing, message-driven data flows
 Signals: stream, pipeline, ETL, transform, batch, kafka, rabbitmq, message_queue, producer, consumer, subscriber, publisher, spark, flink, airflow, dag
@@ -115,11 +115,11 @@ Activate: CODE-TS-TEST-FIRST through CODE-TS-TEST-NAMING
 
 **object-oriented** — Class hierarchies, interfaces, inheritance, OOP patterns
 Signals: class, extends, implements, interface, abstract, override, virtual, protected, super(, base., inheritance, polymorphism
-Activate: CODE-SD-001 through CODE-SD-007, CODE-CS-DRY, CODE-CS-YAGNI
+Activate: SOLID-SRP, SOLID-OCP, SOLID-LSP, SOLID-ISP, SOLID-DIP, GOF-COMPOSITION-OVER-INHERITANCE, GOF-PROGRAM-TO-INTERFACE, CODE-CS-DRY, CODE-CS-YAGNI
 
 **cloud-native** — Cloud deployment, containers, twelve-factor app patterns
 Signals: Dockerfile, docker-compose, kubernetes, k8s, helm, env_var, process.env, os.environ, ConfigMap, Secret, health_check, readiness, liveness, twelve-factor, 12-factor, container, pod, service mesh
-Activate: CODE-AR-001 through CODE-AR-012
+Activate: 12FACTOR-01-CODEBASE through 12FACTOR-12-ADMIN-PROCESSES
 
 **infrastructure** — Infrastructure-as-code and provisioning configurations
 Signals: terraform, resource, provider, CloudFormation, ansible, playbook, pulumi, cdk, .tf, module, variable, output, data, stack
@@ -131,11 +131,11 @@ Activate: CODE-DX-SYSTEM-STATUS-VISIBILITY through CODE-DX-DATA-INK-RATIO
 
 **library-api** — Public libraries, SDKs, packages consumed by external users
 Signals: export, public API, SDK, package, library, @api, @public, module.exports, __init__.py, setup.py, package.json, Cargo.toml, *.gemspec, nuget, npm publish
-Activate: CODE-API-001 through CODE-API-010, CODE-API-BACKWARD-COMPATIBILITY
+Activate: CODE-API-STANDARD-HTTP-METHODS, CODE-API-HATEOAS, CODE-API-RESOURCE-NOUNS, CODE-API-HTTP-STATUS-CODES, CODE-API-BACKWARD-COMPATIBILITY
 
 **functional** — Functional programming patterns with immutability and pure functions
 Signals: map(, filter(, reduce(, flatMap, immutable, readonly, const, val, pure, lambda, fn, pipe, compose, curry, monad, functor, fold, pattern match
-Activate: CODE-SD-006, CODE-CC-PREFER-IMMUTABLE, CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
+Activate: GOF-COMPOSITION-OVER-INHERITANCE, CODE-CC-PREFER-IMMUTABLE, CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
 
 **typed-language** — Statically typed languages with expressive type systems
 Signals: TypeScript, Kotlin, Rust, Haskell, C#, Scala, F#, .ts, .kt, .rs, .hs, .cs, .scala, type, interface, generic, enum, struct, trait
@@ -147,11 +147,11 @@ Based on the risk signals detected in Phase 1, elevate principles from matching 
 
 **authentication** — User authentication, sessions, identity verification
 Signals: password, login, logout, OAuth, JWT, token, session, authenticate, credential, sign_in, sign_up, bcrypt, hash, salt, OIDC, SAML, bearer, refresh_token
-Elevate: CODE-SEC-002, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-008
+Elevate: OWASP-07-AUTHENTICATION-FAILURES, CODE-SEC-STRONG-CRYPTOGRAPHY, OWASP-01-BROKEN-ACCESS-CONTROL
 
 **financial** — Payments, billing, currency, financial transactions
 Signals: payment, billing, invoice, currency, transaction, charge, refund, stripe, paypal, ledger, account_balance, decimal, money, price, checkout, subscription
-Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-004, CODE-RL-IDEMPOTENCY, CODE-CC-SYNC-SHARED-STATE
+Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-DATA-INTEGRITY, CODE-RL-IDEMPOTENCY, CODE-CC-SYNC-SHARED-STATE
 
 **personal-data** — Personally identifiable information, privacy-sensitive data
 Signals: PII, GDPR, email, SSN, social_security, address, phone_number, date_of_birth, passport, driver_license, personal_data, consent, data_subject, anonymize, pseudonymize, encryption, CCPA, HIPAA
@@ -159,7 +159,7 @@ Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-SECURIT
 
 **public-api** — Versioned or published APIs consumed by third-party clients
 Signals: versioned, v1, v2, published, third-party, external, consumer, backward_compatible, deprecat, changelog, breaking_change, semver, api_version, public_api
-Elevate: CODE-API-BACKWARD-COMPATIBILITY, CODE-API-001, CODE-API-004, CODE-RL-SCHEMA-EVOLUTION
+Elevate: CODE-API-BACKWARD-COMPATIBILITY, CODE-API-STANDARD-HTTP-METHODS, CODE-API-HTTP-STATUS-CODES, CODE-RL-SCHEMA-EVOLUTION
 
 **high-throughput** — Performance-critical code paths requiring low latency
 Signals: hot_path, hot path, real-time, realtime, low-latency, low_latency, performance, benchmark, throughput, cache, pool, buffer, batch_size, optimization, critical_path, microsecond, nanosecond
@@ -171,7 +171,7 @@ Elevate: CODE-RL-FAULT-TOLERANCE through CODE-RL-CONSISTENCY-MODELS, CODE-OB-STR
 
 **legacy-codebase** — Refactoring, migration, brownfield work
 Signals: refactor, migration, brownfield, legacy, technical_debt, tech_debt, deprecated, backward_compat, strangler, anti-corruption, modernize, rewrite, upgrade
-Elevate: CODE-CS-DRY, CODE-CS-YAGNI, CODE-SD-029 through CODE-SD-032
+Elevate: CODE-CS-DRY, CODE-CS-YAGNI, SIMPLE-DESIGN-PASSES-TESTS, SIMPLE-DESIGN-REVEALS-INTENTION, SIMPLE-DESIGN-NO-DUPLICATION, SIMPLE-DESIGN-FEWEST-ELEMENTS
 
 ## Phase 4 — Load Principle Content
 
@@ -184,7 +184,7 @@ For each namespace, read its single pre-compiled context file:
 
 Each entry in the file has this form:
 ```
-### CODE-SD-001 — Single Responsibility Principle
+### SOLID-SRP — Single Responsibility Principle
 <principle statement>
 
 Why it matters:
@@ -206,7 +206,7 @@ Present your results in this format:
 
 | Layer | ID | Title | Source |
 |-------|----|-------|--------|
-| 1 — Always | CODE-SD-001 | Single Responsibility Principle | Layer 1 universal |
+| 1 — Always | SOLID-SRP | Single Responsibility Principle | Layer 1 universal |
 | 2 — Context | CODE-API-STANDARD-HTTP-METHODS | Use standard HTTP methods... | api-design context |
 | 3 — Risk | CODE-SEC-STRONG-CRYPTOGRAPHY | Use strong cryptography correctly | authentication risk |
 

@@ -14,8 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Highlights
 
-- **214 principles** across **14 namespaces** — `code/general`, `code/naming`, `code/functions`, `code/error-handling`, `code/testing`, `code/comments`, `solid`, `gof`, `ddd`, `clean-arch`, `simple-design`, `code-smells`, `grasp`, `12factor`, `owasp`, `effective-java`, `arch`, `infra`
-- **30 pre-defined groups** — `@spring-boot`, `@react`, `@angular`, `@django`, `@fastapi`, `@microservices`, `@security-focused`, `@ddd`, `@12factor`, `@owasp`, and more
+- **187 principle files** across **13 top-level namespaces** — `12factor`, `arch`, `clean-arch`, `code`, `code-smells`, `ddd`, `effective-java`, `gof`, `grasp`, `infra`, `owasp`, `simple-design`, `solid`
+- **30 pre-defined groups** — `@spring-boot`, `@react`, `@angular`, `@django`, `@fastapi`, `@microservices`, `@security-focused`, `@clean-arch`, `@solid`, `@typescript`, and more
 - **3 AI commands** — `/scout`, `/prime`, `/audit`
 - **3-layer model** — Universal, Contextual, and Risk-Elevated principles
 - **Hierarchical `.principles` file resolution** — project-level overrides with inheritance

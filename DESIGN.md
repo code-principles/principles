@@ -107,8 +107,29 @@ Each namespace contains two pre-compiled files that consolidate all its principl
 |------|---------|----------|
 | `.context-prime.md` | `/prime` Phase 4 | Principle statement, Why it matters, Good practice — for all principles in the namespace |
 | `.context-audit.md` | `/audit` Phase 4 | Principle statement, Violations to detect — for all principles in the namespace |
+| `.context-inspect.md` | `/audit` Phase 5 | Machine-executable pre-scan patterns (grep/awk/find commands) — for principles with deterministic inspection patterns |
 
 The command reads one file per namespace and filters to only the entries in the final active set. This avoids reading N individual principle files.
+
+### `.context-inspect.md` Format
+
+Pre-compiled inspection patterns for `/audit` Phase 5 (Pre-Scan). Each principle's entry contains bash commands that produce `file:line:match` output:
+
+```markdown
+# .principles inspect context — <namespace>
+# Machine-executable pre-scan patterns per principle
+
+### CODE-SEC-VALIDATE-INPUT
+
+- `grep -rnE 'eval\(|exec\(' --include="*.py" $TARGET` | HIGH | Direct eval/exec calls
+- `grep -rnE '\.query\(.*\+' --include="*.py" $TARGET` | HIGH | String concat in queries
+```
+
+Format: `` - `command` | SEVERITY_HINT | description ``
+
+- `$TARGET` is replaced with the actual scan path at runtime
+- Commands must use only POSIX + bash 4+ tools: `grep`, `find`, `wc`, `awk`, `sort`
+- Principles without inspection patterns are absent from this file and are handled by LLM-only reasoning
 
 ### `catalog.yaml` Schema
 
@@ -195,6 +216,10 @@ Every principle file follows this template:
 - [Specific code pattern that violates this principle]
 - [Another violation pattern]
 
+## Inspection
+
+<!-- Optional — see "Inspection" field guidance below. -->
+
 ## Good practice
 
 ```[language]
@@ -214,10 +239,32 @@ Every principle file follows this template:
 | `Categories`           | Semantic tags for detection (e.g., `api-design`, `security`, `testing`)    |
 | `Applies-to`           | `all` or specific languages, platforms, domains, or architectural contexts |
 | `Violations to detect` | Concrete patterns for AI to look for during review                         |
+| `Inspection`           | Optional. Machine-executable pre-scan commands for `/audit` Phase 5. See guidance below |
 | `Good practice`        | Positive example (AI uses this for generation guidance)                    |
 | `Sources`              | At least one verifiable published source                                   |
 
 **Diagrams:** Include a `mermaid` code block in the *Good practice* section whenever the concept has a structural form (class hierarchies, relationships, flows). Mermaid adds machine-readable semantics. If you can draw it, draw it.
+
+### `## Inspection` — When to Add
+
+The `## Inspection` section is **optional**. It contains bash commands that `/audit` Phase 5 runs to flag likely violations *before* the LLM reads the code. Not every principle is a good fit.
+
+**Add inspection patterns when** the violation has a textual signature that grep/awk/find can match reliably — e.g., `eval(`, empty `catch {}` blocks, files over 300 lines. These are surface-level patterns that narrow the search space for the LLM.
+
+**Do not add inspection patterns when** the violation requires understanding intent, context, or design — e.g., whether a class has too many responsibilities (SRP beyond line count), whether an abstraction is premature (YAGNI), whether naming reveals intent, or whether a system follows Postel's Law. These are **semantic-only** principles that only an LLM can evaluate.
+
+**Rule of thumb:** if you cannot write a grep pattern that produces fewer than ~30% false positives on a typical codebase, leave the section empty. A noisy pre-scan is worse than none.
+
+**Format:** each entry is a fenced command, a severity hint, and a short description:
+
+```
+- `grep -rnE 'eval\(' --include="*.py" $TARGET` | HIGH | Direct eval calls
+```
+
+- `$TARGET` is replaced with the scan path at runtime
+- Commands must use only POSIX + bash 4+ tools: `grep`, `find`, `wc`, `awk`, `sort`
+- Output should be `file:line:match` format (`grep -rn` default)
+- When adding patterns, also add the entry to the namespace's `.context-inspect.md`
 
 ---
 
@@ -235,10 +282,10 @@ includes:
   - java              # resolved from groups/java.yaml
 
 principles:
-  - CODE-API-011
-  - CODE-API-012
-  - CODE-SEC-002
-  - CODE-AR-003
+  - CODE-API-STANDARD-HTTP-METHODS
+  - CODE-API-HATEOAS
+  - CODE-SEC-VALIDATE-INPUT
+  - ARCH-STATELESS-FIRST
 ```
 
 | Field         | Description                                         |
@@ -308,21 +355,30 @@ Plain text. One entry per line. Filesystem mtime is the implicit last-modified t
 @company-arch
 
 # Bare IDs — direct includes
-CODE-OB-004
+CODE-OB-SERVICE-LEVEL-OBJECTIVES
 CORP-0001
 
 # Exclusions — suppresses even if a group activates it
-!CODE-API-012
-!CODE-TS-001
+!CODE-API-HATEOAS
+!CODE-TS-TEST-FIRST
 ```
 
 | Syntax     | Meaning                                                                         |
 |------------|---------------------------------------------------------------------------------|
 | `# ...`    | Comment (ignored)                                                               |
+| `:directive value` | Configuration directive (see below)                                    |
 | `@name`    | Include all principles from `groups/name.yaml` (recursive)                      |
 | `ID`       | Include a specific principle by ID                                              |
 | `!ID`      | Exclude a principle (takes final precedence over everything, including Layer 1) |
 | blank line | Ignored                                                                         |
+
+### Directives
+
+Lines starting with `:` are configuration directives:
+
+| Directive | Example | Description |
+|-----------|---------|-------------|
+| `:max_principles` | `:max_principles 15` | Cap the total number of active principles. When trimming: Layer 1 is always retained, then Layer 3 risk-elevated, then Layer 2 context-dependent (dropped first). If Layer 1 alone exceeds the cap, the cap applies only to non-Layer-1 principles. |
 
 IDs are matched case-insensitively.
 
@@ -353,7 +409,7 @@ Collect all `.principles` files encountered, ordered **root → target** (outerm
 /repo-root/
   .principles          ← root file: @spring-boot
   src/
-    .principles        ← adds CODE-OB-004, !CODE-API-012
+    .principles        ← adds CODE-OB-SERVICE-LEVEL-OBJECTIVES, !CODE-API-HATEOAS
     payments/
       .principles      ← adds @security-focused
 ```
@@ -361,9 +417,9 @@ Collect all `.principles` files encountered, ordered **root → target** (outerm
 When reviewing `/repo-root/src/payments/PaymentService.java`:
 1. Seed with Layer 1 universals
 2. Apply `/repo-root/.principles` → expand `@spring-boot` (→ includes `java`)
-3. Apply `/repo-root/src/.principles` → add `CODE-OB-004`, mark `CODE-API-012` excluded
+3. Apply `/repo-root/src/.principles` → add `CODE-OB-SERVICE-LEVEL-OBJECTIVES`, mark `CODE-API-HATEOAS` excluded
 4. Apply `/repo-root/src/payments/.principles` → expand `@security-focused`
-5. Subtract exclusion set: remove `CODE-API-012`
+5. Subtract exclusion set: remove `CODE-API-HATEOAS`
 
 ---
 
@@ -392,11 +448,12 @@ Reviews code against activated principles. Outputs findings grouped by severity.
 | Phase | Name                          | Description                                                                                    |
 |-------|-------------------------------|------------------------------------------------------------------------------------------------|
 | 1     | Resolve Input                 | Determines what code to review (file, directory, inline)                                       |
-| 2     | Resolve .principles Hierarchy | Same walk algorithm as prime                                                                   |
+| 2     | Resolve .principles Hierarchy | Same walk algorithm as prime; supports `:max_principles` directive                             |
 | 3     | Dynamic Detection (fallback)  | Only if no `.principles` files found                                                           |
 | 4     | Load Principle Content        | Reads one `.context-audit.md` per namespace (pre-compiled); filters to active IDs             |
-| 5     | Review                        | Applies each principle; groups findings by severity (Critical/High/Medium/Low)                 |
-| 6     | Output                        | Compact text report + `audit-output.json` written to repo root; reports principle source       |
+| 5     | Pre-Scan                      | Reads `.context-inspect.md` per namespace; runs bash commands to build pre-scan manifest       |
+| 6     | Review                        | Guided review (hits) + semantic-only review + opportunistic findings                           |
+| 7     | Output                        | Compact text report + `audit-output.json` written to repo root; reports principle source       |
 
 ### 🔍 `/scout`
 
@@ -514,8 +571,8 @@ The system discovers all `principles/*/catalog.yaml` files automatically. The na
 
 | Depth                  | Use when                            | Example              |
 |------------------------|-------------------------------------|----------------------|
-| 2 levels: `NS/CAT`     | ≤20 principles per category         | `CODE-SD-001`        |
-| 3 levels: `NS/CAT/SUB` | Large category needing sub-grouping | `ARCH-CLOUD-K8S-001` |
+| 2 levels: `NS/CAT`     | ≤20 principles per category         | `SOLID-SRP`          |
+| 3 levels: `NS/CAT/SUB` | Large category needing sub-grouping | `CODE-API-STANDARD-HTTP-METHODS` |
 
 Keep paths shallow. Deep nesting makes IDs hard to read and reference.
 
@@ -530,38 +587,4 @@ Add a new category directory when:
 
 ## 🤝 11. Contributing Principles
 
-> **Scope of this repo:** Principles contributed here must be **established, widely recognized concepts** from the software engineering literature — named principles, published patterns, or documented practices backed by authoritative sources. They must not duplicate what is already in the catalog.
->
-> 🍴 If your principle is original, company-specific, domain-niche, or doesn't have an authoritative published source, **fork this repo** and add it in your own namespace (e.g., `principles/corp/`) rather than submitting a PR.
-
-### ✅ Requirements
-
-Every new principle must have:
-- A clear principle description in your own words
-- At least one verifiable published source (book with ISBN, paper with DOI, or authoritative URL)
-- Correct layer assignment (1 = universal, 2 = contextual, 3 = risk-elevated)
-- At least one "Violations to detect" entry
-- No significant overlap with an existing principle in the catalog
-
-### 🔁 Process
-
-1. Copy `principles/code/TEMPLATE.md` to the appropriate category directory
-2. Fill in all fields
-3. Derive the ID from the file path (Section 3)
-4. Add the principle to relevant groups in `groups/`
-5. Submit a pull request with:
-   - The principle file
-   - Group file updates
-   - A brief rationale for the source choice
-
-### 📚 Source Requirements
-
-Acceptable sources:
-- Books: full citation with ISBN (e.g., *Effective Java* by Bloch, 3rd ed., ISBN 978-0134685991)
-- Papers: DOI or stable URL
-- Authoritative specifications: RFC, OWASP, IEEE standard with URL
-
-Not acceptable:
-- Blog posts without named authors
-- Stack Overflow answers
-- Undated sources
+See [CONTRIBUTING.md](CONTRIBUTING.md) for requirements, process, and source guidelines.

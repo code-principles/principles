@@ -20,6 +20,10 @@ When a class serves multiple stakeholders, a change for one can inadvertently br
 - God classes with dozens of methods spanning multiple domains
 - A method that accepts boolean flags to switch between fundamentally different behaviours
 
+## Inspection
+
+- `find $TARGET -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.cs" | xargs wc -l 2>/dev/null | sort -rn | head -20` | MEDIUM | Largest source files by line count (>300 lines suggests multiple responsibilities)
+
 ## Good practice
 
 Split each responsibility into its own class. The diagram and code below show a monolithic `User` class refactored into three focused classes — each owned by a different stakeholder.

@@ -20,6 +20,11 @@ Code is read far more often than it is written. Poor names force every future re
 - Boolean variables or methods without a predicate form (`flag`, `status` instead of `isActive`, `hasPermission`)
 - Functions named with vague verbs (`handle`, `process`, `manage`, `do`) without specifying what
 
+## Inspection
+
+- `grep -rnE '\b(temp|tmp|data|result|retval|foo|bar|baz)\b\s*=' --include="*.py" --include="*.js" --include="*.ts" --include="*.java" --include="*.go" --include="*.cs" $TARGET` | LOW | Generic variable names lacking intent
+- `grep -rnE '(var|let|const|int|string|auto)\s+[a-z]\s*[=;,)]' --include="*.js" --include="*.ts" --include="*.java" --include="*.go" --include="*.cs" $TARGET` | LOW | Single-letter variable names (non-loop)
+
 ## Good practice
 
 - Use domain vocabulary — name things using the language of the problem domain, not technical jargon

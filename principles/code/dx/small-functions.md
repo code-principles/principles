@@ -20,6 +20,10 @@ Large, multi-purpose functions are the primary source of accidental complexity i
 - Functions that require extensive scrolling to read in their entirety
 - Functions whose name requires "and" or "or" to describe what they do
 
+## Inspection
+
+- `awk '/^[[:space:]]*(def |function |func |public |private |protected |static )/{start=NR; name=$0} /^[[:space:]]*\}|^[[:space:]]*end[[:space:]]*$/{if(start && NR-start>30) print FILENAME":"start": long function ("NR-start" lines): "name; start=0}' $(find $TARGET -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.rb" -o -name "*.cs" 2>/dev/null)` | MEDIUM | Functions exceeding 30 lines
+
 ## Good practice
 
 - Extract each distinct step or responsibility into its own function with a descriptive name

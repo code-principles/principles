@@ -18,7 +18,7 @@ Verify: `bash --version`
 
 ### Windows wrapper scripts
 
-On Windows, use `install.ps1` / `uninstall.ps1` (PowerShell) or `install.cmd` / `uninstall.cmd` (Command Prompt) instead of calling `install.sh` directly. These wrappers detect bash on `PATH` and forward all arguments unchanged. See [INSTALL.md](INSTALL.md) for usage.
+On Windows, use `install.ps1` / `uninstall.ps1` (PowerShell) or `install.cmd` / `uninstall.cmd` (Command Prompt) instead of calling `install.sh` directly. These wrappers detect bash on `PATH` and normalize Windows absolute paths before forwarding arguments to bash. See [INSTALL.md](INSTALL.md) for usage.
 
 ## AI Model
 

@@ -55,7 +55,7 @@ my-project/
 │   └── src/
 │
 ├── infra/
-│   └── .principles                ◄ 🏗️  @terraform + @twelve-factor
+│   └── .principles                ◄ 🏗️  CODE-AR-INFRASTRUCTURE-AS-CODE + CODE-AR-IMMUTABLE-INFRASTRUCTURE
 │
 └── docs/
     └── .principles                ◄ 📝 (minimal — no security scanning in prose)
@@ -83,7 +83,7 @@ flowchart LR
 
 ### 🤖 Let the AI scout your project
 
-You don't need to figure out which principles apply yourself. The `/scout` command analyzes your file structure and writes the `.principles` files for you:
+You don't need to figure out which principles apply yourself. The `/scout` command analyzes your file structure, proposes `.principles` placements, and then writes them after your confirmation:
 
 ```
 /scout
@@ -93,7 +93,7 @@ You don't need to figure out which principles apply yourself. The `/scout` comma
 → Writing .principles            → @microservices + @security-focused
 → Writing backend/.principles   → @spring-boot
 → Writing frontend/.principles  → @react + @typescript
-→ Writing infra/.principles     → @terraform + @twelve-factor
+→ Writing infra/.principles     → CODE-AR-INFRASTRUCTURE-AS-CODE + CODE-AR-IMMUTABLE-INFRASTRUCTURE
 → Writing backend/src/payments/.principles → CODE-RL-IDEMPOTENCY
 
 Done ✅  Run /prime before your next coding session.
@@ -176,10 +176,10 @@ Place a `.principles` file in your project root (and optionally in subdirectorie
 @spring-boot
 
 # Add a specific principle
-CODE-OB-004
+CODE-OB-SERVICE-LEVEL-OBJECTIVES
 
 # Suppress a principle for this subtree
-!CODE-API-012
+!CODE-API-HATEOAS
 ```
 
 The system walks up from the reviewed file to the git root, collecting `.principles` files and merging them (outermost first, innermost last). The AI then reads the full principle content before coding or reviewing.
@@ -211,7 +211,7 @@ The AI figures out the scope from context:
 
 ## 🚀 Quick start
 
-**Prerequisites:** Bash 4+ — see [REQUIREMENTS.md](REQUIREMENTS.md) for platform-specific setup. Tested with Claude Haiku 4.5, GPT-4.1, and GPT-5.1-mini. Premium models recommended for best review quality and formatting. Local LLMs not supported.
+**Prerequisites:** Bash 4+ — see [REQUIREMENTS.md](REQUIREMENTS.md) for platform-specific setup. Tested with Claude Haiku 4.5, GPT-4.1, and GPT-5.1-mini (low). Premium models recommended for best review quality and formatting. Local LLMs not supported.
 
 ```bash
 # Clone the repo
@@ -306,15 +306,11 @@ The catalog is actively growing. Planned additions are tracked in [TODO.md](TODO
 | Documentation | Docs as code, progressive disclosure, write for your audience |
 | API design | API versioning strategy, gRPC / Protobuf design |
 
-Contributions are welcome — see [CONTRIBUTING](#-contributing) below.
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 🤝 Contributing
 
-Principles in this repo must be **established, widely recognized concepts** from the software engineering literature — named principles, published patterns, or documented practices backed by authoritative sources. They must not duplicate what is already in the catalog.
-
-If you need original, company-specific, or niche principles that don't meet this bar, **fork this repo** and add them in your own namespace (e.g., `principles/corp/`).
-
-Every contribution requires a clear principle description, at least one verifiable published source (book with ISBN, paper with DOI, or authoritative URL), and correct layer assignment. See [DESIGN.md](DESIGN.md#-11-contributing-principles) for the full process.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for requirements, process, and source guidelines.
 
 ## 📄 License
 

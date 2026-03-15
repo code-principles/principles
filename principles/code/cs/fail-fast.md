@@ -21,6 +21,13 @@ Silent failures are the most expensive kind of bug. They allow corrupted data to
 - Error codes ignored by callers (return value not checked)
 - `TODO: handle error` comments left in catch blocks
 
+## Inspection
+
+- `grep -rnE 'catch\s*\([^)]*\)\s*\{\s*\}' --include="*.java" --include="*.js" --include="*.ts" --include="*.cs" $TARGET` | HIGH | Empty catch blocks swallowing exceptions
+- `grep -rnE '^\s*except:\s*$|^\s*except\s+Exception\s*:' --include="*.py" $TARGET` | HIGH | Bare except or overly broad exception handler
+- `grep -rnE 'catch\s*\{' --include="*.kt" --include="*.swift" $TARGET` | MEDIUM | Catch-all without specific exception type
+- `grep -rnE 'TODO.*handle.*error|FIXME.*error' -i $TARGET` | MEDIUM | Deferred error handling
+
 ## Good practice
 
 - Validate preconditions at the start of functions and throw immediately on violation

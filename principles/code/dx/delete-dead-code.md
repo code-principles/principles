@@ -21,6 +21,11 @@ Dead code imposes a maintenance tax on every developer who encounters it. Reader
 - Variables that are assigned but never read
 - Entire files that are not referenced from any entry point
 
+## Inspection
+
+- `grep -rnE '^\s*(//|#)\s*(function |def |class |public |private |protected )' $TARGET` | MEDIUM | Commented-out function/class definitions
+- `grep -rnE 'TODO.*(remove|delete|clean ?up)|FIXME.*(remove|delete|dead)' -i $TARGET` | LOW | TODO markers for dead code removal
+
 ## Good practice
 
 - Delete dead code immediately when you identify it — do not leave it "just in case"

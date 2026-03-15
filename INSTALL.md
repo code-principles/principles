@@ -55,7 +55,7 @@ Bash is pre-installed on both platforms. Run the installer directly:
 
 ### Windows
 
-Windows users need bash on `PATH`. The repo ships thin wrapper scripts for both PowerShell and Command Prompt that detect bash and forward all arguments to the real `install.sh`.
+Windows users need bash on `PATH`. The repo ships thin wrapper scripts for both PowerShell and Command Prompt that detect bash and forward arguments to the real `install.sh`.
 
 **Step 1 — get bash.** Install [Git for Windows](https://git-scm.com/download/win) (includes Git Bash). WSL, MSYS2, and Cygwin also work as long as `bash` is on `PATH`.
 
@@ -97,7 +97,7 @@ install.cmd cursor ~/projects/my-app
 install.cmd all ~/projects/my-app
 ```
 
-> **Path note:** `install.cmd` / `uninstall.cmd` automatically convert backslashes to forward slashes in all arguments, so `C:\My\Path` and `C:/My/Path` both work. PowerShell passes arguments directly and does not need conversion.
+> **Path note:** Both wrapper styles handle Windows absolute paths for you. `install.cmd` / `uninstall.cmd` normalize backslashes to forward slashes before calling bash, and `install.ps1` / `uninstall.ps1` convert `C:\...` paths to a bash-friendly absolute path.
 
 ---
 

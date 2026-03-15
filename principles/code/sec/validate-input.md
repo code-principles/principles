@@ -20,6 +20,13 @@ Unvalidated input is the root cause of injection attacks (SQL, command, path tra
 - Trust assumptions on data from "internal" services without validation
 - Denylists instead of allowlists for input filtering
 
+## Inspection
+
+- `grep -rnE 'eval\(|exec\(' --include="*.py" $TARGET` | HIGH | Direct eval/exec calls
+- `grep -rnE 'system\(|popen\(' --include="*.py" --include="*.rb" --include="*.php" $TARGET` | HIGH | Shell command execution
+- `grep -rnE '\.query\(.*\+|\.execute\(.*\+|\.raw\(.*\+' --include="*.py" --include="*.js" --include="*.ts" $TARGET` | HIGH | String concatenation in database queries
+- `grep -rnE 'shell\s*=\s*True' --include="*.py" $TARGET` | HIGH | Shell injection via subprocess
+
 ## Good practice
 
 - Use allowlists over denylists — define what is valid, reject everything else

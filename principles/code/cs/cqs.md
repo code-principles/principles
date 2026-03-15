@@ -19,6 +19,10 @@ Methods that both mutate state and return a value are harder to reason about, ha
 - Functions named as queries (`get`, `find`, `check`, `is`) that also mutate
 - Repository or service methods that return the saved entity and also send a notification or emit an event in the same call
 
+## Inspection
+
+- `grep -rnE '(get|find|fetch|is|has|check)[A-Za-z]*\(.*\{' --include="*.java" --include="*.ts" --include="*.js" --include="*.cs" $TARGET | grep -iE '\.(save|update|delete|remove|send|write|insert|set)\('` | MEDIUM | Query-named methods that also mutate state
+
 ## Good practice
 
 - If a method must both return a value and have a side effect, split it: one command method, one query method; call the command, then query separately

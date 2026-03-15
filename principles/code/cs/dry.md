@@ -20,6 +20,10 @@ When knowledge is duplicated, changing a business rule requires finding and upda
 - Database schema knowledge hardcoded in application code instead of derived from the schema
 - Copy-pasted code blocks that encode the same decision (not just similar structure)
 
+## Inspection
+
+- `find $TARGET -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.cs" | xargs awk 'NF{print}' 2>/dev/null | sort | uniq -cd | sort -rn | head -20` | LOW | Most frequently duplicated non-blank lines across source files
+
 ## Good practice
 
 - Extract shared knowledge into a single authoritative source (function, constant, schema, config)

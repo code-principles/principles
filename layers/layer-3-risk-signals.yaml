@@ -25,9 +25,9 @@ authentication:
     - "bearer"
     - "refresh_token"
   elevate:
-    - SEC-002
-    - SEC-003
-    - SEC-008
+    - OWASP-01-BROKEN-ACCESS-CONTROL
+    - CODE-SEC-STRONG-CRYPTOGRAPHY
+    - OWASP-07-AUTHENTICATION-FAILURES
 
 financial:
   description: "Code processing payments, billing, currency, or financial transactions"
@@ -49,10 +49,10 @@ financial:
     - "checkout"
     - "subscription"
   elevate:
-    - SEC-001
-    - SEC-004
-    - RL-003
-    - CC-001
+    - CODE-SEC-VALIDATE-INPUT
+    - OWASP-03-INJECTION
+    - CODE-RL-IDEMPOTENCY
+    - CODE-CC-SYNC-SHARED-STATE
 
 personal-data:
   description: "Code handling personally identifiable information or privacy-sensitive data"
@@ -76,10 +76,10 @@ personal-data:
     - "CCPA"
     - "HIPAA"
   elevate:
-    - SEC-001
-    - SEC-003
-    - SEC-005
-    - SEC-010
+    - CODE-SEC-VALIDATE-INPUT
+    - CODE-SEC-STRONG-CRYPTOGRAPHY
+    - CODE-SEC-SECURITY-BY-DESIGN
+    - CODE-SEC-SECURITY-LOGGING
 
 public-api:
   description: "Versioned or published APIs consumed by third-party clients"
@@ -99,10 +99,10 @@ public-api:
     - "api_version"
     - "public_api"
   elevate:
-    - API-014
-    - API-001
-    - API-004
-    - RL-007
+    - CODE-API-BACKWARD-COMPATIBILITY
+    - EFFECTIVE-JAVA-MINIMIZE-ACCESSIBILITY
+    - EFFECTIVE-JAVA-DESIGN-METHOD-SIGNATURES
+    - CODE-RL-SCHEMA-EVOLUTION
 
 high-throughput:
   description: "Performance-critical code paths requiring low latency or high throughput"
@@ -125,12 +125,12 @@ high-throughput:
     - "microsecond"
     - "nanosecond"
   elevate:
-    - PF-001
-    - PF-002
-    - PF-003
-    - PF-004
-    - PF-005
-    - CC-006
+    - CODE-PF-PROFILE-FIRST
+    - CODE-PF-MECHANICAL-SYMPATHY
+    - CODE-PF-DATA-LOCALITY
+    - CODE-PF-MINIMIZE-ALLOCATION
+    - CODE-PF-PREDICTABLE-LATENCY
+    - CODE-CC-AVOID-LOCKS-IN-HOT-PATHS
 
 distributed-system:
   description: "Distributed architectures with inter-service communication and eventual consistency"
@@ -154,17 +154,17 @@ distributed-system:
     - "outbox"
     - "dead_letter"
   elevate:
-    - RL-002
-    - RL-003
-    - RL-004
-    - RL-005
-    - RL-006
-    - OB-001
-    - OB-002
-    - OB-003
-    - AR-013
-    - AR-014
-    - AR-015
+    - CODE-RL-FAULT-TOLERANCE
+    - CODE-RL-IDEMPOTENCY
+    - CODE-CS-CIRCUIT-BREAKER
+    - CODE-RL-BACKPRESSURE
+    - CODE-RL-CONSISTENCY-MODELS
+    - CODE-OB-STRUCTURED-TELEMETRY
+    - CODE-OB-HIGH-CARDINALITY
+    - CODE-OB-DISTRIBUTED-TRACING
+    - CODE-AR-ASYNC-MESSAGING
+    - CODE-AR-PIPES-AND-FILTERS
+    - CODE-AR-MESSAGE-BROKER
 
 legacy-codebase:
   description: "Refactoring, migration, or brownfield work on existing codebases"
@@ -183,17 +183,17 @@ legacy-codebase:
     - "rewrite"
     - "upgrade"
   elevate:
-    - CS-001
-    - CS-002
-    - CS-003
-    - CS-004
-    - CS-005
-    - CS-006
-    - CS-007
-    - CS-008
-    - CS-009
-    - CS-010
-    - SD-029
-    - SD-030
-    - SD-031
-    - SD-032
+    - CODE-CS-DRY
+    - CODE-SMELLS-LONG-METHOD
+    - CODE-SMELLS-LARGE-CLASS
+    - CODE-SMELLS-FEATURE-ENVY
+    - CODE-SMELLS-DATA-CLUMPS
+    - CODE-SMELLS-PRIMITIVE-OBSESSION
+    - CODE-SMELLS-SWITCH-STATEMENTS
+    - CODE-SMELLS-SPECULATIVE-GENERALITY
+    - CODE-SMELLS-MESSAGE-CHAINS
+    - CODE-SMELLS-COMMENTS-AS-DEODORANT
+    - SIMPLE-DESIGN-PASSES-TESTS
+    - SIMPLE-DESIGN-REVEALS-INTENTION
+    - SIMPLE-DESIGN-NO-DUPLICATION
+    - SIMPLE-DESIGN-FEWEST-ELEMENTS
