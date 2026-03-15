@@ -234,6 +234,25 @@ For GitHub Copilot, run `./install.sh copilot <project-dir>`. This writes:
 
 The prompt files need YAML frontmatter to be discoverable. `install.sh copilot` now generates valid prompt files, but command visibility still depends on the Copilot client you use.
 
+## 🌐 Installation scopes
+
+Every tool supports two installation scopes — **global** (no directory argument) applies across all your repos, **local** (with a directory argument) applies to a single project only:
+
+| Command | Scope | Where |
+|---|---|---|
+| `./install.sh claude` | Global | `~/.claude/commands/` |
+| `./install.sh claude <dir>` | Local | `<dir>/.claude/commands/` |
+| `./install.sh copilot` | Global | `~/.copilot/copilot-instructions.md` |
+| `./install.sh copilot <dir>` | Local | `<dir>/.github/` (instructions + skills + prompts) |
+| `./install.sh cursor` | — | Not supported (see below) |
+| `./install.sh cursor <dir>` | Local | `<dir>/.cursor/rules/code-principles.mdc` |
+| `./install.sh all` | Global | Claude + Copilot globally; Cursor message |
+| `./install.sh all <dir>` | Local | All three tools in `<dir>` |
+
+**Cursor limitation:** Cursor has no file-based user-level config. To apply principles globally, go to Cursor > Settings > General > Rules for AI and paste the principle content there manually.
+
+**Breaking change:** `./install.sh copilot` (no argument) previously defaulted to the current directory. It now installs globally to `~/.copilot/copilot-instructions.md`. To install locally as before, pass the directory explicitly: `./install.sh copilot .`
+
 ## 📚 Principle catalog
 
 150+ principles across 13 categories:

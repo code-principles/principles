@@ -6,15 +6,20 @@ set -euo pipefail
 # install.sh — Deploy code-principles to AI coding tools
 #
 # Usage:
-#   ./install.sh claude              # Install Claude Code slash commands (~/.claude/commands/)
-#   ./install.sh copilot [project]   # Generate Copilot assets:
+#   ./install.sh claude              # Install Claude Code slash commands globally (~/.claude/commands/)
+#   ./install.sh claude <dir>        # Install Claude Code slash commands locally (<dir>/.claude/commands/)
+#   ./install.sh copilot             # Install Copilot instructions globally (~/.copilot/copilot-instructions.md)
+#   ./install.sh copilot <dir>       # Generate Copilot assets in <dir>/.github/
 #                                    #   .github/copilot-instructions.md  (all Copilot clients)
 #                                    #   .github/skills/<name>/SKILL.md   (Copilot CLI slash commands)
 #                                    #   .github/prompts/<name>.prompt.md (VS Code / JetBrains / Visual Studio)
-#   ./install.sh cursor [project]    # Generate Cursor rules (.cursor/rules/code-principles.mdc)
-#   ./install.sh all [project]       # Install all targets
+#   ./install.sh cursor              # (not applicable — configure via Cursor > Settings > General > Rules for AI)
+#   ./install.sh cursor <dir>        # Generate Cursor rules (<dir>/.cursor/rules/code-principles.mdc)
+#   ./install.sh all                 # Global: install claude + copilot (cursor: message)
+#   ./install.sh all <dir>           # Local: install all tools in <dir>
 #   ./install.sh --list              # Show what's installed
-#   ./uninstall.sh [project]         # Remove Claude, Copilot, and Cursor assets
+#   ./uninstall.sh                   # Remove global assets
+#   ./uninstall.sh <dir>             # Remove local assets from <dir>
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_COMMANDS_DIR="$HOME/.claude/commands"
@@ -130,21 +135,33 @@ EOF
 }
 
 install_claude() {
-    echo -e "${BOLD}Installing Claude Code slash commands...${NC}"
+    local project_dir="${1:-}"
+    local target_dir
 
-    mkdir -p "$CLAUDE_COMMANDS_DIR"
+    if [ -n "$project_dir" ]; then
+        if [ ! -d "$project_dir" ]; then
+            echo -e "${RED}Error: Directory '$project_dir' does not exist.${NC}"; exit 1
+        fi
+        target_dir="$project_dir/.claude/commands"
+        echo -e "${BOLD}Installing Claude Code slash commands (local: $project_dir)...${NC}"
+    else
+        target_dir="$CLAUDE_COMMANDS_DIR"
+        echo -e "${BOLD}Installing Claude Code slash commands (global)...${NC}"
+    fi
+
+    mkdir -p "$target_dir"
 
     local count=0
     for file in "$CLAUDE_TARGETS_DIR/"*.md; do
         if [ -f "$file" ]; then
-            cp "$file" "$CLAUDE_COMMANDS_DIR/"
+            cp "$file" "$target_dir/"
             count=$((count + 1))
             echo -e "  ${GREEN}✓${NC} /$(basename "$file" .md)"
         fi
     done
 
     echo ""
-    echo -e "Installed ${BOLD}$count${NC} commands to $CLAUDE_COMMANDS_DIR"
+    echo -e "Installed ${BOLD}$count${NC} commands to $target_dir"
     echo ""
     echo "Available commands:"
     echo "  /scout  — Detect project profile and generate .principles placements"
@@ -153,7 +170,16 @@ install_claude() {
 }
 
 install_copilot() {
-    local project_dir="${1:-.}"
+    local project_dir="${1:-}"
+    if [ -n "$project_dir" ]; then
+        install_copilot_local "$project_dir"
+    else
+        install_copilot_global
+    fi
+}
+
+install_copilot_local() {
+    local project_dir="$1"
 
     if [ ! -d "$project_dir" ]; then
         echo -e "${RED}Error: Directory '$project_dir' does not exist.${NC}"
@@ -239,8 +265,61 @@ install_copilot() {
     echo "In VS Code:     type /audit, /prime, /scout  in Copilot Chat"
 }
 
+install_copilot_global() {
+    local target_dir="$HOME/.copilot"
+    local target_file="$target_dir/copilot-instructions.md"
+
+    echo -e "${BOLD}Generating global Copilot instructions (~/.copilot/copilot-instructions.md)...${NC}"
+    mkdir -p "$target_dir"
+
+    # Build the new block in a temp file
+    local block_file
+    block_file="$(mktemp)"
+    echo "<!-- code-principles: begin -->" > "$block_file"
+    write_principles_body "$block_file"
+    echo "<!-- code-principles: end -->" >> "$block_file"
+
+    if [ ! -f "$target_file" ] || [ ! -s "$target_file" ]; then
+        cp "$block_file" "$target_file"
+    elif grep -q "^<!-- code-principles: begin -->$" "$target_file"; then
+        local result_file
+        result_file="$(mktemp)"
+        awk '
+            BEGIN { in_block=0 }
+            /^<!-- code-principles: begin -->$/ { in_block=1; next }
+            /^<!-- code-principles: end -->$/ { if (in_block) { in_block=0; next } }
+            !in_block { print }
+        ' "$target_file" > "$result_file"
+        awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
+            "$result_file" > "${result_file}.t" && mv "${result_file}.t" "$result_file"
+        [ -s "$result_file" ] && echo "" >> "$result_file"
+        cat "$block_file" >> "$result_file"
+        mv "$result_file" "$target_file"
+    else
+        echo "" >> "$target_file"
+        cat "$block_file" >> "$target_file"
+    fi
+
+    rm -f "$block_file"
+
+    echo -e "  ${GREEN}✓${NC} $target_file"
+    echo ""
+    echo "Global Copilot instructions written to ~/.copilot/copilot-instructions.md"
+    echo "For skills and prompts, run: ./install.sh copilot <project-dir>"
+}
+
 install_cursor() {
-    local project_dir="${1:-.}"
+    local project_dir="${1:-}"
+
+    if [ -z "$project_dir" ]; then
+        echo -e "${BOLD}Cursor — global/user scope not supported${NC}"
+        echo ""
+        echo "Cursor does not support file-based user-level rules."
+        echo "Configure manually: Cursor > Settings > General > Rules for AI"
+        echo ""
+        echo "For project-level rules: ./install.sh cursor <project-dir>"
+        return 0
+    fi
 
     if [ ! -d "$project_dir" ]; then
         echo -e "${RED}Error: Directory '$project_dir' does not exist.${NC}"
@@ -273,7 +352,7 @@ list_installed() {
     echo -e "${BOLD}Installed code-principles:${NC}"
     echo ""
 
-    echo "Claude Code commands:"
+    echo "Claude Code commands (global: ~/.claude/commands/):"
     local found=false
     for file in "$CLAUDE_TARGETS_DIR/"*.md; do
         if [ -f "$file" ] && [ -f "$CLAUDE_COMMANDS_DIR/$(basename "$file")" ]; then
@@ -284,26 +363,41 @@ list_installed() {
     if [ "$found" = false ]; then
         echo "  (none)"
     fi
+
+    echo ""
+    echo "Copilot instructions (global: ~/.copilot/copilot-instructions.md):"
+    if [ -f "$HOME/.copilot/copilot-instructions.md" ] && grep -q "^<!-- code-principles: begin -->$" "$HOME/.copilot/copilot-instructions.md" 2>/dev/null; then
+        echo -e "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md"
+    else
+        echo "  (none)"
+    fi
 }
 
 show_usage() {
     print_header
     echo ""
-    echo "Usage: $0 <target> [options]"
+    echo "Usage: $0 <target> [project-dir]"
     echo ""
     echo "Targets:"
-    echo "  claude              Install slash commands to ~/.claude/commands/"
-    echo "  copilot [dir]       Generate .github/copilot-instructions.md + valid .github/prompts/*.prompt.md files"
-    echo "  cursor [dir]        Generate .cursor/rules/code-principles.mdc (default: current dir)"
-    echo "  all [dir]           Install all targets"
+    echo "  claude              Install slash commands globally (~/.claude/commands/)"
+    echo "  claude <dir>        Install slash commands locally (<dir>/.claude/commands/)"
+    echo "  copilot             Install Copilot instructions globally (~/.copilot/copilot-instructions.md)"
+    echo "  copilot <dir>       Generate Copilot assets in <dir>/.github/"
+    echo "  cursor              (not applicable — configure via Cursor > Settings > General > Rules for AI)"
+    echo "  cursor <dir>        Generate .cursor/rules/code-principles.mdc in <dir>"
+    echo "  all                 Global: install claude + copilot (cursor: message)"
+    echo "  all <dir>           Local: install all tools in <dir>"
     echo ""
     echo "Management:"
     echo "  --list              Show what's installed"
     echo "  --help              Show this help"
-    echo "  ./uninstall.sh [dir] Remove Claude, Copilot, and Cursor assets"
+    echo "  ./uninstall.sh      Remove global Claude and Copilot assets"
+    echo "  ./uninstall.sh <dir> Remove local assets from <dir>"
     echo ""
     echo "Examples:"
     echo "  ./install.sh claude"
+    echo "  ./install.sh claude ~/projects/my-app"
+    echo "  ./install.sh copilot"
     echo "  ./install.sh copilot ~/projects/my-app"
     echo "  ./install.sh all ~/projects/my-app"
 }
@@ -313,20 +407,20 @@ print_header
 
 case "${1:-}" in
     claude)
-        install_claude
+        install_claude "${2:-}"
         ;;
     copilot)
-        install_copilot "${2:-.}"
+        install_copilot "${2:-}"
         ;;
     cursor)
-        install_cursor "${2:-.}"
+        install_cursor "${2:-}"
         ;;
     all)
-        install_claude
+        install_claude "${2:-}"
         echo ""
-        install_copilot "${2:-.}"
+        install_copilot "${2:-}"
         echo ""
-        install_cursor "${2:-.}"
+        install_cursor "${2:-}"
         ;;
     --list|-l)
         list_installed

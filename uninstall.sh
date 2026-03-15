@@ -6,8 +6,11 @@ set -euo pipefail
 # uninstall.sh — Remove code-principles assets from supported AI coding tools
 #
 # Usage:
-#   ./uninstall.sh [project]   # Remove assets for all targets:
+#   ./uninstall.sh             # Remove global assets:
 #                              #   Claude Code: ~/.claude/commands/<name>.md
+#                              #   Copilot:     ~/.copilot/copilot-instructions.md (code-principles block only)
+#   ./uninstall.sh <project>   # Remove local assets from <project>:
+#                              #   Claude Code: <project>/.claude/commands/<name>.md
 #                              #   Copilot CLI: .github/skills/<name>/SKILL.md
 #                              #   Copilot IDE: .github/prompts/<name>.prompt.md
 #                              #               .github/copilot-instructions.md (code-principles block only)
@@ -17,7 +20,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_COMMANDS_DIR="$HOME/.claude/commands"
 CLAUDE_TARGETS_DIR="$SCRIPT_DIR/targets/claude-code"
-PROJECT_DIR="${1:-.}"
+
+UNINSTALL_SCOPE="global"
+PROJECT_DIR=""
+if [ -n "${1:-}" ] && [[ "${1:-}" != --* ]]; then
+    UNINSTALL_SCOPE="local"
+    PROJECT_DIR="$1"
+fi
 
 # Colors (if terminal supports them)
 if [ -t 1 ]; then
@@ -40,7 +49,7 @@ cleanup_dir_if_empty() {
 }
 
 require_project_dir() {
-    if [ ! -d "$PROJECT_DIR" ]; then
+    if [ -n "$PROJECT_DIR" ] && [ ! -d "$PROJECT_DIR" ]; then
         echo -e "${RED}Error: Directory '$PROJECT_DIR' does not exist.${NC}"
         exit 1
     fi
@@ -55,17 +64,31 @@ print_header() {
 show_usage() {
     print_header
     echo ""
-    echo "Usage: $0 [project]"
+    echo "Usage: $0 [project-dir]"
     echo ""
-    echo "Removes current code-principles assets for Claude Code, GitHub Copilot, and Cursor."
-    echo "Project files are removed from [project] or the current directory when omitted."
+    echo "Removes code-principles assets for Claude Code, GitHub Copilot, and Cursor."
+    echo ""
+    echo "  (no arg)            Remove global assets (~/.claude/commands/, ~/.copilot/)"
+    echo "  <dir>               Remove local assets from <dir>/.claude/, .github/, .cursor/"
     echo ""
     echo "Options:"
     echo "  --help              Show this help"
 }
 
 uninstall_claude() {
-    echo -e "${BOLD}Removing Claude Code slash commands...${NC}"
+    local project_dir="${1:-}"
+    local target_dir
+    local scope_label
+
+    if [ -n "$project_dir" ]; then
+        target_dir="$project_dir/.claude/commands"
+        scope_label="local: $project_dir"
+    else
+        target_dir="$CLAUDE_COMMANDS_DIR"
+        scope_label="global"
+    fi
+
+    echo -e "${BOLD}Removing Claude Code slash commands ($scope_label)...${NC}"
 
     local count=0
     local found_target=false
@@ -74,7 +97,7 @@ uninstall_claude() {
     for file in "$CLAUDE_TARGETS_DIR/"*.md; do
         if [ -f "$file" ]; then
             found_target=true
-            local installed_file="$CLAUDE_COMMANDS_DIR/$(basename "$file")"
+            local installed_file="$target_dir/$(basename "$file")"
             if [ -f "$installed_file" ]; then
                 rm "$installed_file"
                 count=$((count + 1))
@@ -94,9 +117,23 @@ uninstall_claude() {
         echo ""
         echo -e "Removed ${GREEN}$count${NC} commands."
     fi
+
+    if [ -n "$project_dir" ]; then
+        cleanup_dir_if_empty "$target_dir"
+        cleanup_dir_if_empty "$project_dir/.claude"
+    fi
 }
 
 uninstall_copilot() {
+    local project_dir="${1:-}"
+    if [ -n "$project_dir" ]; then
+        uninstall_copilot_local "$project_dir"
+    else
+        uninstall_copilot_global
+    fi
+}
+
+uninstall_copilot_local() {
     local project_dir="$1"
     local target_file="$project_dir/.github/copilot-instructions.md"
     local prompts_dir="$project_dir/.github/prompts"
@@ -182,8 +219,58 @@ uninstall_copilot() {
     cleanup_dir_if_empty "$project_dir/.github"
 }
 
+uninstall_copilot_global() {
+    local target_file="$HOME/.copilot/copilot-instructions.md"
+
+    echo -e "${BOLD}Removing global Copilot instructions...${NC}"
+
+    if [ ! -f "$target_file" ]; then
+        echo "  ${NEUTRAL} No global Copilot instructions found to remove."
+        return
+    fi
+
+    local temp_file
+    temp_file="$(mktemp)"
+
+    awk '
+        BEGIN { in_block=0; removed=0 }
+        /^<!-- code-principles: begin -->$/ { in_block=1; removed=1; next }
+        /^<!-- code-principles: end -->$/   { if (in_block) { in_block=0; next } }
+        !in_block { print }
+        END { exit removed ? 0 : 1 }
+    ' "$target_file" > "$temp_file" || {
+        rm -f "$temp_file"
+        echo "  ${NEUTRAL} No code-principles block found in global Copilot instructions."
+        return
+    }
+
+    awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
+        "$temp_file" > "${temp_file}.t" && mv "${temp_file}.t" "$temp_file"
+
+    if grep -q '[^[:space:]]' "$temp_file"; then
+        mv "$temp_file" "$target_file"
+        echo -e "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md (removed code-principles block)"
+    else
+        rm -f "$temp_file" "$target_file"
+        echo -e "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md"
+    fi
+
+    cleanup_dir_if_empty "$HOME/.copilot"
+}
+
 uninstall_cursor() {
-    local project_dir="$1"
+    local project_dir="${1:-}"
+
+    if [ -z "$project_dir" ]; then
+        echo -e "${BOLD}Cursor — global/user scope not supported${NC}"
+        echo ""
+        echo "Cursor does not support file-based user-level rules."
+        echo "Configure manually: Cursor > Settings > General > Rules for AI"
+        echo ""
+        echo "For project-level removal: ./uninstall.sh <project-dir>"
+        return 0
+    fi
+
     local target_file="$project_dir/.cursor/rules/code-principles.mdc"
 
     echo -e "${BOLD}Removing Cursor rules...${NC}"
@@ -205,7 +292,7 @@ run_uninstall() {
 
     print_header
     echo ""
-    uninstall_claude
+    uninstall_claude "$PROJECT_DIR"
     echo ""
     uninstall_copilot "$PROJECT_DIR"
     echo ""
@@ -231,4 +318,3 @@ case "${1:-}" in
         run_uninstall
         ;;
 esac
-
