@@ -165,6 +165,8 @@ AI agents are already technically capable of producing correct, working code. Th
 
 Think of it as: the AI instructions tell the agent *how to behave*; `.principles` tells it *which engineering lens to apply*.
 
+While `.principles` is currently focused on coding principles, it is not limited to code. Anything that follows the "X as Code" approach — documentation, infrastructure definitions, configuration — is plain text in version control, and therefore available for principle-driven review and auditing.
+
 ## ⚙️ How it works
 
 Place a `.principles` file in your project root (and optionally in subdirectories) to declare which principles apply:
@@ -209,6 +211,8 @@ The AI figures out the scope from context:
 
 ## 🚀 Quick start
 
+**Prerequisites:** Bash 4+ — see [REQUIREMENTS.md](REQUIREMENTS.md) for platform-specific setup. Tested with Claude Haiku 4.5, GPT-4.1, and GPT-5.1-mini. Premium models recommended for best review quality and formatting. Local LLMs not supported.
+
 ```bash
 # Clone the repo
 git clone https://github.com/code-principles/.principles.git
@@ -220,7 +224,7 @@ git clone https://github.com/code-principles/.principles.git
 #   /scout                      → detect profile and create .principles files
 #   /prime                      → before writing code
 #   /audit current changes      → review only what changed since last commit
-#   /audit                      → review whatever you describe in conversation
+#   /audit directory            → review whatever you describe in conversation
 ```
 
 For GitHub Copilot, run `./install.sh copilot <project-dir>`. This writes:
@@ -255,6 +259,8 @@ Shipped groups (e.g., `@spring-boot`, `@react`, `@microservices`, `@security-foc
 Many principles include **code examples and diagrams** to make the guidance concrete — not just a definition, but a demonstration of the principle in practice.
 
 ## 💡 Example review output
+
+> **Note:** The output below is illustrative. Formatting, structure, and level of detail will vary between AI models and even between runs of the same model. The principle review itself is performed by the AI — some models produce thorough, well-structured audits; others may miss findings or deviate from the template. The `audit-output.json` file is the most reliable artefact; the text report is best-effort.
 
 ```
 ## Critical

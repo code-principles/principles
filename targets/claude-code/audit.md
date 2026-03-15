@@ -1,29 +1,23 @@
 # Audit
 
-You are reviewing code against activated coding principles. Follow these six phases exactly.
+Review code against activated coding principles in six phases.
 
 ## Phase 1 — Resolve Input
 
-Determine what code to review based on `$ARGUMENTS`:
+Determine what to review from `$ARGUMENTS`:
 
-- If `$ARGUMENTS` is **empty**: respond with "What code would you like me to review?" and stop.
-- If `$ARGUMENTS` is a **file path**: read that file and use its contents as the code under review.
-- If `$ARGUMENTS` is a **directory path**: recursively glob all source files in that directory. Exclude binaries, lock files, `node_modules`, `vendor`, `dist`, `build`, `.git`, and other build artifacts. Combine the contents of all remaining files as the code under review.
-- If `$ARGUMENTS` is **inline code or text**: use it directly as the code under review.
-
-Record the **target path** (file or directory) for use in Phase 2.
+- Empty → respond "What code would you like me to review?" and stop.
+- File path → read that file.
+- Directory path → recursively glob all source files; exclude binaries, lock files, `node_modules`, `vendor`, `dist`, `build`, `.git`, and build artifacts.
+- Inline code → use it directly.
 
 ## Phase 2 — Resolve .principles Hierarchy
 
-Walk **up** from the target path to the git repo root (directory containing `.git/`) or a maximum of 10 levels, collecting every `.principles` file found along the way. Order them **root → target** (outermost first, innermost last).
+Walk up from the target path to the git repo root (`.git/`) or max 10 levels, collecting every `.principles` file. Order: root → target.
 
-**If no `.principles` files are found, skip to Phase 3.**
-
-Otherwise, resolve the active principle set as follows:
+**If no `.principles` files found: skip to Phase 3.**
 
 ### Layer 1 — Always Seeded
-
-Seed the active set with these universally-active principles:
 
 | ID | Title |
 |----|-------|
@@ -55,227 +49,178 @@ Seed the active set with these universally-active principles:
 
 ### Process Each .principles File (root → target)
 
-For each `.principles` file encountered:
+1. Skip blank lines and `#` comments.
+2. `@group` → read `{{CODE_PRINCIPLES_REPO}}/groups/<group>.yaml`, expand `principles` into the active set; recursively process `includes` (abort on cycles).
+3. Bare `ID` → add to active set (case-insensitive).
+4. `!ID` → add to exclusion set.
 
-1. Skip blank lines and `#` comment lines
-2. For each `@group` entry: read `{{CODE_PRINCIPLES_REPO}}/groups/<group>.yaml`, expand its `principles` list into the active set. Recursively process any `includes` entries (detect and abort on cycles).
-3. For each bare `ID` entry: add the ID to the active set (case-insensitive)
-4. For each `!ID` entry: add the ID to an exclusion set
-
-After processing all files: `final_active = active_set MINUS exclusion_set`
-
-Record source as: `.principles hierarchy (N files)`
+`final_active = active_set MINUS exclusion_set` · Source: `.principles hierarchy (N files)`
 
 ## Phase 3 — Dynamic Detection (fallback)
 
-**Only run this phase if Phase 2 found no `.principles` files.**
+**Only if Phase 2 found no `.principles` files.**
 
-Analyze the code under review and identify:
-
-- **Language**: Which programming language(s) are present?
-- **Framework**: Which frameworks or libraries are in use?
-- **Domain**: What problem domain does this code serve?
-- **Architectural style**: What patterns are in use?
-
-Detect the following **risk signals** — note which ones are present:
-
-- Authentication or authorization logic
-- Payment processing or financial calculations
-- Personally identifiable information (PII) handling
-- Public-facing API surfaces
-- Concurrency, parallelism, or shared mutable state
-- High-throughput or latency-sensitive paths
-
-Seed the active set with Layer 1 universals (same as Phase 2), then apply:
+Detect language, framework, domain, and risk signals (auth, payments, PII, public APIs, concurrency, high-throughput). Seed with Layer 1, then apply:
 
 ### Layer 2 — Context-Dependent
 
-Based on the code under review, activate ALL principles from matching contexts below.
+Activate ALL matching contexts:
 
-**api-design** — REST/HTTP API endpoints, controllers, route handlers
-Signals: @RestController, @GetMapping, @PostMapping, @RequestMapping, app.get(, app.post(, router., HttpResponse, status_code, REST, endpoint, controller, FastAPI, flask, express, OpenAPI, swagger
+**api-design** — REST/HTTP endpoints, controllers
+Signals: `@RestController`, `@GetMapping`, `app.get(`, `router.`, `HttpResponse`, `FastAPI`, `flask`, `express`, `swagger`
 Activate: CODE-API-STANDARD-HTTP-METHODS, CODE-API-HATEOAS, CODE-API-RESOURCE-NOUNS, CODE-API-BACKWARD-COMPATIBILITY, CODE-API-HTTP-STATUS-CODES, CODE-SEC-VALIDATE-INPUT, CODE-SEC-004
 
-**concurrency** — Concurrent or parallel code using threads, async, or locks
-Signals: async, await, Thread, Lock, Mutex, Semaphore, synchronized, concurrent, parallel, atomic, volatile, CompletableFuture, Promise.all, asyncio, tokio, goroutine, channel
+**concurrency** — Threads, async, locks
+Signals: `async`, `await`, `Thread`, `Lock`, `Mutex`, `Semaphore`, `synchronized`, `asyncio`, `goroutine`, `channel`
 Activate: CODE-CC-SYNC-SHARED-STATE through CODE-CC-STRUCTURED-CONCURRENCY
 
-**domain-modeling** — Domain-driven design with entities, value objects, aggregates
-Signals: Entity, ValueObject, Aggregate, Repository, DomainEvent, BoundedContext, domain, aggregate_root, repository, specification, factory
+**domain-modeling** — DDD entities, value objects, aggregates
+Signals: `Entity`, `ValueObject`, `Aggregate`, `Repository`, `DomainEvent`, `BoundedContext`
 Activate: CODE-DM-001 through CODE-DM-008
 
-**data-pipeline** — Streaming, ETL, batch processing, message-driven data flows
-Signals: stream, pipeline, ETL, transform, batch, kafka, rabbitmq, message_queue, producer, consumer, subscriber, publisher, spark, flink, airflow, dag
+**data-pipeline** — Streaming, ETL, batch, message queues
+Signals: `stream`, `pipeline`, `ETL`, `kafka`, `rabbitmq`, `producer`, `consumer`, `airflow`, `dag`
 Activate: CODE-AR-ASYNC-MESSAGING, CODE-AR-PIPES-AND-FILTERS, CODE-AR-MESSAGE-BROKER, CODE-RL-IDEMPOTENCY, CODE-RL-BACKPRESSURE, CODE-RL-SCHEMA-EVOLUTION
 
-**testing** — Test files, test frameworks, test utilities
-Signals: test_, _test.go, .test.ts, .test.js, .spec.ts, .spec.js, @Test, describe(, it(, expect(, assert, pytest, unittest, JUnit, jest, mocha, vitest, mock, stub, fixture
+**testing** — Test files and frameworks
+Signals: `test_`, `_test.go`, `.test.ts`, `.spec.ts`, `@Test`, `describe(`, `pytest`, `jest`, `mock`, `fixture`
 Activate: CODE-TS-TEST-FIRST through CODE-TS-TEST-NAMING
 
-**object-oriented** — Class hierarchies, interfaces, inheritance, OOP patterns
-Signals: class, extends, implements, interface, abstract, override, virtual, protected, super(, base., inheritance, polymorphism
+**object-oriented** — Classes, interfaces, inheritance
+Signals: `class`, `extends`, `implements`, `interface`, `abstract`, `override`
 Activate: CODE-SD-001 through CODE-SD-007, CODE-CS-DRY, CODE-CS-YAGNI
 
-**cloud-native** — Cloud deployment, containers, twelve-factor app patterns
-Signals: Dockerfile, docker-compose, kubernetes, k8s, helm, env_var, process.env, os.environ, ConfigMap, Secret, health_check, readiness, liveness, twelve-factor, 12-factor, container, pod, service mesh
+**cloud-native** — Containers, Kubernetes, twelve-factor
+Signals: `Dockerfile`, `kubernetes`, `helm`, `process.env`, `os.environ`, `ConfigMap`, `health_check`
 Activate: CODE-AR-001 through CODE-AR-012
 
-**infrastructure** — Infrastructure-as-code and provisioning configurations
-Signals: terraform, resource, provider, CloudFormation, ansible, playbook, pulumi, cdk, .tf, module, variable, output, data, stack
+**infrastructure** — IaC and provisioning
+Signals: `terraform`, `CloudFormation`, `ansible`, `pulumi`, `.tf`, `module`, `variable`
 Activate: CODE-AR-INFRASTRUCTURE-AS-CODE through CODE-AR-COMPOSABLE-MODULES
 
-**ui-interaction** — User interface components, forms, navigation, interaction
-Signals: Component, useState, useEffect, render, onClick, onChange, form, input, button, modal, dialog, navigation, route, template, view, directive, v-model, ngModel, @Component, JSX, TSX
+**ui-interaction** — UI components, forms, navigation
+Signals: `useState`, `useEffect`, `onClick`, `onChange`, `form`, `template`, `v-model`, JSX, TSX
 Activate: CODE-DX-SYSTEM-STATUS-VISIBILITY through CODE-DX-DATA-INK-RATIO
 
-**library-api** — Public libraries, SDKs, packages consumed by external users
-Signals: export, public API, SDK, package, library, @api, @public, module.exports, __init__.py, setup.py, package.json, Cargo.toml, *.gemspec, nuget, npm publish
+**library-api** — Public libraries, SDKs
+Signals: `export`, `__init__.py`, `setup.py`, `package.json`, `Cargo.toml`, `npm publish`
 Activate: CODE-API-001 through CODE-API-010, CODE-API-BACKWARD-COMPATIBILITY
 
-**functional** — Functional programming patterns with immutability and pure functions
-Signals: map(, filter(, reduce(, flatMap, immutable, readonly, const, val, pure, lambda, fn, pipe, compose, curry, monad, functor, fold, pattern match
+**functional** — Immutability, pure functions
+Signals: `map(`, `filter(`, `reduce(`, `immutable`, `readonly`, `lambda`, `pipe`, `compose`
 Activate: CODE-SD-006, CODE-CC-PREFER-IMMUTABLE, CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
 
-**typed-language** — Statically typed languages with expressive type systems
-Signals: TypeScript, Kotlin, Rust, Haskell, C#, Scala, F#, .ts, .kt, .rs, .hs, .cs, .scala, type, interface, generic, enum, struct, trait
+**typed-language** — Static type systems
+Signals: TypeScript, Kotlin, Rust, Haskell, C#, Scala, `.ts`, `.kt`, `.rs`, `.cs`
 Activate: CODE-TP-MAKE-ILLEGAL-STATES-UNREPRESENTABLE through CODE-TP-BRANDED-TYPES
 
 ### Layer 3 — Risk-Elevated
 
-Based on risk signals detected, elevate principles from matching risks. Elevated principles are treated with higher severity — a violation of an elevated principle is promoted one severity level (Low→Medium, Medium→High, High→Critical).
+Violations of elevated principles are promoted one severity level (Low→Medium, Medium→High, High→Critical).
 
-**authentication** — User authentication, sessions, identity verification
-Signals: password, login, logout, OAuth, JWT, token, session, authenticate, credential, sign_in, sign_up, bcrypt, hash, salt, OIDC, SAML, bearer, refresh_token
+**authentication** — Signals: `password`, `login`, `OAuth`, `JWT`, `token`, `session`, `bcrypt`, `hash`
 Elevate: CODE-SEC-002, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-008
 
-**financial** — Payments, billing, currency, financial transactions
-Signals: payment, billing, invoice, currency, transaction, charge, refund, stripe, paypal, ledger, account_balance, decimal, money, price, checkout, subscription
+**financial** — Signals: `payment`, `billing`, `invoice`, `currency`, `transaction`, `stripe`, `paypal`
 Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-004, CODE-RL-IDEMPOTENCY, CODE-CC-SYNC-SHARED-STATE
 
-**personal-data** — Personally identifiable information, privacy-sensitive data
-Signals: PII, GDPR, email, SSN, social_security, address, phone_number, date_of_birth, passport, driver_license, personal_data, consent, data_subject, anonymize, pseudonymize, encryption, CCPA, HIPAA
+**personal-data** — Signals: `PII`, `GDPR`, `email`, `SSN`, `personal_data`, `HIPAA`, `CCPA`
 Elevate: CODE-SEC-VALIDATE-INPUT, CODE-SEC-STRONG-CRYPTOGRAPHY, CODE-SEC-SECURITY-BY-DESIGN, CODE-SEC-SECURITY-LOGGING
 
-**public-api** — Versioned or published APIs consumed by third-party clients
-Signals: versioned, v1, v2, published, third-party, external, consumer, backward_compatible, deprecat, changelog, breaking_change, semver, api_version, public_api
+**public-api** — Signals: `versioned`, `v1`, `v2`, `third-party`, `backward_compatible`, `deprecat`, `semver`
 Elevate: CODE-API-BACKWARD-COMPATIBILITY, CODE-API-001, CODE-API-004, CODE-RL-SCHEMA-EVOLUTION
 
-**high-throughput** — Performance-critical code paths requiring low latency
-Signals: hot_path, hot path, real-time, realtime, low-latency, low_latency, performance, benchmark, throughput, cache, pool, buffer, batch_size, optimization, critical_path, microsecond, nanosecond
+**high-throughput** — Signals: `hot_path`, `realtime`, `low-latency`, `benchmark`, `throughput`, `cache`, `pool`
 Elevate: CODE-PF-PROFILE-FIRST through CODE-PF-PREDICTABLE-LATENCY, CODE-CC-AVOID-LOCKS-IN-HOT-PATHS
 
-**distributed-system** — Inter-service communication, eventual consistency
-Signals: microservice, RPC, gRPC, event-driven, event_bus, saga, choreography, orchestration, circuit_breaker, retry, timeout, idempotent, eventual_consistency, distributed, service_mesh, message_broker, outbox, dead_letter
+**distributed-system** — Signals: `microservice`, `gRPC`, `circuit_breaker`, `retry`, `idempotent`, `saga`, `outbox`
 Elevate: CODE-RL-FAULT-TOLERANCE through CODE-RL-CONSISTENCY-MODELS, CODE-OB-STRUCTURED-TELEMETRY through CODE-OB-DISTRIBUTED-TRACING, CODE-AR-ASYNC-MESSAGING through CODE-AR-MESSAGE-BROKER
 
-**legacy-codebase** — Refactoring, migration, brownfield work
-Signals: refactor, migration, brownfield, legacy, technical_debt, tech_debt, deprecated, backward_compat, strangler, anti-corruption, modernize, rewrite, upgrade
+**legacy-codebase** — Signals: `refactor`, `migration`, `legacy`, `tech_debt`, `deprecated`, `strangler`
 Elevate: CODE-CS-DRY, CODE-CS-YAGNI, CODE-SD-029 through CODE-SD-032
 
 ## Phase 4 — Load Principle Content
 
-Determine the namespaces present in the active ID set (e.g. `CODE`, `CORP` → namespaces `code`, `corp`).
+For each namespace in the active ID set, read one file:
 
-For each namespace, read its single pre-compiled context file:
 ```
 {{CODE_PRINCIPLES_REPO}}/principles/<namespace>/.context-audit.md
 ```
 
-Each entry in the file has this form:
-```
-### CODE-SD-001 — Single Responsibility Principle
-<principle statement>
-
-Violations to detect:
-- <pattern>
-- <pattern>
-```
-
-Filter to only the entries whose `### ID` is in the final active set. Do not load entries for inactive principles.
-
-Use the **Principle** and **Violations to detect** content in Phase 5 to produce accurate, principle-grounded findings. This is one file read per namespace, not one read per principle.
+Filter to entries whose `### ID` is in the final active set. Use the **Principle** and **Violations to detect** content in Phase 5.
 
 ## Phase 5 — Review
 
-Apply every activated principle against the code under review. For each issue found:
+**Output nothing during this phase.**
 
-1. Identify which principle ID it violates.
-2. Determine the severity: Critical, High, Medium, or Low.
-3. Pinpoint the location (file and line number when available).
-4. Describe what is wrong in one line.
-5. Provide a concrete fix grounded in the principle's guidance.
+**Read every source file** collected in Phase 1. Do not substitute grep, search, or pattern-matching tools for reading — you must read and understand each file's logic, structure, and intent.
 
-If a principle was elevated via Layer 3, promote the finding one severity level.
+For each file, apply every active principle from Phase 2/3. Evaluate design, naming, structure, input handling, duplication, and intent — not just surface patterns like `TODO` or `eval`.
 
-Present findings grouped by severity using this exact format. Omit any severity section that has no findings.
+For each violation found, record: principle ID, severity (Critical/High/Medium/Low, elevated → promote one level), absolute file path with forward slashes, line number, one sentence describing what is wrong, and a concrete fix grounded in the principle.
 
-## Critical
+## Phase 6 — Output
 
-Issues that will cause security vulnerabilities, data loss, or crashes in production.
+**Step 1.** Write `audit-output.json` to the **repository root** (where `.git/` is) with this structure:
 
-- [ ] [PRINCIPLE-ID]: one-line title
-  /absolute/path/to/file:line — what's wrong
-  → concrete fix
+```json
+{
+  "findings": [
+    {
+      "severity":     "HIGH",
+      "principle_id": "CODE-SD-001",
+      "title":        "one-line description",
+      "file":         "C:/absolute/path/to/file.py",
+      "line":         42,
+      "description":  "what is wrong",
+      "fix":          "concrete fix"
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 0,
+    "active_principles": ["CODE-SD-001", "CODE-CS-DRY"],
+    "principle_source": ".principles hierarchy (2 files)"
+  }
+}
+```
 
-## High
+- `severity`: `CRITICAL`, `HIGH`, `MEDIUM`, or `LOW`
+- `file`: absolute path, forward slashes; `""` if unavailable
+- `line`: integer; `0` if unavailable
+- `findings`: `[]` if no issues found
 
-Issues affecting correctness, concurrency safety, or API contracts.
+**Step 2.** Output a compact text report grouped by severity. Use this exact template:
 
-- [ ] [PRINCIPLE-ID]: one-line title
-  /absolute/path/to/file:line — what's wrong
-  → concrete fix
+```
+Audit complete — {N} findings.
 
-## Medium
+Critical:
 
-Issues affecting maintainability, design quality, or readability.
+- `{absolute/file.py}:{line}` [{PRINCIPLE-ID}] — {description}. → {fix}.
 
-- [ ] [PRINCIPLE-ID]: one-line title
-  /absolute/path/to/file:line — what's wrong
-  → concrete fix
+High:
 
-## Low
+- `{absolute/file.py}:{line}` [{PRINCIPLE-ID}] — {description}. → {fix}.
 
-Minor improvements — naming, style, minor smells.
+Medium:
 
-- [ ] [PRINCIPLE-ID]: one-line title
-  /absolute/path/to/file:line — what's wrong
-  → concrete fix
+- `{absolute/file.py}:{line}` [{PRINCIPLE-ID}] — {description}. → {fix}.
 
-Rules:
-- Each finding is exactly three lines: the `- [ ]` line, the `/absolute/path/to/file:line` line, and the `→` line. No blank lines within a finding.
-- The `- [ ]` line format is: hyphen, space, open-bracket, space, close-bracket, then exactly ONE space before `[PRINCIPLE-ID]` — never two spaces.
-- Always use forward slashes in file paths (e.g. `C:/Code/project/src/file.py:42`). Never use backslashes — they are markdown escape characters and will corrupt filenames containing underscores (e.g. `__init__.py`).
-- Separate consecutive findings with exactly one blank line.
+Low:
 
-## Phase 6 — Summary
+- `{absolute/file.py}:{line}` [{PRINCIPLE-ID}] — {description}. → {fix}.
 
-After all findings, output a summary block:
+Summary: {critical} critical, {high} high, {medium} medium, {low} low
+Principle source: {source}
 
-## Summary
+Generated: {absolute path}/audit-output.json
+```
 
-Findings: X critical, Y high, Z medium, W low
-Active principles: [comma-separated list of all principle IDs that were checked]
-Principle source: .principles hierarchy (N files) | dynamic detection
-
-If no issues were found at all, output:
-
-## Summary
-
-No issues found.
-Active principles: [comma-separated list of all principle IDs that were checked]
-Principle source: .principles hierarchy (N files) | dynamic detection
-
-Then, if there are any findings, output a Fix Checklist — a flat, agent-ready task list with one line per finding, ordered by file path then line number. This gives an AI agent a self-contained work queue to iterate through and tick off without cross-referencing the sections above.
-
-## Fix Checklist
-
-- [ ] /absolute/path/to/file:line · SEVERITY · PRINCIPLE-ID — what's wrong → concrete fix
-
-Rules:
-- Each entry is exactly one line — no line breaks or blank lines within or between entries.
-- The format is: `- [ ] ` (hyphen, space, open-bracket, space, close-bracket, then exactly ONE space) before the path — never two spaces.
-- Always use forward slashes in file paths (e.g. `C:/Code/project/src/file.py:42`). Never use backslashes — they are markdown escape characters and will corrupt filenames containing underscores (e.g. `__init__.py`).
-- Order by severity (CRITICAL first, then HIGH, MEDIUM, LOW), then by file path alphabetically, then by line number.
-- SEVERITY in ALL CAPS: CRITICAL, HIGH, MEDIUM, or LOW.
-- Omit the file path if no location is available (inline code review).
-- Omit this section entirely if there are no findings.
+- Group findings by severity (Critical / High / Medium / Low). Omit empty severity groups.
+- Use absolute file paths with forward slashes, wrapped in backticks to prevent markdown mangling (e.g. `__init__.py`).
+- Principle ID in brackets: `[CODE-SD-001]`.
+- One line per finding.
+- If no findings: output `Audit complete — 0 findings.` followed by the Summary and Generated lines.

@@ -214,8 +214,15 @@ install_copilot() {
             local prompt_file
             command_name="$(basename "$file" .md)"
             prompt_file="$prompts_dir/$command_name.prompt.md"
-            write_copilot_prompt "$file" "$prompt_file" "$command_name"
-            write_copilot_skill "$file" "$skills_dir/$command_name" "$command_name"
+            # For audit: rewrite ~/.claude/ paths to project-relative paths
+            local patched_file
+            patched_file="$(mktemp)"
+            sed \
+                -e 's|~/.claude/audit-output\.json|.github/scripts/audit-output.json|g' \
+                "$file" > "$patched_file"
+            write_copilot_prompt "$patched_file" "$prompt_file" "$command_name"
+            write_copilot_skill "$patched_file" "$skills_dir/$command_name" "$command_name"
+            rm -f "$patched_file"
             prompt_count=$((prompt_count + 1))
             echo -e "  ${GREEN}✓${NC} /$command_name"
         fi

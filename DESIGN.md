@@ -407,6 +407,8 @@ Analyses a project directory and creates or updates `.principles` files.
 
 `install.sh` deploys the three commands (`/scout`, `/prime`, `/audit`) to three AI tool families. Each target writes different files because each tool family has its own discovery mechanism.
 
+**Prerequisites:** Bash 4+. See [REQUIREMENTS.md](REQUIREMENTS.md).
+
 ### 🤖 Claude Code (`./install.sh claude`)
 
 Writes to `~/.claude/commands/<name>.md` (global, user-level).
