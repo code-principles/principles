@@ -230,6 +230,12 @@ git clone https://github.com/code-principles/.principles.git
 #   /audit directory            → review whatever you describe in conversation
 ```
 
+**GitHub Copilot (VS Code / JetBrains):** The repo ships with `.github/prompts/` already populated — `/scout`, `/prime`, and `/audit` are available in Copilot Chat as soon as you clone. To install into your own project:
+
+```bash
+./install.sh copilot <dir>
+```
+
 See [INSTALL.md](INSTALL.md) for full platform instructions (Linux, macOS, Windows), all supported tools, and how to try it on a branch before committing.
 
 ## 📚 Principle catalog

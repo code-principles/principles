@@ -511,7 +511,9 @@ Claude Code discovers slash commands by scanning `~/.claude/commands/` (global) 
 
 **Skills** (`.github/skills/<name>/SKILL.md`) are the CLI mechanism. The Copilot CLI scans `.github/skills/` at startup, reads each `SKILL.md`, and exposes the skill as a `/skill-name` slash command. Skills require a YAML frontmatter with `name` and `description`; the `description` is also used by Copilot to decide when to invoke the skill automatically.
 
-**Prompt files** (`.github/prompts/<name>.prompt.md`) are the IDE mechanism. Copilot Chat in VS Code, JetBrains, and Visual Studio discovers `.prompt.md` files in `.github/prompts/` and exposes them as slash commands in the chat panel. They require at minimum a `description:` field in YAML frontmatter.
+**Prompt files** (`.github/prompts/<name>.prompt.md`) are the IDE mechanism. Copilot Chat in VS Code, JetBrains, and Visual Studio discovers `.prompt.md` files in `.github/prompts/` and exposes them as slash commands in the chat panel. They use YAML frontmatter with `description:` and `mode: agent` — agent mode enables file reading, tool use, and shell execution, which `/audit` (pre-scan commands, writing `audit-output.json`) and `/scout` (writing `.principles` files) require.
+
+This repo ships with pre-populated `.github/prompts/` and `.github/skills/` directories so that contributors working in this repo itself get `/scout`, `/prime`, and `/audit` in Copilot without running the installer.
 
 ### 🖱️ Cursor (`./install.sh cursor <dir>`)
 
