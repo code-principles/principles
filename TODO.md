@@ -27,13 +27,6 @@ Extend `arch` or new namespace: `arch-patterns`
 - [ ] Saga pattern — coordinate distributed transactions across services using a sequence of local transactions with compensating actions on failure
 - [ ] Strangler Fig — incrementally replace a legacy system by routing traffic to a new implementation piece by piece, running both in parallel until the old system can be retired
 
-## 🔐 Security principles
-Extend `infra` or new namespace: `sec-arch`
-
-- [ ] Threat modelling — systematically identify and rank threats against a system before implementation; use STRIDE or PASTA to structure the analysis
-- [ ] Zero trust — never grant implicit trust based on network location; every request must be authenticated, authorised, and encrypted regardless of origin
-- [ ] Supply chain security — verify the integrity of all dependencies, container base images, and build tools; generate and attest SBOMs; sign artifacts
-
 ## 🧪 Testing principles
 Extend `code/ts`
 

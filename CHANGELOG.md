@@ -12,6 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+- **7 new security principles** across two namespaces:
+  - **`code/sec/`** (4 new) — `CODE-SEC-DEFENSE-IN-DEPTH` (NIST SP 800-53 / NSA), `CODE-SEC-FAIL-SAFE-DEFAULTS` (Saltzer & Schroeder 1975), `CODE-SEC-COMPLETE-MEDIATION` (Saltzer & Schroeder 1975), `CODE-SEC-PRIVACY-BY-DESIGN` (Cavoukian / ISO/IEC 29101 / GDPR Art 25)
+  - **`sec-arch/`** (new namespace, 3 principles) — `SEC-ARCH-THREAT-MODELLING` (Shostack / OWASP), `SEC-ARCH-ZERO-TRUST` (NIST SP 800-207 / Kindervag), `SEC-ARCH-SUPPLY-CHAIN-SECURITY` (SLSA / NIST SP 800-218)
+  - `CODE-SEC-FAIL-SAFE-DEFAULTS` includes an `## Inspection` section and a new grep pattern in `code/.context-inspect.md`
+  - `SEC-ARCH-SUPPLY-CHAIN-SECURITY` includes inspection patterns for floating CI action refs and undigested Docker base images
+  - `groups/security-focused.yaml` updated with all 7 new principle IDs
+  - `principles/catalog.yaml` updated: 214 principles across 15 namespaces
+
 - **27 new OOP/object-design principles** across 6 namespaces:
   - **`pkg/` namespace** (new) — Robert Martin's 6 Package/Component Principles: `PKG-REP`, `PKG-CCP`, `PKG-CRP`, `PKG-ADP`, `PKG-SDP`, `PKG-SAP`; new `@pkg` group
   - **`gof/`** — `GOF-LAW-OF-DEMETER` (Law of Demeter, IEEE 1989), `GOF-NULL-OBJECT` (Woolf / Fowler)

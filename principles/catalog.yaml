@@ -1,5 +1,5 @@
 # .principles — Consolidated Catalog
-# Generated from principle files. 207 principles across 14 namespaces.
+# Generated from principle files. 214 principles across 15 namespaces.
 # Each entry maps a current principle ID to lightweight metadata.
 # Full principle text lives in the principle markdown files under principles/.
 
@@ -671,6 +671,30 @@ CODE-SEC-VALIDATE-INPUT:
   categories: [security, reliability, api-design]
   applies_to: [all]
 
+CODE-SEC-DEFENSE-IN-DEPTH:
+  title: "Layer independent security controls"
+  layer: 1
+  categories: [security]
+  applies_to: [all]
+
+CODE-SEC-FAIL-SAFE-DEFAULTS:
+  title: "Default to denial; fail closed"
+  layer: 1
+  categories: [security, reliability]
+  applies_to: [all]
+
+CODE-SEC-COMPLETE-MEDIATION:
+  title: "Check every access, on every request"
+  layer: 2
+  categories: [security, access-control]
+  applies_to: [all]
+
+CODE-SEC-PRIVACY-BY-DESIGN:
+  title: "Embed privacy into the design from the start"
+  layer: 2
+  categories: [security, privacy, data-protection]
+  applies_to: [all]
+
 CODE-TP-BRANDED-TYPES:
   title: "Use newtypes/branded types to prevent value confusion"
   layer: 2
@@ -1299,4 +1323,26 @@ SOLID-SRP:
   title: "Single Responsibility Principle"
   layer: 1
   categories: [software-design, maintainability]
+  applies_to: [all]
+
+# =============================================================================
+# SEC-ARCH
+# =============================================================================
+
+SEC-ARCH-THREAT-MODELLING:
+  title: "Model threats before implementing security controls"
+  layer: 2
+  categories: [security, architecture]
+  applies_to: [all]
+
+SEC-ARCH-ZERO-TRUST:
+  title: "Never trust implicitly; verify every request"
+  layer: 2
+  categories: [security, architecture, networking]
+  applies_to: [all]
+
+SEC-ARCH-SUPPLY-CHAIN-SECURITY:
+  title: "Verify provenance and integrity across the build chain"
+  layer: 2
+  categories: [security, architecture, devops]
   applies_to: [all]
