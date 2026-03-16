@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+---
+
+## [v0.2.0] — 2026-03-17
+
 ### Changed
 
 - **Installer now copies principle data to `~/.principles`** — `install.sh` creates a fixed well-known data directory (`~/.principles` on Linux/macOS/Windows Git Bash; `%USERPROFILE%\.principles` on Windows) and copies `groups/` and `principles/` into it on every install. The directory is refreshed (old files removed, new files copied) on every run, so updates are always in sync.
@@ -80,4 +84,5 @@ See [TODO.md](TODO.md) for the roadmap.
 
 ---
 
+[v0.2.0]: https://github.com/code-principles/principles/releases/tag/v0.2.0
 [v0.1.0]: https://github.com/code-principles/principles/releases/tag/v0.1.0
