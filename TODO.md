@@ -10,16 +10,6 @@ New namespace: `cd`
 - [ ] Fast feedback loops — optimise the pipeline so engineers know within minutes whether a change is safe
 - [ ] GitOps — infrastructure and application state is declared in git; an operator continuously reconciles actual state to match
 
-## 🗄️ Database / persistence design
-New namespace: `db`
-
-- [ ] Avoid N+1 queries — never issue a query per row of a result set; use joins, batch loads, or eager loading
-- [ ] Index for access patterns — design indexes based on the queries the application actually runs, not the schema shape
-- [ ] Normalise to third normal form by default — eliminate redundancy and update anomalies; denormalise only with a measured reason
-- [ ] Schema migrations are code — every schema change is version-controlled, reviewed, and applied through an automated pipeline
-- [ ] Separate read and write models where load demands it — CQRS: optimise query models independently of command models when they have diverging requirements
-- [ ] Outbox pattern — write events to a database outbox table in the same transaction as the domain change; relay them asynchronously to avoid dual-write inconsistency
-
 ## 🏛️ Architecture patterns
 Extend `arch` or new namespace: `arch-patterns`
 

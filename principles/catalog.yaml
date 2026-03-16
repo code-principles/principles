@@ -1,5 +1,5 @@
 # .principles — Consolidated Catalog
-# Generated from principle files. 214 principles across 15 namespaces.
+# Generated from principle files. 228 principles across 16 namespaces.
 # Each entry maps a current principle ID to lightweight metadata.
 # Full principle text lives in the principle markdown files under principles/.
 
@@ -1345,4 +1345,92 @@ SEC-ARCH-SUPPLY-CHAIN-SECURITY:
   title: "Verify provenance and integrity across the build chain"
   layer: 2
   categories: [security, architecture, devops]
+  applies_to: [all]
+
+# =============================================================================
+# DB
+# =============================================================================
+
+DB-ACID:
+  title: "ACID properties — guarantee correctness of every database transaction"
+  layer: 1
+  categories: [database, transactions, reliability, correctness]
+  applies_to: [all]
+
+DB-CAP-THEOREM:
+  title: "CAP theorem — a distributed store can guarantee at most two of consistency, availability, and partition tolerance"
+  layer: 2
+  categories: [database, distributed-systems, architecture, reliability]
+  applies_to: [distributed-systems, microservices, cloud-native]
+
+DB-AVOID-N-PLUS-ONE:
+  title: "Avoid N+1 queries — never issue a query per row of a result set"
+  layer: 2
+  categories: [database, performance, query-optimization]
+  applies_to: [all]
+
+DB-INDEX-FOR-ACCESS-PATTERNS:
+  title: "Index for access patterns — design indexes from the queries, not the schema"
+  layer: 2
+  categories: [database, performance, query-optimization]
+  applies_to: [all]
+
+DB-THIRD-NORMAL-FORM:
+  title: "Normalise to third normal form by default — eliminate redundancy before introducing it"
+  layer: 2
+  categories: [database, data-modeling, correctness, maintainability]
+  applies_to: [all]
+
+DB-SCHEMA-MIGRATIONS-AS-CODE:
+  title: "Schema migrations are code — version, review, and automate every schema change"
+  layer: 1
+  categories: [database, devops, maintainability, reliability]
+  applies_to: [all]
+
+DB-CQRS:
+  title: "CQRS — separate read and write models when they have diverging requirements"
+  layer: 2
+  categories: [database, architecture, scalability, performance]
+  applies_to: [distributed-systems, microservices, high-load-systems]
+
+DB-OUTBOX-PATTERN:
+  title: "Outbox pattern — write events transactionally with domain changes to avoid dual-write"
+  layer: 2
+  categories: [database, reliability, distributed-systems, messaging]
+  applies_to: [distributed-systems, microservices, event-driven]
+
+DB-EVENTUAL-CONSISTENCY:
+  title: "Eventual consistency — distributed systems that favour availability must explicitly manage staleness"
+  layer: 2
+  categories: [database, distributed-systems, reliability, architecture]
+  applies_to: [distributed-systems, microservices, cloud-native]
+
+DB-EVENT-SOURCING:
+  title: "Event sourcing — persist state as an immutable log of domain events"
+  layer: 2
+  categories: [database, architecture, reliability, auditability]
+  applies_to: [event-driven, domain-driven-design, audit-critical-systems]
+
+DB-OPTIMISTIC-CONCURRENCY:
+  title: "Optimistic concurrency control — detect write conflicts at commit time rather than blocking readers"
+  layer: 2
+  categories: [database, concurrency, transactions, performance]
+  applies_to: [all]
+
+DB-TWO-PHASE-LOCKING:
+  title: "Two-phase locking — acquire all locks before releasing any to guarantee serializability"
+  layer: 2
+  categories: [database, concurrency, transactions, correctness]
+  applies_to: [relational-databases, high-conflict-systems]
+
+DB-POLYGLOT-PERSISTENCE:
+  title: "Polyglot persistence — use the most appropriate storage technology for each distinct access pattern"
+  layer: 2
+  categories: [database, architecture, scalability]
+  applies_to: [microservices, large-scale-systems]
+
+DB-DENORMALIZE-INTENTIONALLY:
+  title: "Denormalise intentionally — introduce redundancy only with a measured justification and explicit consistency enforcement"
+  layer: 2
+  categories: [database, performance, data-modeling, maintainability]
   applies_to: [all]

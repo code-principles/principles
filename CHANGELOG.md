@@ -12,6 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+- **14 new database / persistence principles** — new namespace `db`:
+  - **Layer 1 (universal):** `DB-ACID` (Gray & Reuter 1992 / Haerder & Reuter 1983), `DB-SCHEMA-MIGRATIONS-AS-CODE` (Humble & Farley 2010)
+  - **Layer 2 (contextual):** `DB-CAP-THEOREM` (Brewer 2000 / Gilbert & Lynch 2002), `DB-AVOID-N-PLUS-ONE` (Kleppmann 2017 / Fowler PEAA), `DB-INDEX-FOR-ACCESS-PATTERNS` (Kleppmann 2017 / Winand 2012), `DB-THIRD-NORMAL-FORM` (Codd 1970 / Date 2003), `DB-CQRS` (Young 2010 / Fowler 2011), `DB-OUTBOX-PATTERN` (Richardson 2018), `DB-EVENTUAL-CONSISTENCY` (Vogels 2008 / Pritchett 2008), `DB-EVENT-SOURCING` (Young 2010 / Fowler 2005), `DB-OPTIMISTIC-CONCURRENCY` (Kung & Robinson 1981), `DB-TWO-PHASE-LOCKING` (Gray 1978), `DB-POLYGLOT-PERSISTENCE` (Fowler & Sadalage 2012), `DB-DENORMALIZE-INTENTIONALLY` (Fowler PEAA / Date 2003)
+  - `DB-AVOID-N-PLUS-ONE` includes an `## Inspection` section with a grep heuristic for queries inside loops
+  - `groups/db.yaml` added — bundles all 14 principles for the `@db` group
+  - `principles/db/.context-prime.md` and `.context-audit.md` added for `/prime` and `/audit` support
+  - `principles/catalog.yaml` updated: 228 principles across 16 namespaces
+
 - **7 new security principles** across two namespaces:
   - **`code/sec/`** (4 new) — `CODE-SEC-DEFENSE-IN-DEPTH` (NIST SP 800-53 / NSA), `CODE-SEC-FAIL-SAFE-DEFAULTS` (Saltzer & Schroeder 1975), `CODE-SEC-COMPLETE-MEDIATION` (Saltzer & Schroeder 1975), `CODE-SEC-PRIVACY-BY-DESIGN` (Cavoukian / ISO/IEC 29101 / GDPR Art 25)
   - **`sec-arch/`** (new namespace, 3 principles) — `SEC-ARCH-THREAT-MODELLING` (Shostack / OWASP), `SEC-ARCH-ZERO-TRUST` (NIST SP 800-207 / Kindervag), `SEC-ARCH-SUPPLY-CHAIN-SECURITY` (SLSA / NIST SP 800-218)
