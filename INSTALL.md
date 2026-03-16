@@ -97,7 +97,7 @@ install.cmd cursor ~/projects/my-app
 install.cmd all ~/projects/my-app
 ```
 
-> **Path note:** Both wrapper styles handle Windows absolute paths for you. `install.cmd` / `uninstall.cmd` normalize backslashes to forward slashes before calling bash, and `install.ps1` / `uninstall.ps1` convert `C:\...` paths to a bash-friendly absolute path.
+> **Path note:** On Windows, `~` is equivalent to `%USERPROFILE%` (e.g. `C:\Users\YourName`). Both wrapper styles handle Windows absolute paths for you. `install.cmd` / `uninstall.cmd` normalize backslashes to forward slashes before calling bash, and `install.ps1` / `uninstall.ps1` convert `C:\...` paths to a bash-friendly absolute path.
 
 ---
 
@@ -105,18 +105,50 @@ install.cmd all ~/projects/my-app
 
 Every tool supports two scopes:
 
-| Command | Scope | Where it installs |
-|---|---|---|
-| `install.sh claude` | Global | `~/.claude/commands/` |
-| `install.sh claude <dir>` | Local | `<dir>/.claude/commands/` |
-| `install.sh copilot` | Global | `~/.copilot/copilot-instructions.md` |
-| `install.sh copilot <dir>` | Local | `<dir>/.github/` (instructions + skills + prompts) |
-| `install.sh cursor` | — | Not supported (see Cursor note below) |
-| `install.sh cursor <dir>` | Local | `<dir>/.cursor/rules/code-principles.mdc` |
-| `install.sh all` | Global | Claude + Copilot globally; Cursor message |
-| `install.sh all <dir>` | Local | All three tools in `<dir>` |
+| Command                    | Scope  | Where it installs                                  |
+|----------------------------|--------|----------------------------------------------------|
+| `install.sh claude`        | Global | `~/.claude/commands/`                              |
+| `install.sh claude <dir>`  | Local  | `<dir>/.claude/commands/`                          |
+| `install.sh copilot`       | Global | `~/.copilot/copilot-instructions.md`               |
+| `install.sh copilot <dir>` | Local  | `<dir>/.github/` (instructions + skills + prompts) |
+| `install.sh cursor`        | —      | Not supported (see Cursor note below)              |
+| `install.sh cursor <dir>`  | Local  | `<dir>/.cursor/rules/code-principles.mdc`          |
+| `install.sh all`           | Global | Claude + Copilot globally; Cursor message          |
+| `install.sh all <dir>`     | Local  | All three tools in `<dir>`                         |
 
-**Cursor limitation:** Cursor has no file-based user-level config. For global principles, go to **Cursor → Settings → General → Rules for AI** and paste the principle content there manually. For a single project, use `install.sh cursor <dir>`.
+### Claude Code — global commands work everywhere
+
+Claude Code stores commands in `~/.claude/commands/`. Once installed globally, `/scout`, `/prime`, and `/audit` are available in every project automatically — no per-project setup needed.
+
+### GitHub Copilot — global installation is passive only
+
+GitHub Copilot has no user-level location for skills or prompt files. The global installation (`install.sh copilot`) writes **only** `~/.copilot/copilot-instructions.md` — a brief Layer 1/2/3 summary that Copilot reads as background context. This gives Copilot passive awareness of the principle layers, but **`/scout`, `/prime`, and `/audit` are not available** from the global installation alone.
+
+To get the slash commands in a project, run the **local install** once per project:
+
+```bash
+./install.sh copilot ~/projects/my-app
+# Windows:
+.\install.ps1 copilot C:\projects\my-app
+```
+
+This writes into `.github/` inside that project:
+
+
+| File                              | Purpose                                      |
+|-----------------------------------|----------------------------------------------|
+| `.github/copilot-instructions.md` | Always-on context for all Copilot clients    |
+| `.github/prompts/prime.prompt.md` | `/prime` in VS Code / JetBrains Copilot Chat |
+| `.github/prompts/audit.prompt.md` | `/audit` in VS Code / JetBrains Copilot Chat |
+| `.github/prompts/scout.prompt.md` | `/scout` in VS Code / JetBrains Copilot Chat |
+| `.github/skills/prime/SKILL.md`   | `/prime` in Copilot CLI                      |
+| `.github/skills/audit/SKILL.md`   | `/audit` in Copilot CLI                      |
+| `.github/skills/scout/SKILL.md`   | `/scout` in Copilot CLI                      |
+Commit these files to the repository so every team member gets the commands automatically.
+
+### Cursor limitation
+
+Cursor has no file-based user-level config. For global principles, go to **Cursor → Settings → General → Rules for AI** and paste the principle content there manually. For a single project, use `install.sh cursor <dir>`.
 
 ---
 
@@ -162,7 +194,7 @@ git checkout -b try-principles
 git checkout main && git branch -D try-principles
 ```
 
-Local installs write only into `<dir>/.claude/commands/` (or `.github/`, `.cursor/rules/`) — they leave your global setup untouched and disappear with the branch.
+Local installations write only into `<dir>/.claude/commands/` (or `.github/`, `.cursor/rules/`) — they leave your global setup untouched and disappear with the branch.
 
 ## 7. After installing
 
@@ -173,5 +205,7 @@ Open your AI tool and run the commands:
 /prime     → activate principles before writing code
 /audit     → review code with severity-categorized findings
 ```
+
+> **Copilot users:** `/scout`, `/prime`, and `/audit` require a **local** installation in your project (`.github/prompts/` or `.github/skills/`). The global installation alone is not enough. Run `install.sh copilot <your-project>` first — see [Section 3](#3-installation-scopes) above.
 
 See [README.md](README.md) for a full walkthrough and examples.
