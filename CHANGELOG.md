@@ -12,6 +12,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+- **7 new observability principles** — extending `code/ob` namespace:
+  - **`CODE-OB-USE-METHOD`** — for every infrastructure resource, measure Utilisation, Saturation, and Errors; a systematic checklist that predicts most resource-related failures (Gregg, *Systems Performance* 2nd ed., ISBN 978-0-13-682045-9)
+  - **`CODE-OB-RED-METHOD`** — for every service, instrument Rate, Errors, and Duration as the minimum contract for user-visible health (Wilkie, GrafanaCon 2018; Sridharan, *Distributed Systems Observability*, ISBN 978-1-492-03364-9)
+  - **`CODE-OB-ERROR-BUDGET`** — alert on SLO burn rate using a multi-window strategy; treat budget exhaustion as the trigger to halt feature work (Google SRE Book ch. 3; SRE Workbook ch. 5). Includes `## Inspection` grep pattern for alert rule files.
+  - **`CODE-OB-FOUR-GOLDEN-SIGNALS`** — every service must expose Latency, Traffic, Errors, and Saturation; the four dimensions cover the most common causes of user-visible degradation (Google SRE Book ch. 6)
+  - **`CODE-OB-HEALTH-CHECK-API`** — every service exposes distinct liveness and readiness endpoints returning machine-readable status; orchestrators use them to route traffic and restart unhealthy instances (Richardson, *Microservices Patterns*, ISBN 978-1-617-29454-9). Includes `## Inspection` grep pattern.
+  - **`CODE-OB-PERCENTILE-LATENCY`** — record latency as a histogram and report p99/p99.9 tail percentiles; averages conceal the experience of the worst-affected users and the compounding tail effect in fan-out architectures (Dean & Barroso, "The Tail at Scale", CACM 2013, DOI 10.1145/2408776.2408794)
+  - **`CODE-OB-ALERT-ON-SYMPTOMS`** — alert rules should fire on user-visible symptoms (SLO violations, error rates, latency) not internal causes (CPU, queue depth); `**Audit-scope:** limited` (Google SRE Book ch. 6; SRE Workbook ch. 5)
+  - `groups/microservices.yaml` updated with all 7 new principle IDs
+  - `principles/code/.context-prime.md` and `.context-audit.md` updated with new ob entries
+  - `principles/catalog.yaml` updated: 242 principles across 16 namespaces
+
 - **4 new testing principles** — extending `code/ts` namespace:
   - **`CODE-TS-TEST-DATA-BUILDER`** — build test fixtures using the Builder pattern so tests express intent rather than wiring; changes to object construction stay in one place (Pryce & Freeman, *GOOS*, ISBN 978-0-321-50362-6)
   - **`CODE-TS-HUMBLE-OBJECT`** — extract hard-to-test logic from framework/UI shells into plain, dependency-free classes that can be unit-tested without the framework (Meszaros, *xUnit Test Patterns*, ISBN 978-0-13-149505-0)

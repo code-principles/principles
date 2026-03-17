@@ -1,12 +1,5 @@
 # 📋 TODO — Principle gaps to fill
 
-## 📡 Observability methods
-Extend `code/ob`
-
-- [ ] USE method — for every infrastructure resource, track Utilisation, Saturation, and Errors; these three signals predict most resource-related failures
-- [ ] RED method — for every service, track Rate, Errors, and Duration; these three signals define the user-visible health of a service
-- [ ] Error budget — define acceptable unreliability as an SLO error budget; when it is exhausted, reliability work takes priority over features
-
 ## 🏛️ Architecture patterns
 Extend `arch` or new namespace: `arch-patterns`
 

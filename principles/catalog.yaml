@@ -1,5 +1,5 @@
 # .principles — Consolidated Catalog
-# Generated from principle files. 235 principles across 16 namespaces.
+# Generated from principle files. 242 principles across 16 namespaces.
 # Each entry maps a current principle ID to lightweight metadata.
 # Full principle text lives in the principle markdown files under principles/.
 
@@ -577,6 +577,48 @@ CODE-OB-SERVICE-LEVEL-OBJECTIVES:
 
 CODE-OB-STRUCTURED-TELEMETRY:
   title: "Instrument code with structured, contextual telemetry"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-USE-METHOD:
+  title: "For every resource, track Utilisation, Saturation, and Errors (USE Method)"
+  layer: 2
+  categories: [observability, operations, reliability, performance]
+  applies_to: [all]
+
+CODE-OB-RED-METHOD:
+  title: "For every service, track Rate, Errors, and Duration (RED Method)"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-ERROR-BUDGET:
+  title: "Operationalise reliability through error budget burn-rate alerting"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-FOUR-GOLDEN-SIGNALS:
+  title: "Instrument every service for Latency, Traffic, Errors, and Saturation"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-HEALTH-CHECK-API:
+  title: "Expose liveness and readiness health check endpoints"
+  layer: 2
+  categories: [observability, operations, reliability]
+  applies_to: [all]
+
+CODE-OB-PERCENTILE-LATENCY:
+  title: "Measure latency with histograms and report tail percentiles, not averages"
+  layer: 2
+  categories: [observability, operations, reliability, performance]
+  applies_to: [all]
+
+CODE-OB-ALERT-ON-SYMPTOMS:
+  title: "Alert on user-visible symptoms, not internal causes"
   layer: 2
   categories: [observability, operations, reliability]
   applies_to: [all]
