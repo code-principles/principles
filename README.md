@@ -295,7 +295,7 @@ The AI figures out the scope from context:
 
 ```bash
 # Clone the repo
-git clone https://github.com/code-principles/principles.git
+git clone https://github.com/dot-principles/principles.git
 
 # Install Claude Code slash commands globally
 ./install.sh claude

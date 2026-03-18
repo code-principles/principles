@@ -63,5 +63,5 @@ See [TODO.md](TODO.md) for the roadmap.
 
 ---
 
-[v0.2.0]: https://github.com/code-principles/principles/releases/tag/v0.2.0
-[v0.1.0]: https://github.com/code-principles/principles/releases/tag/v0.1.0
+[v0.2.0]: https://github.com/dot-principles/principles/releases/tag/v0.2.0
+[v0.1.0]: https://github.com/dot-principles/principles/releases/tag/v0.1.0

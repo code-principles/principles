@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2026 Flemming N. Larsen — https://github.com/code-principles/principles
+# Copyright (c) 2026 Flemming N. Larsen — https://github.com/dot-principles/principles
 set -euo pipefail
 
 # install.sh — Deploy .principles to AI coding tools

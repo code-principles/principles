@@ -16,7 +16,7 @@ See [REQUIREMENTS.md](REQUIREMENTS.md) for platform-specific setup and model com
 ## 1. Clone the repo
 
 ```bash
-git clone https://github.com/code-principles/principles.git
+git clone https://github.com/dot-principles/principles.git
 cd .principles
 ```
 
