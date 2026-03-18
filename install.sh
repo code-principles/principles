@@ -481,15 +481,15 @@ DIR_ARG="$(normalize_directory_path "${2:-}")"
 
 case "${1:-}" in
     claude)
-        "$SCRIPT_DIR/uninstall.sh" --quiet ${DIR_ARG:+"$DIR_ARG"}
+        "$SCRIPT_DIR/uninstall.sh" --quiet --target claude ${DIR_ARG:+"$DIR_ARG"}
         install_claude "$DIR_ARG"
         ;;
     copilot)
-        "$SCRIPT_DIR/uninstall.sh" --quiet ${DIR_ARG:+"$DIR_ARG"}
+        "$SCRIPT_DIR/uninstall.sh" --quiet --target copilot ${DIR_ARG:+"$DIR_ARG"}
         install_copilot "$DIR_ARG"
         ;;
     cursor)
-        "$SCRIPT_DIR/uninstall.sh" --quiet ${DIR_ARG:+"$DIR_ARG"}
+        "$SCRIPT_DIR/uninstall.sh" --quiet --target cursor ${DIR_ARG:+"$DIR_ARG"}
         install_cursor "$DIR_ARG"
         ;;
     all)

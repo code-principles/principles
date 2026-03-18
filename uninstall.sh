@@ -56,10 +56,18 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Parse flags before positional arguments
 QUIET=false
+TARGET=""
 _args=()
+_skip_next=false
 for _arg in "$@"; do
+    if [ "$_skip_next" = true ]; then
+        TARGET="$_arg"
+        _skip_next=false
+        continue
+    fi
     case "$_arg" in
         --quiet|-q) QUIET=true ;;
+        --target) _skip_next=true ;;
         *) _args+=("$_arg") ;;
     esac
 done
@@ -197,10 +205,6 @@ uninstall_claude() {
     if [ -n "$project_dir" ]; then
         cleanup_dir_if_empty "$target_dir"
         cleanup_dir_if_empty "$project_dir/.claude"
-    else
-        qecho ""
-        qecho "${BOLD}Removing .principles data...${NC}"
-        uninstall_data
     fi
 }
 
@@ -373,12 +377,27 @@ run_uninstall() {
 
     print_header
     qecho ""
-    uninstall_claude "$PROJECT_DIR"
-    qecho ""
-    uninstall_copilot "$PROJECT_DIR"
-    qecho ""
-    uninstall_cursor "$PROJECT_DIR"
-    qecho ""
+
+    if [ -z "$TARGET" ] || [ "$TARGET" = "claude" ]; then
+        uninstall_claude "$PROJECT_DIR"
+        qecho ""
+    fi
+    if [ -z "$TARGET" ] || [ "$TARGET" = "copilot" ]; then
+        uninstall_copilot "$PROJECT_DIR"
+        qecho ""
+    fi
+    if [ -z "$TARGET" ] || [ "$TARGET" = "cursor" ]; then
+        uninstall_cursor "$PROJECT_DIR"
+        qecho ""
+    fi
+
+    # Always remove ~/.principles on global installs (no project dir)
+    if [ -z "$PROJECT_DIR" ]; then
+        qecho "${BOLD}Removing .principles data...${NC}"
+        uninstall_data
+        qecho ""
+    fi
+
     qecho "Done."
 }
 
