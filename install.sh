@@ -8,7 +8,8 @@ set -euo pipefail
 # Usage:
 #   ./install.sh claude              # Install Claude Code slash commands globally (~/.claude/commands/)
 #   ./install.sh claude <dir>        # Install Claude Code slash commands locally (<dir>/.claude/commands/)
-#   ./install.sh copilot             # Install Copilot instructions globally (~/.copilot/copilot-instructions.md)
+#   ./install.sh copilot             # Install Copilot CLI skills globally:
+#                                    #   ~/.copilot/skills/<name>/SKILL.md
 #   ./install.sh copilot <dir>       # Generate Copilot assets in <dir>/.github/
 #                                    #   .github/copilot-instructions.md  (all Copilot clients)
 #                                    #   .github/skills/<name>/SKILL.md   (Copilot CLI slash commands)
@@ -337,47 +338,40 @@ install_copilot_local() {
 }
 
 install_copilot_global() {
-    local target_dir="$EFFECTIVE_HOME/.copilot"
-    local target_file="$target_dir/copilot-instructions.md"
+    local skills_base="$EFFECTIVE_HOME/.copilot/skills"
 
     install_data
-    echo -e "${BOLD}Generating global Copilot instructions (~/.copilot/copilot-instructions.md)...${NC}"
-    mkdir -p "$target_dir"
+    echo -e "${BOLD}Installing Copilot CLI skills globally (~/.copilot/skills/)...${NC}"
 
-    # Build the new block in a temp file
-    local block_file
-    block_file="$(mktemp)"
-    echo "<!-- .principles: begin -->" > "$block_file"
-    write_principles_body "$block_file"
-    echo "<!-- .principles: end -->" >> "$block_file"
+    local skill_count=0
+    local file
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local command_name
+            command_name="$(basename "$file" .md)"
+            local patched_file
+            patched_file="$(mktemp)"
+            sed "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" "$file" > "$patched_file"
+            write_copilot_skill "$patched_file" "$skills_base/$command_name" "$command_name"
+            rm -f "$patched_file"
+            skill_count=$((skill_count + 1))
+            echo -e "  ${GREEN}✓${NC} /$command_name"
+        fi
+    done
 
-    if [ ! -f "$target_file" ] || [ ! -s "$target_file" ]; then
-        cp "$block_file" "$target_file"
-    elif grep -q "^<!-- .principles: begin -->$" "$target_file"; then
-        local result_file
-        result_file="$(mktemp)"
-        awk '
-            BEGIN { in_block=0 }
-            /^<!-- .principles: begin -->$/ { in_block=1; next }
-            /^<!-- .principles: end -->$/ { if (in_block) { in_block=0; next } }
-            !in_block { print }
-        ' "$target_file" > "$result_file"
-        awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
-            "$result_file" > "${result_file}.t" && mv "${result_file}.t" "$result_file"
-        [ -s "$result_file" ] && echo "" >> "$result_file"
-        cat "$block_file" >> "$result_file"
-        mv "$result_file" "$target_file"
-    else
-        echo "" >> "$target_file"
-        cat "$block_file" >> "$target_file"
-    fi
-
-    rm -f "$block_file"
-
-    echo -e "  ${GREEN}✓${NC} $target_file"
     echo ""
-    echo "Global Copilot instructions written to ~/.copilot/copilot-instructions.md"
-    echo "For skills and prompts, run: ./install.sh copilot <project-dir>"
+    echo "Installed ${BOLD}$skill_count${NC} skills to ~/.copilot/skills/"
+    echo ""
+    echo "Copilot CLI skills written:"
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local command_name
+            command_name="$(basename "$file" .md)"
+            echo "  - ~/.copilot/skills/$command_name/SKILL.md"
+        fi
+    done
+    echo ""
+    echo "In Copilot CLI: use /audit, /prime, /scout  (or run '/skills reload' if already in a session)"
 }
 
 install_cursor() {
@@ -437,10 +431,20 @@ list_installed() {
     fi
 
     echo ""
-    echo "Copilot instructions (global: ~/.copilot/copilot-instructions.md):"
-    if [ -f "$EFFECTIVE_HOME/.copilot/copilot-instructions.md" ] && grep -q "^<!-- .principles: begin -->$" "$EFFECTIVE_HOME/.copilot/copilot-instructions.md" 2>/dev/null; then
-        echo -e "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md"
-    else
+    echo "Copilot CLI skills (global: ~/.copilot/skills/):"
+    local copilot_found=false
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local command_name
+            command_name="$(basename "$file" .md)"
+            local skill_file="$EFFECTIVE_HOME/.copilot/skills/$command_name/SKILL.md"
+            if [ -f "$skill_file" ]; then
+                echo -e "  ${GREEN}✓${NC} ~/.copilot/skills/$command_name/SKILL.md"
+                copilot_found=true
+            fi
+        fi
+    done
+    if [ "$copilot_found" = false ]; then
         echo "  (none)"
     fi
 }
@@ -453,7 +457,7 @@ show_usage() {
     echo "Targets:"
     echo "  claude              Install slash commands globally (~/.claude/commands/)"
     echo "  claude <dir>        Install slash commands locally (<dir>/.claude/commands/)"
-    echo "  copilot             Install Copilot instructions globally (~/.copilot/copilot-instructions.md)"
+    echo "  copilot             Install Copilot CLI skills globally (~/.copilot/skills/)"
     echo "  copilot <dir>       Generate Copilot assets in <dir>/.github/"
     echo "  cursor              (not applicable — configure via Cursor > Settings > General > Rules for AI)"
     echo "  cursor <dir>        Generate .cursor/rules/principles.mdc in <dir>"

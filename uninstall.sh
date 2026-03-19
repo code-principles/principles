@@ -8,12 +8,12 @@ set -euo pipefail
 # Usage:
 #   ./uninstall.sh             # Remove global assets:
 #                              #   Claude Code: ~/.claude/commands/<name>.md
-#                              #   Copilot:     ~/.copilot/copilot-instructions.md (.principles block only)
+#                              #   Copilot CLI: ~/.copilot/skills/<name>/
 #   ./uninstall.sh <project>   # Remove local assets from <project>:
 #                              #   Claude Code: <project>/.claude/commands/<name>.md
 #                              #   Copilot CLI: .github/skills/<name>/SKILL.md
 #                              #   Copilot IDE: .github/prompts/<name>.prompt.md
-#                              #               .github/copilot-instructions.md (.principles block only)
+#                              #                .github/copilot-instructions.md (.principles block only)
 #                              #   Cursor:      .cursor/rules/principles.mdc
 #   ./uninstall.sh --help      # Show this help
 
@@ -305,41 +305,30 @@ uninstall_copilot_local() {
 }
 
 uninstall_copilot_global() {
-    local target_file="$EFFECTIVE_HOME/.copilot/copilot-instructions.md"
+    local skills_base="$EFFECTIVE_HOME/.copilot/skills"
 
-    qecho "${BOLD}Removing global Copilot instructions...${NC}"
+    qecho "${BOLD}Removing Copilot CLI skills (global)...${NC}"
 
-    if [ ! -f "$target_file" ]; then
-        qecho "  ${NEUTRAL} No global Copilot instructions found to remove."
-        return
+    local skill_count=0
+    local file
+    for file in "$CLAUDE_TARGETS_DIR/"*.md; do
+        if [ -f "$file" ]; then
+            local command_name
+            command_name="$(basename "$file" .md)"
+            local skill_dir="$skills_base/$command_name"
+            if [ -d "$skill_dir" ]; then
+                rm -rf "$skill_dir"
+                skill_count=$((skill_count + 1))
+                qecho "  ${GREEN}✓${NC} ~/.copilot/skills/$command_name/"
+            fi
+        fi
+    done
+
+    if [ $skill_count -eq 0 ]; then
+        qecho "  ${NEUTRAL} No Copilot CLI skills found to remove."
     fi
 
-    local temp_file
-    temp_file="$(mktemp)"
-
-    awk '
-        BEGIN { in_block=0; removed=0 }
-        /^<!-- .principles: begin -->$/ { in_block=1; removed=1; next }
-        /^<!-- .principles: end -->$/   { if (in_block) { in_block=0; next } }
-        !in_block { print }
-        END { exit removed ? 0 : 1 }
-    ' "$target_file" > "$temp_file" || {
-        rm -f "$temp_file"
-        qecho "  ${NEUTRAL} No .principles block found in global Copilot instructions."
-        return
-    }
-
-    awk '{lines[NR]=$0; if(/[^[:space:]]/) last=NR} END{for(i=1;i<=last;i++) print lines[i]}' \
-        "$temp_file" > "${temp_file}.t" && mv "${temp_file}.t" "$temp_file"
-
-    if grep -q '[^[:space:]]' "$temp_file"; then
-        mv "$temp_file" "$target_file"
-        qecho "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md (removed .principles block)"
-    else
-        rm -f "$temp_file" "$target_file"
-        qecho "  ${GREEN}✓${NC} ~/.copilot/copilot-instructions.md"
-    fi
-
+    cleanup_dir_if_empty "$EFFECTIVE_HOME/.copilot/skills"
     cleanup_dir_if_empty "$EFFECTIVE_HOME/.copilot"
 }
 
