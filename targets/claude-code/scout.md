@@ -1,3 +1,11 @@
+---
+description: Analyse a project to detect which principles apply and create or update .principles files encoding that analysis. Use when the user runs /scout [path] to map principles to a codebase.
+argument-hint: "[directory-path]"
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+version: {{VERSION}}
+authors: Flemming N. Larsen (https://github.com/flemming-n-larsen)
+---
+
 # Scout
 
 You are analysing a project to determine which principles apply and creating or updating `.principles` files to encode that. Follow these five phases exactly.

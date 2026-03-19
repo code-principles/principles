@@ -1,3 +1,11 @@
+---
+description: Review a file, directory, or inline code against its activated principles. Use when the user runs /audit [target] to check code or docs against quality principles.
+argument-hint: "[file|directory|inline-code]"
+allowed-tools: Read, Write, Glob, Grep, Bash
+version: {{VERSION}}
+authors: Flemming N. Larsen (https://github.com/flemming-n-larsen)
+---
+
 # Audit
 
 Review a file, directory, or inline code against its activated principles in seven phases.

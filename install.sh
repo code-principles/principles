@@ -58,6 +58,7 @@ normalize_directory_path() {
 }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VERSION="$(cat "$SCRIPT_DIR/VERSION" | tr -d '[:space:]')"
 
 # Resolve the home directory for global asset installation.
 # (defined before DATA_DIR so resolve_home() is available)
@@ -223,7 +224,7 @@ install_claude() {
     local count=0
     for file in "$CLAUDE_TARGETS_DIR/"*.md; do
         if [ -f "$file" ]; then
-            sed "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" "$file" > "$target_dir/$(basename "$file")"
+            sed -e "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" -e "s|{{VERSION}}|$VERSION|g" "$file" > "$target_dir/$(basename "$file")"
             count=$((count + 1))
             echo -e "  ${GREEN}✓${NC} /$(basename "$file" .md)"
         fi
@@ -316,6 +317,7 @@ install_copilot_local() {
             patched_file="$(mktemp)"
             sed \
                 -e "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" \
+                -e "s|{{VERSION}}|$VERSION|g" \
                 -e 's|~/.claude/audit-output\.json|.github/scripts/audit-output.json|g' \
                 "$file" > "$patched_file"
             write_copilot_prompt "$patched_file" "$prompt_file" "$command_name"
@@ -351,7 +353,7 @@ install_copilot_global() {
             command_name="$(basename "$file" .md)"
             local patched_file
             patched_file="$(mktemp)"
-            sed "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" "$file" > "$patched_file"
+            sed -e "s|{{PRINCIPLES_DIRECTORY}}|$DATA_DIR|g" -e "s|{{VERSION}}|$VERSION|g" "$file" > "$patched_file"
             write_copilot_skill "$patched_file" "$skills_base/$command_name" "$command_name"
             rm -f "$patched_file"
             skill_count=$((skill_count + 1))

@@ -1,3 +1,11 @@
+---
+description: Activate principles before working on a file or task. Use when the user runs /prime [target] to load the relevant principles into the active frame before writing or editing.
+argument-hint: "[file|directory|description]"
+allowed-tools: Read, Glob, Grep, Bash
+version: {{VERSION}}
+authors: Flemming N. Larsen (https://github.com/flemming-n-larsen)
+---
+
 # Prime
 
 You are activating principles before working on a file or task. Follow these five phases exactly.
